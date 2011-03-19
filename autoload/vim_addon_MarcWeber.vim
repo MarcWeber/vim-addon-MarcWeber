@@ -102,5 +102,48 @@ fun! vim_addon_MarcWeber#Activate()
       \   exe "normal g`\"" |
       \ endif
   "}}}e
+  
+ 
+  "window cursor movement
+  nnoremap <m-s-v><m-s-p> :exec "wincmd g\<c-]>" <bar> exec 'syntax keyword Tag '.expand('<cword>')<cr>
+  vnoremap <m-s-v><m-s-p> y:sp<bar>tjump <c-r>"<cr>
+   
+  nnoremap <m-b><m-n> :bn<cr>
+  nnoremap <m-b><m-p> :bp<cr>
+  nnoremap <m-a> :b<space>
 
+  imap <c-o> <c-x><c-o>
+  imap <c-_> <c-x><c-u>
+
+  noremap \a :ActionOnWrite<cr>
+  noremap \A :ActionOnWrite!<cr>
+
+  noremap \aps : if filereadable('pkgs/top-level/all-packages.nix') <bar> e pkgs/top-level/all-packages.nix <bar> else <bar> exec 'e '.expand("$NIXPKGS_ALL") <bar> endif<cr>
+
+  noremap <m-s-f> :e! %<cr>
+
+  command! SlowTerminalSettings :set slow-terminal| set sidescroll=20 | set scrolljump=10 | set noshowcmd
+  noremap <m-s-l> :e test.sql<cr>
+
+  noremap \sge :setlocal spell spelllang=de_de<cr>
+  noremap \sen :setlocal spell spelllang=en_us<cr>
+
+  noremap <leader>lt :set invlist<cr>
+  noremap <leader>iw :set invwrap<cr>
+  noremap <leader>ip :set invpaste<cr>
+  noremap <leader>hl :set invhlsearch<cr>
+  noremap <leader>dt :diffthis<cr>
+  noremap <leader>do :diffoff<cr>
+  noremap <leader>dg :diffget<cr>
+  noremap <leader>du :diffupdate<cr>
+  noremap <leader>ts :if exists("syntax_on") <Bar>
+	\   syntax off <Bar>
+	\ else <Bar>
+	\   syntax enable <Bar>
+	\ endif <CR>
+  inoremap <s-cr> <esc>o
+  noremap <m-s-e><m-s-n> :enew<cr>
+  inoremap <c-cr> <esc>O
+  noremap <m--> k$
+  noremap <m-s-a> <esc>jA
 endf
