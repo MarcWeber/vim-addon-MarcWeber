@@ -146,4 +146,6 @@ fun! vim_addon_MarcWeber#Activate()
   inoremap <c-cr> <esc>O
   noremap <m--> k$
   noremap <m-s-a> <esc>jA
+  noremap <m-w>/ /\<\><left><left>
+  noremap <m-w>? ?\<\><left><left>
 endf
