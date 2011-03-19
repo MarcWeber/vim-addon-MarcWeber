@@ -49,4 +49,58 @@ fun! vim_addon_MarcWeber#Activate()
 
   " command MergePluginFiles call vam#install#MergePluginFiles(g:merge+["tlib"], '\%(cmdlinehelp\|concordance\|evalselection\|glark\|hookcursormoved\|linglang\|livetimestamp\|localvariables\|loremipsum\|my_tinymode\|pim\|scalefont\|setsyntax\|shymenu\|spec\|tassert\|tbak\|tbibtools\|tcalc\|tcomment\|techopair\|tgpg\|tmarks\|tmboxbrowser\|tortoisesvn\|tregisters\|tselectbuffer\|tselectfile\|tsession\|tskeleton\|tstatus\|viki\|vikitasks\)\.vim_merged')
   " command UnmergePluginFiles call vam#install#UnmergePluginFiles()
+
+  noremap <c-,> :cprevious<cr>
+  noremap <c-c> :cnext<cr>
+
+
+
+  " inoremap <C-x><C-w> <c-o>:setlocal omnifunc=vim_addon_completion#CompleteWordsInBuffer<cr><c-x><c-o>
+  inoremap <C-x><C-w> <c-r>=vim_addon_completion#CompleteUsing('vim_addon_completion#CompleteWordsInBuffer')<cr>
+
+  if !has('gui_running')
+    set timeoutlen=200
+  endif
+  set guioptions+=c
+  set guioptions+=M
+  set guioptions-=m
+  set guioptions-=T
+  set guioptions-=r
+  set guioptions-=l
+
+  set clipboard=unnamed
+  let tags = split(&tags,',')
+  for i in split(expand('$buildInputs'),'\s\+')
+    call extend(tags, split(glob(i.'/src/*/*_tags'),"\n"))
+  endfor
+  call extend(tags, split($TAG_FILES,":"))
+  call filter(tags, 'filereadable(v:val)')
+  for t in tags
+    exec "set tags+=".t
+  endfor
+
+
+  augroup ADD_CONFLICT_MARKERS_MATCH_WORDS
+    " git onlny for now
+    autocmd BufRead,BufNewFile * exec 'let b:match_words '.(exists('b:match_words') ? '.' : '').'= '.string(exists('b:match_words') ? ',' : ''.'<<<<<<<:=======:>>>>>>>')
+  augroup end
+
+
+  command! AsyncSh call async_porcelaine#LogToBuffer({'cmd':'/bin/sh -i', 'move_last':1, 'prompt': '^.*\$[$] '})
+  command! AsyncCoq call async_porcelaine#LogToBuffer({'cmd':'coqtop', 'move_last':1, 'prompt': '^Coq < '})
+  command! AsyncRubyIrb call repl_ruby#RubyBuffer({'cmd':'irb','move_last' : 1})
+  command! AsyncRubySh call repl_ruby#RubyBuffer({'cmd':'/bin/sh','move_last' : 1})
+  command! AsyncPython call repl_python#PythonBuffer({'cmd':'python -i','move_last' : 1, 'prompt': '^>>> '})
+  command! AsyncSMLNJ call repl_ruby#RubyBuffer({'cmd':'sml','move_last' : 1, 'prompt': '^- '})
+
+  "autocommands:"{{{
+    " When editing a file, always jump to the last known cursor position.
+    " Don't do it when the position is invalid or when inside an event handler
+    " (happens when dropping a file on gvim).
+    autocmd BufReadPost *
+      \ if line("'\"") > 0 && line("'\"") <= line("$") |
+      \   exe "normal g`\"" |
+      \ endif
+  "}}}e
+
 endf
