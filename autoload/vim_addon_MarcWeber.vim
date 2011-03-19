@@ -45,7 +45,7 @@ fun! vim_addon_MarcWeber#Activate()
   " "vim-addon-lout",
 
     " \ "delimitMate",
-  call vam#ActivateAddons(activate)
+  call vam#ActivateAddons(activate,{'auto_install':1})
 
   " command MergePluginFiles call vam#install#MergePluginFiles(g:merge+["tlib"], '\%(cmdlinehelp\|concordance\|evalselection\|glark\|hookcursormoved\|linglang\|livetimestamp\|localvariables\|loremipsum\|my_tinymode\|pim\|scalefont\|setsyntax\|shymenu\|spec\|tassert\|tbak\|tbibtools\|tcalc\|tcomment\|techopair\|tgpg\|tmarks\|tmboxbrowser\|tortoisesvn\|tregisters\|tselectbuffer\|tselectfile\|tsession\|tskeleton\|tstatus\|viki\|vikitasks\)\.vim_merged')
   " command UnmergePluginFiles call vam#install#UnmergePluginFiles()
