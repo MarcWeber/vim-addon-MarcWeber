@@ -1,12 +1,8 @@
-fun! vim_addon_MarcWeber#Activate()
+fun! vim_addon_MarcWeber#Activate(vam_features)
   let g:vim_addon_urweb = { 'use_vim_addon_async' : 1 }
   let g:netrw_silent = 0
   let g:linux=1
   let g:config = { 'goto-thing-handler-mapping-lhs' : 'gf' }
-
-  if !exists('g:vam_features')
-    let g:vam_features = []
-  endif
 
   let plugins = {
       \ 'always': ["vim-addon-completion", 'vim-addon-async', 'tlib', "vim-addon-toggle-buffer", "vim-addon-git","vim-addon-mw-utils","snipMate","vim-addon-goto-thing-at-cursor","vim-addon-other", 'matchit.zip'],
@@ -30,8 +26,8 @@ fun! vim_addon_MarcWeber#Activate()
   let activate = []
   for [k,v] in items(plugins)
     if k == 'always' 
-          \ || (type(g:vam_features) == type([]) && index(g:vam_features, k) >= 0)
-          \ || (type(g:vam_features) == type('') && g:vam_features == 'all')
+          \ || (type(a:vam_features) == type([]) && index(a:vam_features, k) >= 0)
+          \ || (type(a:vam_features) == type('') && a:vam_features == 'all')
       call extend(activate, v)
     endif
   endfor
@@ -50,6 +46,8 @@ fun! vim_addon_MarcWeber#Activate()
   " command MergePluginFiles call vam#install#MergePluginFiles(g:merge+["tlib"], '\%(cmdlinehelp\|concordance\|evalselection\|glark\|hookcursormoved\|linglang\|livetimestamp\|localvariables\|loremipsum\|my_tinymode\|pim\|scalefont\|setsyntax\|shymenu\|spec\|tassert\|tbak\|tbibtools\|tcalc\|tcomment\|techopair\|tgpg\|tmarks\|tmboxbrowser\|tortoisesvn\|tregisters\|tselectbuffer\|tselectfile\|tsession\|tskeleton\|tstatus\|viki\|vikitasks\)\.vim_merged')
   " command UnmergePluginFiles call vam#install#UnmergePluginFiles()
 
+  noremap <m-w>/ /\<\><left><left>
+  noremap <m-w>? ?\<\><left><left>
   noremap <c-,> :cprevious<cr>
   noremap <c-c> :cnext<cr>
 
@@ -146,6 +144,6 @@ fun! vim_addon_MarcWeber#Activate()
   inoremap <c-cr> <esc>O
   noremap <m--> k$
   noremap <m-s-a> <esc>jA
-  noremap <m-w>/ /\<\><left><left>
-  noremap <m-w>? ?\<\><left><left>
+  noremap <m-e> :e<space>
 endf
+
