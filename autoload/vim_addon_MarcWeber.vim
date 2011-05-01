@@ -5,10 +5,10 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
   let g:config = { 'goto-thing-handler-mapping-lhs' : 'gf' }
 
   let plugins = {
-      \ 'always': ["vim-addon-completion", 'vim-addon-async', 'tlib', "vim-addon-toggle-buffer", "vim-addon-git","vim-addon-mw-utils","snipMate","vim-addon-goto-thing-at-cursor","vim-addon-other", 'matchit.zip'],
+      \ 'always': ['vim-addon-sql',"vim-addon-completion", 'vim-addon-async', 'tlib', "vim-addon-toggle-buffer", "vim-addon-git","vim-addon-mw-utils","snipMate","vim-addon-goto-thing-at-cursor","vim-addon-other", 'matchit.zip'],
       \ 'extra' : ['textobj-diff', "textobj-function",  "narrow_region"],
       \ 'vim': ["reload", 'vim-dev-plugin'],
-      \ 'sql': ['vim-addon-sql'],
+      \ 'sql': [''],
       \ 'php': ["phpcomplete", "vim-addon-xdebug","ZenCoding"],
       \ 'scala': ["ensime", "vim-addon-scala","vim-addon-sbt"],
       \ 'sml': ["vim-addon-sml"],
@@ -20,6 +20,7 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
       \ 'as3': ["vim-addon-fcsh","Flex_Development_Support"],
       \ 'haskell' : [ "vim-addon-haskell"],
       \ 'ruby' : [ "vim-ruby-debugger" ],
+      \ 'delphi' : [ "vim-addon-delphi" ],
       \ 'nix' : ["vim-addon-nix"],
       \ 'coq' : ['vim-addon-coq'],
       \ }
