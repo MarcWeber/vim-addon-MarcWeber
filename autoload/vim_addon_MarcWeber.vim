@@ -51,7 +51,11 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
   noremap <m-w>? ?\<\><left><left>
   noremap <c-,> :cprevious<cr>
   noremap <c-c> :cnext<cr>
-
+  inoremap <m-s-r> <esc>:w<cr>
+  nnoremap <m-s-r> :w<cr>
+  noremap <m-h> :h<space>
+  cmap >fn <c-r>=expand('%:p')<cr>
+  cmap >fd <c-r>=expand('%:p:h').'/'<cr>
 
 
   " inoremap <C-x><C-w> <c-o>:setlocal omnifunc=vim_addon_completion#CompleteWordsInBuffer<cr><c-x><c-o>
