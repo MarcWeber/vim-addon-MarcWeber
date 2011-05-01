@@ -8,7 +8,7 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
       \ 'always': ['vim-addon-sql',"vim-addon-completion", 'vim-addon-async', 'tlib', "vim-addon-toggle-buffer", "vim-addon-git","vim-addon-mw-utils","snipMate","vim-addon-goto-thing-at-cursor","vim-addon-other", 'matchit.zip'],
       \ 'extra' : ['textobj-diff', "textobj-function",  "narrow_region"],
       \ 'vim': ["reload", 'vim-dev-plugin'],
-      \ 'sql': [''],
+      \ 'sql': [],
       \ 'php': ["phpcomplete", "vim-addon-xdebug","ZenCoding"],
       \ 'scala': ["ensime", "vim-addon-scala","vim-addon-sbt"],
       \ 'sml': ["vim-addon-sml"],
