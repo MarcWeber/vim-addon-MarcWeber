@@ -150,5 +150,11 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
   noremap <m--> k$
   noremap <m-s-a> <esc>jA
   noremap <m-e> :e<space>
+
+  noremap <m-s-s> :<c-u>tjump<space>
+  noremap <m-s-t><m-s-p> :<c-u>tprevious<cr>
+  noremap <m-s-t><m-s-n> :<c-u>tnext<cr>
+  nnoremap <m-s-t> :tabnew<cr>
+  noremap <m-s-f><m-s-t><m-s-p> :exec 'e ~/mwr/dotvim/ftplugin/'.&filetype.'_mw.vim'<cr>
 endf
 
