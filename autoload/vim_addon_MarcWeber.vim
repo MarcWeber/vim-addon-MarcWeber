@@ -158,7 +158,7 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
   noremap <m-s-t><m-s-p> :<c-u>tprevious<cr>
   noremap <m-s-t><m-s-n> :<c-u>tnext<cr>
   nnoremap <m-s-t> :tabnew<cr>
-  exec "noremap <m-s-f><m-s-t><m-s-p> :exec 'e ".fnamemodify(s:thisf,':r:p:p')."/ftplugin/'.&filetype.'_mw.vim'<cr>"
+  exec "noremap <m-s-f><m-s-t><m-s-p> :exec 'e ".fnamemodify(s:thisf,':h:h')."/ftplugin/'.&filetype.'_mw.vim'<cr>"
   noremap \co :<c-u>exec 'cope '.&lines/3<cr>
   noremap <m-s-s><m-s-p> :SnipMateOpenSnippetFiles<cr>
   inoremap <c-e> :<esc>A<cr>
