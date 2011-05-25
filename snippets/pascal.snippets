@@ -1,0 +1,28 @@
+snippet for
+	for ${1:i} := Low(${2:arr}) to High(${3}) do
+	begin
+		Writeln(IntToStr(j));
+		Writeln(ParamStr(j));
+	end;
+snippet try
+	try
+	
+	except
+	on E:Exception do
+		Writeln(E.Classname, ': ', E.Message);
+	end;
+snippet ifdef
+	{$IFDEF PCRE_LINKDLL}
+		{$DEFINE PCRE_EXPORT_CDECL}
+	{$ELSE}
+	{$ENDIF}
+snippet procedure
+	procedure ${1}(${2});
+	begin
+		${3}
+	end;
+snippet function
+	function ${1}(${2}):${3};
+	begin
+		Result := ${4};
+	end;
