@@ -2,6 +2,7 @@ setlocal tags+=~/haxe-lib/tags
 " CFComplete haxe#CompleteClassNames
 " OFComplete haxe#CompleteHAXE
 
+inoremap <buffer> <c-c> //<space>
 inoremap <buffer> <m-s><m-g> String
 inoremap <buffer> <m-a><m-y> Array<
 inoremap <buffer> <m-n> new<space>

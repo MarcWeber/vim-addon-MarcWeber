@@ -8,7 +8,7 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
   let g:config = { 'goto-thing-handler-mapping-lhs' : 'gf' }
 
   let plugins = {
-      \ 'always': ['vim-addon-sql',"vim-addon-completion", 'vim-addon-async', 'tlib', "vim-addon-toggle-buffer", "vim-addon-git","vim-addon-mw-utils","snipMate","vim-addon-goto-thing-at-cursor","vim-addon-other", 'matchit.zip'],
+      \ 'always': ['vim-addon-sql',"vim-addon-completion", 'vim-addon-async', 'tlib', "vim-addon-toggle-buffer", "vim-addon-git","vim-addon-mw-utils","snipmate","vim-addon-goto-thing-at-cursor","vim-addon-other", 'matchit.zip'],
       \ 'extra' : ['textobj-diff', "textobj-function",  "narrow_region"],
       \ 'vim': ["reload", 'vim-dev-plugin'],
       \ 'sql': [],
@@ -22,6 +22,7 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
       \ 'haxe' : [ 'vim-haxe' ],
       \ 'as3': ["vim-addon-fcsh","Flex_Development_Support"],
       \ 'haskell' : [ "vim-addon-haskell"],
+      \ 'haskell-scion' : [ "scion-backend-vim"],
       \ 'ruby' : [ "vim-ruby-debugger" ],
       \ 'delphi' : [ "vim-addon-delphi" ],
       \ 'nix' : ["vim-addon-nix"],
@@ -162,5 +163,9 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
   noremap \co :<c-u>exec 'cope '.&lines/3<cr>
   noremap <m-s-s><m-s-p> :SnipMateOpenSnippetFiles<cr>
   inoremap <c-e> :<esc>A<cr>
+
+  if isdirectory('src/main/scala')
+    noremap <c-s> :e src/main/scala/*
+  endif
 endf
 
