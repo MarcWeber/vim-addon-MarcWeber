@@ -1,0 +1,262 @@
+snippet ziparchive_create
+	$z = new ZipArchive();
+	$z->open('zip.zip', ZIPARCHIVE::CREATE);
+	$z->addFromString('abc.txt','text');
+	$z->close();
+snippet html_form
+			<form action="<?=$GLOBALS['SCRIPT_NAME']?>" method="post" enctype="multipart/form-data">
+	</form>
+snippet html
+snippet htmlToUtf8
+	function htmlToUtf8($s){
+		$e='asdlkfjasdflkjdfasjkjkljkljkljkl';
+		$s = str_replace('&nbsp;',$e, $s);
+		$s = str_replace('&lt;',$e.'lt', $s);
+		$s = str_replace('&gt;',$e.'gt', $s);
+		$s = html_entity_decode($s,  ENT_NOQUOTES, 'UTF-8');
+		$s = str_replace($e.'lt', '&lt;', $s);
+		$s = str_replace($e.'gt', '&gt;', $s);
+		return  str_replace($e, '&nbsp;', $s);
+	}
+snippet args
+	$args = func_get_args();
+snippet tne
+	throw new Exception('${1}');
+snippet fen
+	foreach ($${1:variable} as $${2:value}) {
+		${3:// code...}
+	}
+snippet fek
+	foreach ($${1:variable} as $${2:key} => $${3:value}) {
+		${4:// code...}
+	}
+snippet __call
+	public function __call($name, $arguments) {
+	}
+snippet __construct
+	function __construct(argument){
+	}
+snippet ve
+	var_export(${1}, true)
+snippet ga
+	$args = func_get_args();
+snippet trace
+	$debug_handle = fopen('/tmp/php.log', 'a+');
+	fwrite($debug_handle, var_export(${1},true)."\n" );
+	fclose($debug_handle);
+snippets entferne_boms
+	<?php
+	
+	function has_bom($file){
+			$packed = pack("CCC",0xef,0xbb,0xbf);
+	
+			$handle = fopen($file,'r');
+			if (!$handle){
+					echo "error opening ".$file."\n";
+			} else {
+					$str = fread ( $handle, 3);
+					if ($str == $packed)
+							$has_bom = true;
+					fclose($handle);
+			}
+			return isset($has_bom);
+	}
+	
+	function find_files($path, $pattern, $callback) {
+		$path = rtrim(str_replace("\\", "/", $path), '/') . '/';
+		$matches = Array();
+		$entries = Array();
+		$dir = dir($path);
+		while (false !== ($entry = $dir->read())) {
+			$entries[] = $entry;
+		}
+		$dir->close();
+		foreach ($entries as $entry) {
+			$fullname = $path . $entry;
+			if ($entry != '.' && $entry != '..' && is_dir($fullname)) {
+				find_files($fullname, $pattern, $callback);
+			} else if (is_file($fullname) && preg_match($pattern, $entry)) {
+				call_user_func($callback, $fullname);
+			}
+		}
+	}
+	
+	$files = array();
+	function c($name){
+			global $files;
+			$files[] = $name;
+	}
+	
+	find_files('.', '/\.(php|css|htm)/', 'c');
+	
+	foreach ($files
+			as $file){
+			if (has_bom($file)){
+				file_put_contents($file, substr(file_get_contents($file), 3));
+				echo "$file hat BOM gehabt!\n";
+			}
+	}
+snippet pc
+	public 
+
+snippet swfHTML
+	function swfHTML($alternative_content, $id ='', $path, $w, $h, $params = array(), $flashVars = array()){
+	
+	 // mit z-index wie DOM Element
+	 if (!isset($params['wmode']))
+		$params['wmode'] = 'transparent';
+	
+	 if (count($flashVars) > 0){
+		foreach ($flashVars as $k => $v) {
+		 $fv[] = $k.'='.urlencode($v);
+		}
+		$params['flashVars'] = implode($fv, '&');
+	 }
+	
+	 $is_ie = strpos( $_SERVER["HTTP_USER_AGENT"], 'MSIE'  ) !== false;
+	 $html = '';
+	
+	 if ($is_ie) {
+		$html .= 
+		'<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"  id="'.$id.'"'
+		.'  codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0"'
+		.'  width="'.$w.'" height="'.$h.'">'
+		.'<param name="movie" value="'.$path.'"/>'
+		;
+	 } else {
+		$html .= 
+		 '<object type="application/x-shockwave-flash" id="'.$id.'"'
+		 .' data="'.$path.'" width="'.$w.'" height="'.$h.'">';
+	 }
+	
+	 foreach ($params as $k => $v){
+		$html .= '<param name="'._htmlentities($k).'" value="'._htmlentities($v).'"/>';
+	 }
+	
+	 $html .= $alternative_content
+		.'</object>';
+	
+	 return $html;
+	}
+
+snippet _htmlentities
+	function _htmlentities($s){
+		return htmlentities($s, ENT_QUOTES, "UTF-8" );
+	}
+snippet conditional_get
+	function conditionalGET($timestamp) {
+		$last_modified = gmdate("D, d M Y H:i:s \G\M\T", $timestamp);
+		$etag = '"'.md5($last_modified).'"';
+		header("Last-Modified: $last_modified");
+		header("ETag: $etag");
+		$if_modified_since = isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) ? stripslashes($_SERVER['HTTP_IF_MODIFIED_SINCE']) : false;
+		$if_none_match = isset($_SERVER['HTTP_IF_NONE_MATCH']) ? stripslashes($_SERVER['HTTP_IF_NONE_MATCH']) : false;
+		if(!$if_modified_since && !$if_none_match) return;
+		if($if_none_match && $if_none_match != $etag) return;
+		if($if_modified_since && $if_modified_since != $last_modified) return;
+		header("HTTP/1.0 304 Not Modified");
+		exit;
+	}
+snippet ROOT_URL
+	// get root url 
+	if (isset($_SERVER["HTTPS"])) {	
+		if($_SERVER["HTTPS"] == "on") {
+			$self_protocol = "https://";
+		} else {
+			$self_protocol = "http://"; 
+		}
+	} else {	
+		$self_protocol = "http://"; 
+	}
+	$this_url = $self_protocol . $_SERVER["SERVER_NAME"] . $_SERVER["SCRIPT_NAME"];
+	define('ROOT_URL', dirname($this_url)); 
+snippet autoload_classes_simple
+	function autload_class($class){
+		if (in_array($lass , (array('parent')))) return false;
+		$f = LIB_PATH.'/klassen/'.$class.'.php';
+		if (file_exists($f)){
+			require_once $f;
+			return true;
+		}
+		return false;
+	}
+	spl_autoload_register('autload_class');
+
+snippet validate_xml
+	function validateXML($xml){
+		if (!VALIDATE_XML)
+			return $xml;
+	
+		libxml_use_internal_errors(true);
+	
+		// TODO use doctype?
+		$doc = new DOMDocument('1.0', 'utf-8');
+		$doc->loadXML($xml);
+	
+		$errors = libxml_get_errors();
+		if (empty($errors))
+		{
+			return $xml;
+		}
+
+
+		$error_lines = '';
+
+		foreach ($errors as $error) {
+
+			if ($error->level <= 2) // not defined entitiy ..
+				continue;
+
+		# if $error->message
+		
+		# if ($error->level < 3)
+		# {
+		#       return $xml;
+		# }
+
+			$lines = explode("\n",$xml);
+			$xmls = $error->message.' '.$error->level."\n";
+			$el = $error->line;
+			for ($i = -7; $i < 5; $i++) {
+				$l = $el + $i - 3;
+				if ($i >= 0 && $i < count($lines))
+					$xmls .= ($l+1).': '.g($lines,$l,'')."\n";
+			}
+
+			$error_lines .= "\n".$xmls."\n";
+		}
+
+		if ($error_lines != '')
+			// should only print relevant lines..
+			throw new Exception("error validating XML line ".$el." xml:\n".$error_lines);
+	}
+snippet strip_slashes
+	if (get_magic_quotes_gpc()) {
+		function strip_slashes_deep($value) {
+				return is_array($value) ? array_map('strip_slashes_deep', $value) : stripslashes($value);
+		};
+		$_GET = array_map('strip_slashes_deep', $_GET);
+		$_POST = array_map('strip_slashes_deep', $_POST);
+		$_COOKIE = array_map('strip_slashes_deep', $_COOKIE);
+	}
+snippet file_locking
+		@fopen($this->_file, "wb")
+		@flock($fp, LOCK_EX);
+		@fwrite($fp, $data, $len);
+		@flock($fp, LOCK_UN);
+		@fclose($fp);
+
+snippet d
+	function d($ar, $key, $default){ return isset($ar[$key]) ? $ar[$key] : $default; }
+
+
+
+snippet wordpress_nonce_security
+	if ( function_exists('wp_nonce_field') )
+		wp_nonce_field('plugin-name-action_' . $your_object);
+	?>
+
+	$link = 'your-url.php';
+	$link = ( function_exists('wp_nonce_url') ) ? wp_nonce_url($link, 'plugin-name-action_' . $your_object) : $link;
+
+	check_admin_referer('plugin-name-action_' . $your_object);
