@@ -8,11 +8,11 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
   let g:config = { 'goto-thing-handler-mapping-lhs' : 'gf' }
 
   let plugins = {
-      \ 'always': ['vim-addon-sql',"vim-addon-completion", 'vim-addon-async', 'tlib', "vim-addon-toggle-buffer", "vim-addon-git","vim-addon-mw-utils","snipmate","vim-addon-goto-thing-at-cursor","vim-addon-other", 'matchit.zip'],
+      \ 'always': ['vim-addon-sql',"vim-addon-completion", 'vim-addon-async', 'tlib', "vim-addon-toggle-buffer", "vim-addon-git","vim-addon-mw-utils","snipmate-snippets","vim-addon-goto-thing-at-cursor","vim-addon-other", 'matchit.zip'],
       \ 'extra' : ['textobj-diff', "textobj-function",  "narrow_region"],
       \ 'vim': ["reload", 'vim-dev-plugin'],
       \ 'sql': [],
-      \ 'php': ["phpcomplete", "vim-addon-xdebug","ZenCoding"],
+      \ 'php': ["phpcomplete", "vim-addon-xdebug","ZenCoding",'vim-addon-php-manual'],
       \ 'scala': ["ensime", "vim-addon-scala","vim-addon-sbt"],
       \ 'sml': ["vim-addon-sml"],
       \ 'agda' : ["vim-addon-agda"],
@@ -53,7 +53,12 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
 
   noremap <m-w>/ /\<\><left><left>
   noremap <m-w>? ?\<\><left><left>
-  noremap <c-,> :cprevious<cr>
+  noremap <c-,> :cprevious<cr-  set guioptions+=c
+  set guioptions+=M
+  set guioptions-=m
+  set guioptions-=T
+  set guioptions-=r
+  set guioptions-=l
   noremap <c-c> :cnext<cr>
   inoremap <m-s-r> <esc>:w<cr>
   nnoremap <m-s-r> :w<cr>
@@ -68,12 +73,6 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
   if !has('gui_running')
     set timeoutlen=200
   endif
-  set guioptions+=c
-  set guioptions+=M
-  set guioptions-=m
-  set guioptions-=T
-  set guioptions-=r
-  set guioptions-=l
 
   set clipboard=unnamed
   let tags = split(&tags,',')
@@ -167,5 +166,18 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
   if isdirectory('src/main/scala')
     noremap <c-s> :e src/main/scala/*
   endif
+
+  augroup FOO
+    autocmd BufRead,BufNewFile *.syn-test  set filetype=syn-test
+  augroup end
+
+  augroup FIX_YOUR_WORDING
+    autocmd BufWritePost * call vim_addon_MarcWeber#FixYourWording()
+  augroup end
 endf
 
+fun! vim_addon_MarcWeber#FixYourWording()
+  if join(getline(1,'$'),' ') =~ '\cget\s*out\s*of\s*your'
+    echoe "should be keep out of your way!"
+  endif
+endf
