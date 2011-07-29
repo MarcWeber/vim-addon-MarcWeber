@@ -8,7 +8,7 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
   let g:config = { 'goto-thing-handler-mapping-lhs' : 'gf' }
 
   let plugins = {
-      \ 'always': ['vim-addon-sql',"vim-addon-completion", 'vim-addon-async', 'tlib', "vim-addon-toggle-buffer", "vim-addon-git","vim-addon-mw-utils","snipmate-snippets","vim-addon-goto-thing-at-cursor","vim-addon-other", 'matchit.zip'],
+      \ 'always': ['vim-addon-sql',"vim-addon-completion", 'vim-addon-async', 'tlib', "vim-addon-toggle-buffer", "vim-addon-git","vim-addon-mw-utils","snipmate-snippets","vim-addon-goto-thing-at-cursor","vim-addon-other", 'matchit.zip', 'syntastic2'],
       \ 'extra' : ['textobj-diff', "textobj-function",  "narrow_region"],
       \ 'vim': ["reload", 'vim-dev-plugin'],
       \ 'sql': [],
@@ -50,6 +50,9 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
 
   " command MergePluginFiles call vam#install#MergePluginFiles(g:merge+["tlib"], '\%(cmdlinehelp\|concordance\|evalselection\|glark\|hookcursormoved\|linglang\|livetimestamp\|localvariables\|loremipsum\|my_tinymode\|pim\|scalefont\|setsyntax\|shymenu\|spec\|tassert\|tbak\|tbibtools\|tcalc\|tcomment\|techopair\|tgpg\|tmarks\|tmboxbrowser\|tortoisesvn\|tregisters\|tselectbuffer\|tselectfile\|tsession\|tskeleton\|tstatus\|viki\|vikitasks\)\.vim_merged')
   " command UnmergePluginFiles call vam#install#UnmergePluginFiles()
+  "
+
+  let g:syntastic = { 'list_type': 'c'}
 
   noremap <m-w>/ /\<\><left><left>
   noremap <m-w>? ?\<\><left><left>
@@ -174,6 +177,19 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
   augroup FIX_YOUR_WORDING
     autocmd BufWritePost * call vim_addon_MarcWeber#FixYourWording()
   augroup end
+
+  let g:snipMate = { 'scope_aliases' :
+	  \ {'objc' :'c'
+	  \ ,'cpp': 'c'
+	  \ ,'cs':'c'
+	  \ ,'xhtml': 'html'
+	  \ ,'html': 'javascript'
+	  \ ,'php': 'php,html,javascript'
+	  \ ,'ur': 'html,javascript'
+	  \ ,'mxml': 'actionscript'
+	  \ ,'haml': 'html,javascript'
+	  \ }}
+
 endf
 
 fun! vim_addon_MarcWeber#FixYourWording()

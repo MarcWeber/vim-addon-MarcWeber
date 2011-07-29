@@ -190,9 +190,6 @@ noremap <c-m-p> :PHPHelp<cr>/
 vnoremap <m-a><m-s> :s/$/;/<cr>
 vnoremap <m-a><m-n> :s/\%(\\n\)\@<!";$/\\n";/<cr>
 
-set tags+=/pr/info/php/tags
-set tags+=/home/marc/pear/pear/tags
-
 command! PHPDebugVars %s/^\s*\$\(\w*\)\(\s*=.*\)/$\1\2echo "debug \1";print_r($\1);/g
 
 " nach http://pear.php.net/manual/en/standards.php
