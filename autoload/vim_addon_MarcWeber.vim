@@ -7,13 +7,15 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
   let g:linux=1
   let g:config = { 'goto-thing-handler-mapping-lhs' : 'gf' }
 
+  let g:local_vimrc = {'names':['vl_project.vim']}
+
   let plugins = {
-      \ 'always': ['vim-addon-sql',"vim-addon-completion", 'vim-addon-async', 'tlib', "vim-addon-toggle-buffer", "vim-addon-git","vim-addon-mw-utils","snipmate-snippets","vim-addon-goto-thing-at-cursor","vim-addon-other", 'matchit.zip', 'syntastic2'],
+      \ 'always': ['vim-addon-commenting','vim-addon-local-vimrc','vim-addon-sql',"vim-addon-completion", 'vim-addon-async', 'tlib', "vim-addon-toggle-buffer", "vim-addon-git","vim-addon-mercurial","vim-addon-mw-utils","snipmate-snippets","vim-addon-goto-thing-at-cursor","vim-addon-other", 'matchit.zip', 'syntastic2'],
       \ 'extra' : ['textobj-diff', "textobj-function",  "narrow_region"],
       \ 'vim': ["reload", 'vim-dev-plugin'],
       \ 'sql': [],
       \ 'php': ["phpcomplete", "vim-addon-xdebug","ZenCoding",'vim-addon-php-manual'],
-      \ 'scala': ["ensime", "vim-addon-scala","vim-addon-sbt"],
+      \ 'scala': ["ensime29", "vim-addon-scala","vim-addon-sbt"],
       \ 'sml': ["vim-addon-sml"],
       \ 'agda' : ["vim-addon-agda"],
       \ 'lilypond' : ['vim-addon-lilypond'],

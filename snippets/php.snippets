@@ -260,3 +260,30 @@ snippet wordpress_nonce_security
 	$link = ( function_exists('wp_nonce_url') ) ? wp_nonce_url($link, 'plugin-name-action_' . $your_object) : $link;
 
 	check_admin_referer('plugin-name-action_' . $your_object);
+
+snippet redirect
+	function redirect($code, $url, $close = false){
+		$x = array(
+			301 => 'Moved Permantenly',
+			302 => 'Moved Temporarily',
+		);
+		$t = $x[$code];
+		header("HTTP/1.1 $code $t");
+		header("location: $url");
+		if ($close)
+			header("Connection: close");
+	}
+snippet gettext_setup
+	$directory = dirname(__FILE__).'/lib/locale';
+	$domain = 'webseite';
+	$locale ="de_DE.UTF-8";
+	
+	//putenv("LANG=".$locale); //not needed for my tests, but people say it's useful for windows
+	setlocale( LC_MESSAGES, $locale);
+	bindtextdomain($domain, $directory);
+	textdomain($domain);
+	bind_textdomain_codeset($domain, 'UTF-8');
+snippet memory_limit_increase
+	ini_set('memory_limit', '2048M');
+snippet zendtextarea
+	${1:var} = new Zend_Form_Element_Textarea
