@@ -1,0 +1,15 @@
+This is my personal stuff.
+
+intented usage:
+
+1) activate "github:MarcWeber"
+
+2) after activating the plugin in your .vimrc call the Activate function:
+  call vim_addon_MarcWeber#Activate('all')
+
+  or pick a collections of plugins this way:
+  call vim_addon_MarcWeber#Activate(['scala','vim'])
+
+  if you want to do vim and scala development on this dev machine only.
+
+Questions? Just ask.
