@@ -1,5 +1,6 @@
 set sw=2
 set expandtab
+setlocal formatoptions=
 inoremap <buffer> <m-l> let<space>
 
 

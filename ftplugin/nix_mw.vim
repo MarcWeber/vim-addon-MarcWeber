@@ -1,5 +1,6 @@
 setlocal aw
 setlocal sw=2
+setlocal sts=2
 setlocal expandtab
 setlocal shiftwidth=2
 setlocal softtabstop=8

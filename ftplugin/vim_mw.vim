@@ -1,3 +1,7 @@
+fun! s:LTSp(s)
+  return vim_addon_other#InsertLT(' ',a:s,' ')
+endf
+
 
 " set sw=2
 inoremap <buffer> <m-cr> <lt>cr>
@@ -37,8 +41,8 @@ inoremap <buffer> <m-e><m-o> echo<space>
 inoremap <buffer> <m-e><m-s> <c-r>=vl#dev#text#insertFunctions#InsertWithSpaceNotAfter('!',"exists('")<cr>
 inoremap <buffer> <m-m> <c-r>=GetMetaEscapedChar()<cr>
 inoremap <buffer> <m-~> <space>=~<space>'
-inoremap <buffer> <m-=> <c-r>=vl#dev#text#insertFunctions#InsertWithSpace("=<space>")<cr>
-inoremap <buffer> <m-.> <c-r>=vl#dev#text#insertFunctions#InsertWithSpace(".=<space>")<cr>
+inoremap <buffer> <m-=> <c-r>=<sid>LTSp("=")<cr>
+inoremap <buffer> <m-.> <c-r>=<sid>LTSp(".=")<cr>
 inoremap <buffer> <m-+> <space>+=<space>
 inoremap <m-c><m-r> <lt>c-r>=
 inoremap <buffer> <m-i><m-w><m-s> <c-r>=vl#dev#text#insertFunctions#InsertWithSpace('<lt>c-r>=vl#dev#text#insertFunctions#InsertWithSpace("')<cr>

@@ -1,4 +1,8 @@
+" syntax match Entity "pos => #pos([^)]*)" conceal cchar=& | setlocal conceallevel=2
+" %s/pos => #pos([^)]*)//g
+" 
 setlocal tags+=~/haxe-lib/tags
+" %s/pos =>[^(]*([^)]*)//g
 " CFComplete haxe#CompleteClassNames
 " OFComplete haxe#CompleteHAXE
 
@@ -15,7 +19,7 @@ call vl#lib#completion#contextcompletion#InitContextCompletion(
          \ [ [ "Tab",'<c-tab>','b:tab_compl']
 	 \ , [ "CR" ,'<cr>' ,'b:cr_compl' ,"\<cr>"] ])
 
-AddTabCompletion spf \<bs>\<bs>static\<space>public\<space>function
+AddTabCompletion spf \<bs>\<bs>tatic\<space>public\<space>function
 AddTabCompletion p public
 AddTabCompletion pd public
 AddTabCompletion pv \<bs>rivate\<space>var

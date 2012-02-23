@@ -31,3 +31,19 @@ if expand('%') =~ '.js$'
 endif
 
 "outline
+"
+"
+fun! JSEnter()
+  for id in synstack(line("."), col("."))
+    echoe "id is ".id
+    if synIDattr(id, "name") == 'javaScriptStringS'
+      echo "hit"
+      return "\"\<cr> + \""
+    else
+      continue
+    endif
+  endfor
+  return ""
+endfunction
+
+inoremap <buffer> <expr> \cr JSEnter()

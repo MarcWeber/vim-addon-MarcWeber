@@ -21,7 +21,7 @@ snippet htmlToUtf8
 snippet args
 	$args = func_get_args();
 snippet tne
-	throw new Exception('${1}');
+	throw new Exception(${1});
 snippet fen
 	foreach ($${1:variable} as $${2:value}) {
 		${3:// code...}
@@ -44,7 +44,7 @@ snippet trace
 	$debug_handle = fopen('/tmp/php.log', 'a+');
 	fwrite($debug_handle, var_export(${1},true)."\n" );
 	fclose($debug_handle);
-snippets entferne_boms
+snippet entferne_boms
 	<?php
 	
 	function has_bom($file){
@@ -287,3 +287,96 @@ snippet memory_limit_increase
 	ini_set('memory_limit', '2048M');
 snippet zendtextarea
 	${1:var} = new Zend_Form_Element_Textarea
+snippet include_emulation_minimal
+	<?php
+	/*
+	.htaccess
+	DirectoryIndex index.shtml
+	
+	RewriteEngine On
+	RewriteBase /PATH
+	RewriteRule ^(.*\.shtml)$ include_emulation_php.php?file=$1 [L]
+	
+	$base = dirname($_GET['file']);
+	*/
+	
+	function include_virtual($x){
+		global $base;
+		return file_get_contents($base.'/'.$x[1]);
+	}
+	echo preg_replace_callback(
+		'/<!--#include virtual="([^"]*)" -->/',
+		'include_virtual',
+		file_get_contents($_GET['file'])
+	);
+snippet 1
+	${1:} => ${2:{$1}}
+snippet 2
+	let(:${1:}) do
+		Factory.create(:${2:$1})
+	end
+snippet limits
+	ini_set("memory_limit", "1000M") ; 
+	set_time_limit(60*60);
+
+snippet downloadFile
+
+	function downloadFile( $fullPath, $name = '' ){
+
+		if ($name == '')
+			$name = basename($fullPath);
+
+		// Must be fresh start
+		if( headers_sent() )
+			die('Headers Sent');
+
+		// Required for some browsers
+		if(ini_get('zlib.output_compression'))
+			ini_set('zlib.output_compression', 'Off');
+
+		// File Exists?
+		if( file_exists($fullPath) ){
+
+			// Parse Info / Get Extension
+			$fsize = filesize($fullPath);
+			$path_parts = pathinfo($name);
+			$ext = strtolower($path_parts["PATHINFO_EXTENSION"]);
+
+			// Determine Content Type
+			switch ($ext) {
+				case "pdf": $ctype="application/pdf"; break;
+				case "exe": $ctype="application/octet-stream"; break;
+				case "zip": $ctype="application/zip"; break;
+				case "doc": $ctype="application/msword"; break;
+				case "xls": $ctype="application/vnd.ms-excel"; break;
+				case "ppt": $ctype="application/vnd.ms-powerpoint"; break;
+				case "gif": $ctype="image/gif"; break;
+				case "png": $ctype="image/png"; break;
+				case "jpeg":
+				case "jpg": $ctype="image/jpg"; break;
+				default: $ctype="application/force-download";
+			}
+
+			header("Pragma: public"); // required
+			header("Expires: 0");
+			header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+			header("Cache-Control: private",false); // required for certain browsers
+			header("Content-Type: $ctype");
+			header("Content-Disposition: attachment; filename=\"".$name."\";" );
+			header("Content-Transfer-Encoding: binary");
+			header("Content-Length: ".$fsize);
+			ob_clean();
+			flush();
+			readfile( $fullPath );
+
+		} else
+			throw new Exception("File $fullPath Not Found");
+
+	} 
+
+
+snippet mysqli_insert
+	$sql = 'INSERT INTO .';
+	$eintrag = $db->prepare( $sql );
+	$eintrag->bind_param( 'ss', $name, $bereich );
+	$eintrag->execute();

@@ -10,12 +10,19 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
   let g:local_vimrc = {'names':['vl_project.vim']}
 
   let plugins = {
-      \ 'always': ['vim-addon-commenting','vim-addon-local-vimrc','vim-addon-sql',"vim-addon-completion", 'vim-addon-async', 'tlib', "vim-addon-toggle-buffer", "vim-addon-git","vim-addon-mercurial","vim-addon-mw-utils","snipmate-snippets","vim-addon-goto-thing-at-cursor","vim-addon-other", 'matchit.zip', 'syntastic2'],
+      \ 'always':
+        \ [
+            \ empty($XPTEMPLATE) ? 'snipmate-snippets' : 'xptemplate',
+            \ 'vim-addon-commenting','vim-addon-local-vimrc','vim-addon-sql',"vim-addon-completion",
+            \ 'vim-addon-async', 'tlib', "vim-addon-toggle-buffer",
+            \ "vim-addon-git","vim-addon-mercurial","vim-addon-mw-utils","vim-addon-goto-thing-at-cursor","vim-addon-other",
+            \ 'matchit.zip', 'syntastic2'
+            \ ],
       \ 'extra' : ['textobj-diff', "textobj-function",  "narrow_region"],
       \ 'vim': ["reload", 'vim-dev-plugin'],
       \ 'sql': [],
       \ 'php': ["phpcomplete", "vim-addon-xdebug","ZenCoding",'vim-addon-php-manual'],
-      \ 'scala': ["ensime29", "vim-addon-scala","vim-addon-sbt"],
+      \ 'scala': ["ensime", "vim-addon-scala","vim-addon-sbt"],
       \ 'sml': ["vim-addon-sml"],
       \ 'agda' : ["vim-addon-agda"],
       \ 'lilypond' : ['vim-addon-lilypond'],
@@ -80,16 +87,23 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
   endif
 
   set clipboard=unnamed
-  let tags = split(&tags,',')
-  for i in split(expand('$buildInputs'),'\s\+')
-    call extend(tags, split(glob(i.'/src/*/*_tags'),"\n"))
-  endfor
-  call extend(tags, split($TAG_FILES,":"))
-  call filter(tags, 'filereadable(v:val)')
-  for t in tags
-    exec "set tags+=".t
-  endfor
 
+  fun! AddTagsFromEnv()
+    let tags = split(&tags,',')
+    for i in split(expand('$buildInputs'),'\s\+')
+      call extend(tags, split(glob(i.'/src/*/*_tags'),"\n"))
+    endfor
+    call extend(tags, split($TAG_FILES,":"))
+    call filter(tags, 'filereadable(v:val)')
+    for t in tags
+      if &tags !~ substitute(t, '/','\\/','g')
+        exec "set tags+=".t
+      endif
+    endfor
+  endf
+  let g:vim_addon_haskell = {}
+  let g:vim_addon_haskell.env_reloaded_hook_fun = 'AddTagsFromEnv'
+  call AddTagsFromEnv()
 
   augroup ADD_CONFLICT_MARKERS_MATCH_WORDS
     " git onlny for now
@@ -97,12 +111,13 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
   augroup end
 
 
-  command! AsyncSh call async_porcelaine#LogToBuffer({'cmd':'/bin/sh -i', 'move_last':1, 'prompt': '^.*\$[$] '})
-  command! AsyncCoq call async_porcelaine#LogToBuffer({'cmd':'coqtop', 'move_last':1, 'prompt': '^Coq < '})
-  command! AsyncRubyIrb call repl_ruby#RubyBuffer({'cmd':'irb','move_last' : 1})
-  command! AsyncRubySh call repl_ruby#RubyBuffer({'cmd':'/bin/sh','move_last' : 1})
-  command! AsyncPython call repl_python#PythonBuffer({'cmd':'python -i','move_last' : 1, 'prompt': '^>>> '})
-  command! AsyncSMLNJ call repl_ruby#RubyBuffer({'cmd':'sml','move_last' : 1, 'prompt': '^- '})
+  command! ASh call async_porcelaine#LogToBuffer({'cmd':'/bin/sh -i', 'move_last':1, 'prompt': '^.*\$[$] '})
+  command! AGhci call async_porcelaine#LogToBuffer({'cmd':'ghci', 'move_last':1, 'prompt': '^.*\$[$] '})
+  command! ACoq call async_porcelaine#LogToBuffer({'cmd':'coqtop', 'move_last':1, 'prompt': '^Coq < '})
+  command! ARubyIrb call repl_ruby#RubyBuffer({'cmd':'irb','move_last' : 1})
+  command! ARubySh call repl_ruby#RubyBuffer({'cmd':'/bin/sh','move_last' : 1})
+  command! APython call repl_python#PythonBuffer({'cmd':'python -i','move_last' : 1, 'prompt': '^>>> '})
+  command! ASMLNJ call repl_ruby#RubyBuffer({'cmd':'sml','move_last' : 1, 'prompt': '^- '})
 
   "autocommands:"{{{
     " When editing a file, always jump to the last known cursor position.
@@ -169,12 +184,10 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
   inoremap <c-e> :<esc>A<cr>
 
   if isdirectory('src/main/scala')
-    noremap <c-s> :e src/main/scala/*
+    noremap <m-s> :e src/main/scala/*
   endif
 
-  augroup FOO
-    autocmd BufRead,BufNewFile *.syn-test  set filetype=syn-test
-  augroup end
+  set list listchars=tab:\ \ ,trail:·
 
   augroup FIX_YOUR_WORDING
     autocmd BufWritePost * call vim_addon_MarcWeber#FixYourWording()
@@ -192,6 +205,8 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
 	  \ ,'haml': 'html,javascript'
 	  \ }}
 
+
+  noremap <m-g><m-o> :call<space>vim_addon_MarcWeber#FileByGlobCurrentDir('**/*'.input('glob open ').'$',"\\.git<bar>\\.hg" )<cr>
 endf
 
 fun! vim_addon_MarcWeber#FixYourWording()
@@ -199,3 +214,39 @@ fun! vim_addon_MarcWeber#FixYourWording()
     echoe "should be keep out of your way!"
   endif
 endf
+
+
+" TODO refactor: create glob function
+function! vim_addon_MarcWeber#FileByGlobCurrentDir(glob, exclude_pattern)
+  exec library#GetOptionalArg('caption', string('Choose a file'))
+  " let files = split(glob(a:glob),"\n")
+  let g = a:glob
+  let replace = {'**': '.*','*': '[^/\]*','.': '\.'}
+  let g = substitute(g, '\(\*\*\|\*\|\.\)', '\='.string(replace).'[submatch(1)]','g')
+
+  let exclude = a:exclude_pattern == ''? '' : ' | grep -v -e '.shellescape(a:exclude_pattern)
+
+  let cmd = 'find | grep -e '.shellescape(g).exclude
+  let files = split(system(cmd),"\n")
+  " for nom in a:excludes
+  "   call filter(files,nom)
+  " endfor
+  if len(files) > 1000
+    echoe "more than ".2000." files - would be too slow. Open the file in another way"
+  else
+    if empty(files)
+      echoe "no file found"
+    elseif len(files) == 1
+      exec 'e '.files[0]
+    else
+      let g:abc=7
+      call tovl#ui#filter_list#ListView({
+            \ 'number' : 1,
+            \ 'selectByIdOrFilter' : 1,
+            \ 'Continuation' : library#Function('exec "e ".ARGS[0]'),
+            \ 'items' : files,
+            \ 'cmds' : ['wincmd J']
+            \ })
+    endif
+  endif
+endfunction

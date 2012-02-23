@@ -2,6 +2,7 @@ setlocal comments+=bs:import,
 setlocal sw=2
 setlocal aw
 setlocal notagbsearch
+setlocal autoindent
 
 noremap <buffer> <m-e><m-m> :e /pr/haskell/amendment/Missing/
 call vl#dev#haskell#ghc#UI()
@@ -129,7 +130,7 @@ function! s:SetCompiler(...)
 endfunction
 
 fun! LTSp(s)
-  return tovl#map#InsertLT(' ',a:s,' ')
+  return vim_addon_other#InsertLT(' ',a:s,' ')
 endf
 
 "inoremap <buffer> <c-s-s> False

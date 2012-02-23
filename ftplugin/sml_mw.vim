@@ -2,7 +2,7 @@ inoremap <buffer> <m-v> val<space>
 
 
 fun! LTSp(s)
-  return tovl#map#InsertLT(' ',a:s,' ')
+  return vim_addon_other#InsertLT(' ',a:s,' ')
 endf
 inoremap <buffer> <m->> <c-r>=LTSp("->")<cr>
 inoremap <buffer> <m-:> <c-r>=LTSp(":::")<cr>
