@@ -16,7 +16,7 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
             \ 'vim-addon-commenting','vim-addon-local-vimrc','vim-addon-sql',"vim-addon-completion",
             \ 'vim-addon-async', 'tlib', "vim-addon-toggle-buffer",
             \ "vim-addon-git","vim-addon-mercurial","vim-addon-mw-utils","vim-addon-goto-thing-at-cursor","vim-addon-other",
-            \ 'matchit.zip', 'syntastic2'
+            \ 'matchit.zip', 'vim-addon-syntax-checker', 'vim-addon-rfc'
             \ ],
       \ 'extra' : ['textobj-diff', "textobj-function",  "narrow_region"],
       \ 'vim': ["reload", 'vim-dev-plugin'],
@@ -31,8 +31,8 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
       \ 'haxe' : [ 'vim-haxe' ],
       \ 'as3': ["vim-addon-fcsh","Flex_Development_Support"],
       \ 'haskell' : [ "vim-addon-haskell"],
-      \ 'haskell-scion' : [ "scion-backend-vim"],
-      \ 'ruby' : [ "vim-ruby-debugger" ],
+      \ 'haskell-scion' : ["scion-backend-vim"],
+      \ 'ruby' : [ "vim-addon-rdebug", 'vim-addon-ruby-debug-ide' ],
       \ 'delphi' : [ "vim-addon-delphi" ],
       \ 'nix' : ["vim-addon-nix"],
       \ 'coq' : ['vim-addon-coq'],
@@ -133,6 +133,7 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
   "window cursor movement
   nnoremap <m-s-v><m-s-p> :exec "wincmd g\<c-]>" <bar> exec 'syntax keyword Tag '.expand('<cword>')<cr>
   vnoremap <m-s-v><m-s-p> y:sp<bar>tjump <c-r>"<cr>
+  noremap <m-s-s> :<c-u>tjump<space>
    
   nnoremap <m-b><m-n> :bn<cr>
   nnoremap <m-b><m-p> :bp<cr>
@@ -174,20 +175,20 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
   noremap <m-s-a> <esc>jA
   noremap <m-e> :e<space>
 
-  noremap <m-s-s> :<c-u>tjump<space>
   noremap <m-s-t><m-s-p> :<c-u>tprevious<cr>
   noremap <m-s-t><m-s-n> :<c-u>tnext<cr>
   nnoremap <m-s-t> :tabnew<cr>
   exec "noremap <m-s-f><m-s-t><m-s-p> :exec 'e ".fnamemodify(s:thisf,':h:h')."/ftplugin/'.&filetype.'_mw.vim'<cr>"
   noremap \co :<c-u>exec 'cope '.&lines/3<cr>
-  noremap <m-s-s><m-s-p> :SnipMateOpenSnippetFiles<cr>
+  noremap <m-s><m-p> :SnipMateOpenSnippetFiles<cr>
+  " noremap <esc>s<esc>p :SnipMateOpenSnippetFiles<cr>
   inoremap <c-e> :<esc>A<cr>
 
   if isdirectory('src/main/scala')
     noremap <m-s> :e src/main/scala/*
   endif
 
-  set list listchars=tab:\ \ ,trail:Â·
+  set list listchars=tab:\ \ ,trail:· 
 
   augroup FIX_YOUR_WORDING
     autocmd BufWritePost * call vim_addon_MarcWeber#FixYourWording()
@@ -206,7 +207,7 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
 	  \ }}
 
 
-  noremap <m-g><m-o> :call<space>vim_addon_MarcWeber#FileByGlobCurrentDir('**/*'.input('glob open ').'$',"\\.git<bar>\\.hg" )<cr>
+  noremap <m-g><m-o> :call<space>vim_addon_MarcWeber#FileByGlobCurrentDir('**/*'.input('glob open '),"\\.git<bar>\\.hg" )<cr>
 endf
 
 fun! vim_addon_MarcWeber#FixYourWording()
@@ -237,13 +238,13 @@ function! vim_addon_MarcWeber#FileByGlobCurrentDir(glob, exclude_pattern)
     if empty(files)
       echoe "no file found"
     elseif len(files) == 1
-      exec 'e '.files[0]
+      exec 'e '.fnameescape(files[0])
     else
       let g:abc=7
       call tovl#ui#filter_list#ListView({
             \ 'number' : 1,
             \ 'selectByIdOrFilter' : 1,
-            \ 'Continuation' : library#Function('exec "e ".ARGS[0]'),
+            \ 'Continuation' : library#Function('exec "e ".fnameescape(ARGS[0])'),
             \ 'items' : files,
             \ 'cmds' : ['wincmd J']
             \ })

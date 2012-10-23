@@ -1,5 +1,5 @@
 setlocal thesaurus+=~/.mutt-aliases
-%/s\*\*\* GMX Spamverdacht \*\*\* //
+%/s\*\*\* GMX Spamverdacht \*\*\* //e
 map <buffer> <m-s>  :call search('\csubject:\s*\zs\ze','')<cr>
 map <buffer> <m-t> :call search('\cTo:\s*\zs\ze','')<cr>
 
@@ -28,7 +28,7 @@ ab simons James Cook
 ab urkud Yury G Kudryashov
 ab goibhniu Cillian de Róiste
 ab phreedom Evgeny Egorochkin
-ab  goibhniu Cillian de Róiste
+ab goibhniu Cillian de Róiste
 
 setlocal tags=
 set tags=
@@ -37,8 +37,8 @@ nix-commits@cs.uu.nl
 
 
 ICQ: 343698523
-Skype: skymawe
 MSN: my email
+Skype: skymawe
 irc.freenode.net: MarcWeber
 
 

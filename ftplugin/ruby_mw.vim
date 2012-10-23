@@ -11,3 +11,10 @@ fun! s:LTSp(s)
 endf
 
 inoremap <buffer> <m-f> <c-r>=<sid>LTSp("=>")<cr>
+
+noremap <m-g><m-e> :cfile errors-dev.txt<cr>
+
+fun! Ri(s)
+endf
+
+command! -nargs=1 Ri call views#View('exec',['sh', '-c', 'ri '.<f-args>.' <bar> sed -e "s/.//g" -e "s///"'])

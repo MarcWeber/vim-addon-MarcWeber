@@ -380,3 +380,220 @@ snippet mysqli_insert
 	$eintrag = $db->prepare( $sql );
 	$eintrag->bind_param( 'ss', $name, $bereich );
 	$eintrag->execute();
+
+snippet eur_replace_pdf
+
+	function pdf_eur_replace($s){
+		return str_replace(chr(191),chr(128),$s);
+	}
+	
+	function utf8_decode_pdf($s){
+		return preg_replace_callback('/([^€]+)|([€]+)/', function($m){
+			return (empty($m[1])) ? chr(128) : utf8_decode($m[1]);
+		}, $s);
+	}
+snippet fpdf_ext
+	function CellO($o){
+			// same as Cell, but takes array as argument so that you can merge easily
+			$this->Cell(
+		d($o, 'w', 0),
+		d($o, 'h', 0),
+		d($o, 'txt', ''),
+		d($o, 'border', '1'),
+		d($o, 'ln', '0'),
+		d($o, 'align', ''),
+		d($o, 'fill', 0),
+		d($o, 'link', '')
+			);
+	}
+	
+	/* renders multiple rows from left to right. If the width of the page is not sufficient
+		* rendering continues in a new set of rows below.
+		*
+		* layout: 
+		*    // font-size
+		*    col-header-options: array(....)
+		*    col-options: array(....)
+		*    row-height:
+		*/
+	function renderTableFromLeftToRight($rows_of_cols_headers, $rows_of_cols, $layout){
+			/* noch genug Platz fuer eine Zeile?*/
+	
+			$this->font('klein');
+	
+			$row_height = $layout['row-height'];
+			$cols_total = count($rows_of_cols[0]);
+	
+			// $this->h - $this->y < 
+			$required_height = $row_height * count($rows_of_cols_headers);
+	
+			while (count($rows_of_cols[0]) > 0){
+		// es gibt noch Zellen zum ausgeben
+		// gibts auf dieser Seite noch genug Platz fuer alle Rows?
+	
+		if (d($layout, 'page-break', false) && ($required_height > $this->h - $this->bMargin - $this->y)){
+				// try new page
+				$this->AddPage();
+				if (! $required_height > $this->h - $this->bMargin - $this->y){
+			throw new Exception(eval($c));
+			throw new PDFOutOfPageSpaceException('Even on a new page there is not enough space to render the grid');
+				}
+		}
+	
+		// foreach Row
+		for ($i = 0; $i < count($rows_of_cols_headers); $i++) {
+				$header_row = $rows_of_cols_headers[$i];
+				$data_row =& $rows_of_cols[$i];
+	
+				// render col headers
+				$this->SetX($this->lMargin);
+				for ($j = 0; $j < count($rows_of_cols_headers[0]); $j++) {
+			$o = $layout['col-header-options'][$j];
+			$o['h'] = $row_height;
+			$o['txt'] = $header_row[$j];
+			$this->CellO($o);
+				}
+				$this->Cell(1, $row_height, '', 1);
+	
+				// render as much data as fits on the page to the right, drop cells from array until done
+				$j = 0;
+				while (count($data_row) > 0) {
+			$col_idx = $cols_total - count($data_row);
+			$cw = $layout['col-options'][$col_idx]['w'];
+			if ($this->x + $cw > $this->w - $this->rMargin){
+					if ($j == 0) throw PDFOutOfPageSpaceException('something is wrong, couldnt render single col idx '.$col_idx);
+					break;
+			}
+	
+			$o = $layout['col-options'][$j];
+			$o['h'] = $row_height;
+			$o['txt'] = array_shift($data_row);
+			$this->CellO($o);
+	
+			$j += 1;
+				}
+				$this->SetY($this->GetY() + $row_height);
+		}
+	
+		// some spacing if not all cells fit on these lines
+		if (count($rows_of_cols[0]) > 0)
+				$this->Ln();
+			}
+	}
+
+snippet microtime_bench_start
+	define('MICROTIME_START',microtime(true));
+
+snippet microtime_bench
+	$debug_handle = fopen('/tmp/php.log', 'a+');
+	fwrite($debug_handle, var_export("${1} ".(microtime(true) - MICROTIME_START),true)."\n");
+	fclose($debug_handle);
+snippet finde_segfault_lines
+	<?php
+	
+	$sec_tollerance = 1;
+	
+	$segfault_lines = '
+	Aug 22 00:00:18 webkos kernel: php-cgi[21750]: segfault at 7ffff68dbfe8 ip 00000000005d8fae sp 00007ffff68dbf90 error 6 in php-cgi[400000+2fe000]
+	Aug 22 01:00:17 webkos kernel: php-cgi[22804]: segfault at 7fff961aafdc ip 00000000005d467a sp 00007fff961aafb0 error 6 in php-cgi[400000+2fe000]
+	';
+	
+	$dates = array();
+	
+	$by_url = array();
+	$by_url_kunde = array();
+	
+	foreach (explode("\n", $segfault_lines) as $l) {
+		if (!preg_match('/Aug ([^ ]*) ([^ ]*)/', $l, $m)){
+				echo "skipping $l\n";
+				continue;
+		} else {
+			$date = $m[1].'.8.2012 '.$m[2];
+			# print $date."\n";
+			$parsed = strtotime($date);
+			$dates[] = $parsed;
+			# print date('d.m.Y H:i:s', $parsed)."\n";
+		}
+	}
+	
+	foreach(glob('var/www/vhosts/*/statistics/logs/access_log') as $file){
+		# if ($file != 'var/www/vhosts/alberttravel.com/statistics/logs/access_log')
+		#    continue;
+		echo "reading $file\n";
+		foreach (explode("\n", file_get_contents($file)) as $l) {
+			if ($l == "") continue;
+			if ($l == " ") continue;
+			if (!(preg_match('/([^ ]*) - - \[([^\]]*) \+0200\] "(GET|POST|OPTIONS|HEAD) ([^ ]+) ([^"]*)".*$/', $l, $m))){
+			/*                ^IP           ^ date    ^method    ^ URL
+			 */
+				echo "skipping line $l found at $file\n";
+			} else {
+				$date_s = $m[2];
+				$method = $m[3];
+				$url = $m[4];
+	
+				list ($date, $h, $min, $s) = explode(":", $date_s);
+				list ($day, $month, $year) = explode("/", $date);
+				$date_s = "$day.08.$year $h:$min:$s";
+				$parsed = strtotime($date_s);
+	
+				# $url = preg_replace('/(&[^&]*)&.*/','\1', $url);
+				
+				foreach ($dates as $d){
+					if ($d >= $parsed && $parsed >= $d - $sec_tollerance){
+	
+						if (!isset($by_url[$url]))
+							$by_url[$url] = 1;
+						else
+							$by_url[$url]++;
+	
+	
+						if (!isset($by_url_kunde[$file.'|'.$url])){
+							$by_url_kunde[$file.'|'.$url] = 1;
+						}else{
+							$by_url_kunde[$file.'|'.$url]++;
+						}
+					
+						break;
+					}
+				}
+			}
+		}
+	}
+	
+	// $by_url_kunde = array_flip($by_url_kunde);
+	// $by_url = array_flip($by_url);
+	
+	echo "by url kunde\n";
+	foreach ($by_url_kunde as $key => $value) {
+		echo "$key $value\n";
+	}
+	
+	echo "by url \n";
+	foreach ($by_url as $key => $value) {
+		echo "$key $value\n";
+	}
+
+snippet google_lat_lon
+	function google_lat_lon($addr){
+		$url = 'http://maps.google.com/maps/api/geocode/json?address='.urlencode($addr).'&sensor=false&region=de';
+		$a = file_get_contents($url);
+		$addr_info = json_decode($a, true);
+		if (!isset($addr_info['results'][0]['geometry']['location']))
+			return array('lat' => null, 'lon' => null);
+		$ai = $addr_info['results'][0]['geometry']['location'];
+		return array('lat' => $ai['lat'], 'lon' => $ai['lng']);
+	}
+	
+	function lat_lon_distance_km($a, $b) { 
+		$lat1 = $a['lat'];
+		$lon1 = $a['lon'];
+		$lat2 = $b['lat'];
+		$lon2 = $b['lon'];
+	
+		$theta = $lon1 - $lon2; 
+		$dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)); 
+		$dist = acos($dist); 
+		$dist = rad2deg($dist); 
+		return $dist * 60 * 1.85316;
+	}

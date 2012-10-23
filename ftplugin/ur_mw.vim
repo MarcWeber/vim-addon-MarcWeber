@@ -14,6 +14,7 @@ inoremap <buffer> <m-t> Type
 inoremap <buffer> <m-n> Name
 inoremap <buffer> 3.<space> <c-r>=<sid>LTSp(":::")<cr>
 inoremap <buffer> 2.<space> <c-r>=<sid>LTSp("::")<cr>
+inoremap <buffer> <m-r> <c-r>=<sid>LTSp("=>")<cr>
 inoremap <buffer> 2=<space> <c-r>=<sid>LTSp("==>")<cr>
 inoremap <buffer> 2-<space> <c-r>=<sid>LTSp("-->")<cr>
 inoremap <buffer> <m-f> <space>=><space>

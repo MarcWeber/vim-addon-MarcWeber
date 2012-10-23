@@ -85,3 +85,5 @@ function! UmlauteReplace()
   %s/Ä/\&Auml;/g
   %s/ß/\&szlig;/g
 endfunction
+
+nnoremap <F5> i&shy;<esc>l
