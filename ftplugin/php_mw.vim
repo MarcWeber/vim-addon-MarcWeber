@@ -1,5 +1,5 @@
-ActivateAddons theonevimlib
-call theonevimlibsetup#Setup()
+" ActivateAddons theonevimlib
+" call theonevimlibsetup#Setup()
 "print_isetlocal fdm=indent
 "finish
 " pear coding standard
@@ -9,9 +9,8 @@ call theonevimlibsetup#Setup()
 "set tabstop=4
 "set sw=4
 setlocal autoindent
-"set expandtab
+finish
 "
-call config#SetB('template_dirs', ["/home/marc/mwr/dotvim/tovl_templates/html"])
 " switch files
 noremap <buffer> <m-s><m-b> :call vl#lib#files#switch_files#SwitchFile()<cr>
 let dir1 = '/pr/webkos/svn/booksys/branches/Marc/libraries/lm/'
