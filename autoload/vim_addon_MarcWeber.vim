@@ -9,13 +9,14 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
 
   let g:local_vimrc = {'names':['vl_project.vim']}
 
+  " ,"vim-addon-mercurial"
   let plugins = {
       \ 'always':
         \ [  'vim-addon-mru',
             \ empty($XPTEMPLATE) ? 'snipmate-snippets' : 'xptemplate',
             \ 'vim-addon-commenting', 'vim-addon-local-vimrc', 'vim-addon-sql',"vim-addon-completion",
             \ 'vim-addon-async', 'tlib', "vim-addon-toggle-buffer",
-            \ "vim-addon-git","vim-addon-mercurial","vim-addon-mw-utils","vim-addon-goto-thing-at-cursor","vim-addon-other",
+            \ "vim-addon-git","vim-addon-mw-utils","vim-addon-goto-thing-at-cursor","vim-addon-other",
             \ 'matchit.zip', 'vim-addon-syntax-checker', 'vim-addon-rfc',
             \ 'vim-addon-mw-utils', 'vim-addon-surround', 'vim-addon-toc'
             \ ],
