@@ -39,7 +39,7 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
     " \ '^\%(c\|cpp\)$': [ 'plugin-for-c-development' ],
     let g:ft_addons = {
       \ '^\%(cabal\|hs\|hsc\|lhs\)$': [ "vim-addon-haskell"],
-      \ '^\%(php\|inc\|php.inc\|hsc\|lhs\)$': ['theonevimlib',"phpcomplete", "vim-addon-xdebug","ZenCoding", 'vim-addon-php-manual'],
+      \ '^\%(php\|inc\|php.inc\|hsc\|lhs\)$': ["phpcomplete", "vim-addon-xdebug","ZenCoding", 'vim-addon-php-manual'],
       \ 'rb': [ 'vim-ruby',  "vim-addon-rdebug", 'vim-addon-ruby-debug-ide' ],
       \ 'nix': [ "vim-addon-nix" ],
       \ 'vim': ["reload", 'vim-dev-plugin'],
