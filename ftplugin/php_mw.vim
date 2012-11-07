@@ -1,3 +1,5 @@
+ActivateAddons theonevimlib
+call theonevimlibsetup#Setup()
 "print_isetlocal fdm=indent
 "finish
 " pear coding standard
