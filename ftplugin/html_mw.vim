@@ -1,4 +1,5 @@
 " setlocal sw=2
+finish
 
 " close xml tags:
 imap <c-c> </<c-x><c-o>
