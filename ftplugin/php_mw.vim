@@ -9,6 +9,10 @@
 "set tabstop=4
 "set sw=4
 setlocal autoindent
+inoremap <buffer> <m-d><m-e> define('','')<left><left><left><left><left>
+
+noremap <m-g><m-e> :compiler php<bar>cf /var/marc/vimserver/error <bar> cope<cr>
+
 finish
 "
 " switch files
@@ -142,7 +146,6 @@ noremap <buffer> <F3> :update <bar>call vl#lib#quickfix#runtaskinbackground#RunI
 noremap <buffer> <m-f> :update <bar>exec 'BGQF /usr/lib/php4/bin/php '.expand('%')<cr>
 noremap <buffer> <c-5> :update <bar>exec 'BGQF php5 '.expand('%')<cr>
 
-inoremap <buffer> <m-d><m-e> define('','')<left><left><left><left><left>
 
 " array 
 Inoremap <buffer> <m-a><m-k><m-e> array_key_exists('',)<esc>3l
@@ -238,7 +241,6 @@ command! -buffer SetServerBN :exec "!echo ".v:servername." > /var/marc/vimserver
 
 "call vl#lib#files#switch_files#SwitchFileRegisterLocalRegexSwap('.php','.php5')
 call tovl#errorformat#SetErrorFormat('plugins#tovl#errorformats#PluginErrorFormats#grep')
-noremap <m-g><m-e> :call tovl#errorformat#SetErrorFormat('plugins#tovl#errorformats#PluginErrorFormats#php') <bar> cf /var/marc/vimserver/error <bar> cope<cr>
 noremap <m-g><m-p> :call tovl#errorformat#SetErrorFormat('plugins#tovl#errorformats#PluginErrorFormats#php') <bar> cf /var/marc/vimserver/error-sel <bar> cope<cr>
 
 Inoremap <buffer> <m-p><m-r><m-e> echo<space>'<lt>pre>';<cr>echo<space>'<lt>/pre>';

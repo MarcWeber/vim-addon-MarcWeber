@@ -15,15 +15,16 @@ inoremap <buffer> <m-v><m-d> Void
 
 setlocal fdm=marker
 
-call vl#lib#completion#contextcompletion#InitContextCompletion(
-         \ [ [ "Tab",'<c-tab>','b:tab_compl']
-	 \ , [ "CR" ,'<cr>' ,'b:cr_compl' ,"\<cr>"] ])
+" call vl#lib#completion#contextcompletion#InitContextCompletion(
+"          \ [ [ "Tab",'<c-tab>','b:tab_compl']
+" 	 \ , [ "CR" ,'<cr>' ,'b:cr_compl' ,"\<cr>"] ])
 
-AddTabCompletion spf \<bs>\<bs>tatic\<space>public\<space>function
-AddTabCompletion p public
-AddTabCompletion pd public
-AddTabCompletion pv \<bs>rivate\<space>var
+" AddTabCompletion spf \<bs>\<bs>tatic\<space>public\<space>function
+" AddTabCompletion p public
+" AddTabCompletion pd public
+" AddTabCompletion pv \<bs>rivate\<space>var
 " setlocal autoindent
+" AddTabCompletion i import
 setlocal cindent
 
 "au Haxe BufWritePost <buffer> exec "normal \<F2>:wincmd p\<cr>"
@@ -36,14 +37,6 @@ inoremap <buffer> <m-p> pubilc<space>
 inoremap <buffer> <m-t> this.
 
 noremap <buffer> qd :FlexDoc<space><c-r>=expand('<cword>')<cr>
-
-call vl#lib#completion#contextcompletion#InitContextCompletion(
-      \ [ [ "Tab",'<c-tab>','b:tab_compl']
-      \ , [ "CR" ,'<cr>' ,'b:cr_compl' ,"\<cr>"] ])
-
-
-AddTabCompletion i import
-
 
 command! -buffer AdobeDocs -args=0 exec '!opera http://www.google.com/search?hl=de&q='.expand('<cword>').'+site%3Ahttp%3A%2F%2Flivedocs.adobe.com%2F&btnG=Suche&lr=&aq=f&oq='
 

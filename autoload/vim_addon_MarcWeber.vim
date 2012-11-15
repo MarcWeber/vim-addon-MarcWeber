@@ -40,7 +40,7 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
     let g:ft_addons = {
       \ '^\%(cabal\|hs\|hsc\|lhs\)$': [ "vim-addon-haskell"],
       \ '^\%(php\|inc\|php.inc\|hsc\|lhs\)$': ["phpcomplete", "vim-addon-xdebug","ZenCoding", 'vim-addon-php-manual'],
-      \ 'rb': [ 'vim-ruby',  "vim-addon-rdebug", 'vim-addon-ruby-debug-ide' ],
+      \ 'ruby': [ 'vim-ruby',  "vim-addon-rdebug", 'vim-addon-ruby-debug-ide' ],
       \ 'nix': [ "vim-addon-nix" ],
       \ 'vim': ["reload", 'vim-dev-plugin'],
     \ }

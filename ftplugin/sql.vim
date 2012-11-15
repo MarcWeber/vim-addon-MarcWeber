@@ -1,6 +1,4 @@
 " needs mwpluginmanager
-exec vl#lib#vimscript#dontloadtwice#DontLoadTwice('b:sql')
-
 set sw=2
 setlocal fdm=indent
 imap <buffer> <m-c> create<space>table<space>

@@ -15,7 +15,6 @@ setlocal sw=2
 let s:matchfunction='public\|private\|protected\|friendly\|void|\static\|class'
 let s:java_identifier='\a[[:alnum:]]*'
 
-exec vl#lib#vimscript#dontloadtwice#DontLoadTwice('b:ftpjava')
 function! InsertMainClass()
   exe "put='public class ".expand('%:t:r')."{'"
   put='public static void Main(String args()){'
@@ -141,7 +140,7 @@ function! SingleComplete()
     return "nothing"
   endfunction
 
-  call ProvidePublicPrivateMappings()
+  " call ProvidePublicPrivateMappings()
   inoremap <buffer> <cr> <c-r>=AfterReturn()<cr>
   "inoremap <buffer> <cr> )<c-r>=GetLineEnding()<cr>
   "inoremap <buffer> "<cr> )<c-r>=GetLineEnding()<cr>

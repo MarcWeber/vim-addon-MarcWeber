@@ -4,6 +4,24 @@ setlocal aw
 setlocal notagbsearch
 setlocal autoindent
 
+fun! s:LTSp(s)
+  return vim_addon_other#InsertLT(' ',a:s,' ')
+endf
+
+inoremap <buffer> <m-$> <c-r>=LTSp("$")<cr>
+inoremap <buffer> <m-<> <c-r>=LTSp("<-")<cr>
+inoremap <buffer> <m->> <c-r>=LTSp("->")<cr>
+inoremap <buffer> <m-r> <c-r>=LTSp("=>")<cr>
+inoremap <buffer> <m-.> <c-r>=LTSp(".")<cr>
+inoremap <buffer> <m-p> <c-r>=LTSp("++")<cr>
+inoremap <buffer> <m-q><m-d> <c-r>=LTSp("qualified")<cr>
+inoremap <buffer> <m-l><m-m> <c-r>=LTSp("liftM")<cr>
+inoremap <buffer> <m-l><m-2> <c-r>=LTSp("liftM2")<cr>
+inoremap <buffer> <m-l><m-3> <c-r>=LTSp("liftM3")<cr>
+inoremap <buffer> <m-l><m-b> <c-r>=LTSp("=<<")<cr>
+inoremap <buffer> <m-r><m-b> <c-r>=LTSp(">>=")<cr>
+inoremap <m-:> <c-r>=LTSp("::")<cr>
+finish
 noremap <buffer> <m-e><m-m> :e /pr/haskell/amendment/Missing/
 call vl#dev#haskell#ghc#UI()
 
@@ -141,30 +159,18 @@ inoremap <buffer> <m-s-L> Left
 "inoremap <buffer> <m-s-R> Right
 inoremap <buffer> <m-s-j> Just
 inoremap <buffer> <m-s-n> Nothing
-inoremap <buffer> <m-$> <c-r>=LTSp("$")<cr>
+
 inoremap <buffer> <m-s><m-g> String
 inoremap <buffer> <m-m><m-n> main<space>=<space>do<cr>
-inoremap <buffer> <m-<> <c-r>=LTSp("<-")<cr>
-inoremap <buffer> <m->> <c-r>=LTSp("->")<cr>
-inoremap <buffer> <m-r> <c-r>=LTSp("=>")<cr>
-inoremap <buffer> <m-.> <c-r>=LTSp(".")<cr>
-inoremap <buffer> <m-p> <c-r>=LTSp("++")<cr>
 inoremap <buffer> <m-m><m-b> Maybe<space>
 inoremap <buffer> <m-i><m-c> instance<space>
 inoremap <buffer> <m-d><m-v> deriving<space>(
-inoremap <buffer> <m-q><m-d> <c-r>=LTSp("qualified")<cr>
 inoremap <buffer> <m-bar> <space><lt><bar>><space>
 inoremap <buffer> <m-r><m-n> return<space>
-inoremap <buffer> <m-l><m-m> <c-r>=LTSp("liftM")<cr>
-inoremap <buffer> <m-l><m-2> <c-r>=LTSp("liftM2")<cr>
-inoremap <buffer> <m-l><m-3> <c-r>=LTSp("liftM3")<cr>
 inoremap <buffer> <m-l><m-i> liftIO<space>
 inoremap <buffer> <m-a><m-d><m-c> --<space>added<space>by<space>Marc<space>(debug<space>purposes)<space>on<space><c-r>=system('date')<cr>
 inoremap <buffer> <m-f><m-o> f<space>`on`<space>op<space>=<space>\x<space>y<space>-><space>f<space>x<space>`op`<space>f<space>y
 inoremap <buffer> <m-c><m-o><m-g><m-e> {-# OPTIONS_GHC -fglasgow-exts #-}
-inoremap <buffer> <m-l><m-b> <c-r>=LTSp("=<<")<cr>
-inoremap <buffer> <m-r><m-b> <c-r>=LTSp(">>=")<cr>
-inoremap <m-:> <c-r>=LTSp("::")<cr>
 
 inoremap <buffer> <m-w><m-a> <esc>-yejPa<space>
 noremap <buffer> <m-s><m-a> /<c-r>=SearchAnyTypeExpression(input('name :'))<cr>
