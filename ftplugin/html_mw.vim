@@ -45,25 +45,6 @@ inoremap <buffer> <m-i><m-d> <c-r>=vl#dev#text#insertFunctions#InsertWithSpaceNo
 inoremap <buffer> <m-c><m-s> <c-r>=vl#dev#text#insertFunctions#InsertWithSpaceNotAfterBefore('_',"class=\"\"",'>')<cr><esc>?""<cr>a
 " inoremap <buffer> <c-i> $('')<esc>2h
 
-" my EasyHTML mappings
-" Tag deletion
-nm d<F2> lF<df>
-" Attribut deletion
-nm d<F3> lF d2f"
-" Left move attribut
-nm <C-S-Left> d<F3>
-" Right move attribut
-nm <C-S-Right> d<F3>/ \\|><cr>:nohl<cr>P
-" Tag attributes list
-nm <m-l><m-e> :cal LaunchEasyHtml('<')<cr>
-"im <F2> <esc><F2>a
-" Attributes values list
-nm <m-l><m-a> :cal LaunchEasyHtml('\s')<cr>
-"im <F3> <esc><F3>a
-" Style attribut values list
-nm <m-l><m-s> :cal LaunchEasyHtml('\(\s\\|"\\|;\)[a-zA-Z-]\+:')<cr>
-"im <F4> <esc><F4>a
-
 exec 'so '.expand('<sfile>:p:h').'/xml_mw.vim'
 exec 'so '.expand('<sfile>:p:h').'/javascript_mw.vim'
 

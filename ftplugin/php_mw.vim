@@ -11,7 +11,13 @@
 setlocal autoindent
 inoremap <buffer> <m-d><m-e> define('','')<left><left><left><left><left>
 
+inoremap <buffer> <m-r> ->
 noremap <m-g><m-e> :compiler php<bar>cf /var/marc/vimserver/error <bar> cope<cr>
+inoremap <buffer> <m-i> ['
+inoremap <buffer> <m-f> <space>=><space>
+inoremap <buffer> <m-t> $this->
+inoremap <buffer> <m-r><m-n> return
+" Inoremap <buffer> <m-r><m-n> <c-r>=vl#dev#text#insertFunctions#InsertWithSpace("return ")<cr>
 
 finish
 "
@@ -156,7 +162,6 @@ Inoremap <buffer> <m-i><m-c><m-o> <space>instanceof<space>
 Inoremap <buffer> <m-:> ::
 Inoremap <buffer> <m-p><m-r> print_r(
 Inoremap <buffer> <m-p> <?php<space>
-Inoremap <buffer> <m-r><m-n> <c-r>=vl#dev#text#insertFunctions#InsertWithSpace("return ")<cr>
 Inoremap <buffer> <m-p><m-e> <c-r>=vl#dev#text#insertFunctions#InsertWithSpace("<?php echo ")<cr>
 Inoremap <buffer> <m-e><m-o> echo "\n";<left><left><left><left>
 Inoremap <buffer> <m-e><m-d> echo<space>"\n<br><br>\n";<left><left><left><left><left><left><left><left>
@@ -165,9 +170,6 @@ Inoremap <buffer> <m-v><m-e> var_export(,true);<bs><bs><bs><bs><bs><bs>
 Inoremap <buffer> <m-i><m-o> include_once<space>''<space>;<left><left><left>
 Inoremap <buffer> <m-r><m-o> require_once<space>''<space>;<left><left><left>
 Inoremap <buffer> <m-s->> <space>=<space>
-Inoremap <buffer> <m-r> ->
-Inoremap <buffer> <m-f> <space>=><space>
-Inoremap <buffer> <m-t> $this->
 Inoremap <buffer> <m-r><m-t> $result
 Inoremap <buffer> <m-g><m-e> $_GET['']<esc>2h
 Inoremap <buffer> <m-s><m-e> $_SESSION['']<esc>2h
@@ -184,7 +186,6 @@ Inoremap <buffer> <m-c><m-o> $args<space>=<space>func_get_args();<cr>$this->copy
 Inoremap <buffer> <m-f><m-c><m-o> $args<space>=<space>func_get_args();<cr>$o=U::copyOptions(array(<++>), $args);
 Inoremap <buffer> <m-q> U::C('
 Inoremap <buffer> <m-a><m-m> array_merge(
-Inoremap <buffer> <m-i> ['
 Inoremap <buffer> <m-b><m-m> $p->enterSection($sec = '<++>');<cr>$p->leaveSection($sec);
 Inoremap <buffer> <m-c><m-u><m-a> call_user_func_array()<left>
 Inoremap <buffer> <m-c><m-u> call_user_func()<left>
