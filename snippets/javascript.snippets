@@ -1,0 +1,224 @@
+snippet absoluteCoordinates
+	[% set paste %]
+	function getAbsoluteLeft(objectId) {
+		// Get an object left position from the upper left viewport corner
+		o = document.getElementById(objectId)
+		oLeft = o.offsetLeft            // Get left position from the parent object
+		while(o.offsetParent!=null) {   // Parse the parent hierarchy up to the document element
+			oParent = o.offsetParent    // Get parent object reference
+			oLeft += oParent.offsetLeft // Add parent left position
+			o = oParent
+		}
+		return oLeft
+	}
+	
+	function getAbsoluteTop(objectId) {
+		// Get an object top position from the upper left viewport corner
+		o = document.getElementById(objectId)
+		oTop = o.offsetTop            // Get top position from the parent object
+		while(o.offsetParent!=null) { // Parse the parent hierarchy up to the document element
+			oParent = o.offsetParent  // Get parent object reference
+			oTop += oParent.offsetTop // Add parent top position
+			o = oParent
+		}
+		return oTop
+	}
+snippet benchmark
+	var Benchmark = new Class({
+	    initialize : function (){
+	        this.sections = {};
+	        this.start = this.getTick();
+	    },
+	    getTick : function(){
+	        return new Date().getTime();
+	    },
+	    enterSection : function(s){
+	        var n = {}; n[s] = [];
+	        this.sections = $merge( n, this.sections );
+	        t = this.getTick()
+	        console.log(s + 'entering section at '+t);
+	        this.sections[s].push(t);
+	    },
+	    leaveSection : function(s){
+	        console.log(this.sections);
+	        if (!this.sections[s])
+	            console.log('verlasse nicht existierende Sektion '+s);
+	        else {
+	            var tick = this.getTick();
+	            var t = this.sections[s].pop();
+	            var diff = (tick - t)
+	            console.log(s + 'left sect at '+tick);
+	            console.log(s + 'time of sect [ms] :'+diff);
+	            console.error(diff);
+	        }
+	    }
+	});
+	var b = new Benchmark();
+	console.log('Benchmark object erstellt');
+snippet dumpdom
+	function dumpDOM(div, obj, indent){
+	    var div = div 
+	             || ($('dumpDOM') && $('dumpDOM').empty()) 
+	             || new Element('div', { 'id' : 'dumpDOM'
+	                                   , 'styles' :  { 'position' : 'float'
+	                                            , 'left': '10px'
+	                                            , 'top': '10px'
+	                                            , 'margin-top': '20px'
+	                                            }
+	                                    })
+	                        .injectInside($$('body')[0]);
+	    var obj = obj || $$('html')[0];
+	    var indent = indent || 0;
+	    new Element('a')
+	      .addEvent('click', function (){console.log('======================');
+	                                     for (  var i in obj){ console.log([i, obj[i]]);};
+	                                     console.log(obj.innerHTML);
+	                                     } )
+	      .injectInside(div)
+	      .setText(obj.tagName+' '+Json.toString(obj.getCoordinates()) + obj.innerHTML.slice(0,200));
+	
+	    $each( obj.getChildren(), function (c){
+	            if (c.id != 'dumpDOM'){
+	                var d = new Element('div', { styles :{ 'padding-left': indent+'px', 'padding-bottom' : '0px', 'margin' : '0px'}})
+	                            .injectInside(div);
+	                //new Element('br').injectInside(div);
+	                dumpDOM(d, c, 4+indent);
+	            }
+	            });
+	}
+snippet fold
+	Array.extend({
+	  // [ 3, 5, 9 ].foldl(function(el, value){ return value - el; } );
+	  // == 3 - 5 - 9
+	  // [ 3, 5, 9 ].foldl(function(el, value){ return value - el; } );
+	  // == 3 - 5 - 9
+	  foldl: function (f){
+	    var i = this.length - 1;
+	
+	    if (arguments.length == 2){
+	      var result = arguments[1];
+	    } else {
+	      var result = this[i];
+	      i--;
+	    }
+	
+	    for (; i >= 0 ; i--)
+	      var result = f( result, this[i]);
+	    return result;
+	  },
+	  foldr: function (f){
+	    var i = 0;
+	
+	    if (arguments.length == 2){
+	      var result = arguments[1];
+	    } else {
+	      var result = this[i];
+	      i++;
+	    }
+	
+	    var length = this.length;
+	    for (; i < length; i++)
+	      var result = f( this[i], result);
+	    return result;
+	  }
+	}
+	);
+snippet switch
+	switch(<++>) {
+	  case <++>:
+	    break;
+	  case <++>:
+	    break;
+	  default:
+	}
+snippet utf8
+	[% set paste %]
+	function decode_utf8(utftext) {
+	     var plaintext = ""; var i=0; var c=c1=c2=0;
+	     // while-Schleife, weil einige Zeichen uebersprungen werden
+	     while(i<utftext.length)
+	         {
+	         c = utftext.charCodeAt(i);
+	         if (c<128) {
+	             plaintext += String.fromCharCode(c);
+	             i++;}
+	         else if((c>191) && (c<224)) {
+	             c2 = utftext.charCodeAt(i+1);
+	             plaintext += String.fromCharCode(((c&31)<<6) | (c2&63));
+	             i+=2;}
+	         else {
+	             c2 = utftext.charCodeAt(i+1); c3 = utftext.charCodeAt(i+2);
+	             plaintext += String.fromCharCode(((c&15)<<12) | ((c2&63)<<6) | (c3&63));
+	             i+=3;}
+	         }
+	     return plaintext;
+	}
+	
+	function encode_utf8(rohtext) {
+	     // dient der Normalisierung des Zeilenumbruchs
+	     rohtext = rohtext.replace(/\r\n/g,"\n");
+	     var utftext = "";
+	     for(var n=0; n<rohtext.length; n++)
+	         {
+	         // ermitteln des Unicodes des  aktuellen Zeichens
+	         var c=rohtext.charCodeAt(n);
+	         // alle Zeichen von 0-127 => 1byte
+	         if (c<128)
+	             utftext += String.fromCharCode(c);
+	         // alle Zeichen von 127 bis 2047 => 2byte
+	         else if((c>127) && (c<2048)) {
+	             utftext += String.fromCharCode((c>>6)|192);
+	             utftext += String.fromCharCode((c&63)|128);}
+	         // alle Zeichen von 2048 bis 66536 => 3byte
+	         else {
+	             utftext += String.fromCharCode((c>>12)|224);
+	             utftext += String.fromCharCode(((c>>6)&63)|128);
+	             utftext += String.fromCharCode((c&63)|128);}
+	         }
+	     return utftext;
+	}
+snippet console.log
+	console.log(${1})
+snippet moo_dom_ready
+		window.addEvent("domready", function(){
+			${1}
+		});
+snippet nE
+	new Element('${1}', {${2}})
+snippet sane_image_size_steps
+       function my_size($isw, $ish, $rw, $rh){
+               
+               // same ratio as original image:
+               if ($isw / $ish > $rw / $rh){
+                       // request more portrait like
+                       $rw = $rh * $isw  / $ish;
+               } else {
+                       // request more landscape like
+                       $rh = $rw * $ish  / $isw;
+               }
+               
+               $newArea = pow(2, ceil(log($rw * $rh, 2)));
+               
+               $r = $isw / $ish;
+               $w = (int) (sqrt($newArea * $r));
+               $h = (int) (sqrt($newArea) / sqrt($r));
+               
+               // don't return image which is larger than original:
+               if ($isw < $w) $w = $isw;
+               if ($ish < $h) $h = $ish;
+               
+               return array($w, $h);
+               
+       }
+
+snippet jquery_domready
+	$(document).ready(function(){
+		$1
+	});
+snippet type_shorcut
+	type x  same as con x :: Type
+	type y = T same as con X :: Type = T
+snippet a.b
+	a.b
+snippet b
+	b

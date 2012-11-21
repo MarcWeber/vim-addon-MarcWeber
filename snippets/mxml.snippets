@@ -1,0 +1,57 @@
+snippet package
+	package ${name}{
+	}
+
+snippet mxml_initialize
+	initialize="addControls()">
+	
+		<mx:Script>
+			<![CDATA[
+		  import mx.controls.Image;
+		  import mx.controls.Label;
+		
+		  private function addControls():void {
+			createImage();
+			createPhotographer();
+		  }
+		
+		  private function createImage():void {
+			var photo:Image = new Image();
+			photo.source = "assets/animals03.jpg";
+			this.addChild(photo);
+		  }
+		
+		  private function createPhotographer():void {
+			var photographer:Label = new Label();
+			photographer.text = "Photographed by Elsie Weil";
+			this.addChild(photographer);
+		  }
+		
+			]]>
+		</mx:Script>
+snippet mxml_simple_complete
+	<?xml version="1.0" encoding="utf-8"?>
+	<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+		applicationComplete="" 
+		initialize="init()" layout="horizontal" color="#000000" backgroundColor="#FFFFFF" horizontalAlign="center" verticalAlign="top" height="768" borderColor="#FFFFFF"
+		>
+		
+		<mx:HTTPService id="settingsLoader" resultFormat="e4x" result="" showBusyCursor="true"
+			url="jabbercam/config.php?settings" fault="trace('fault: ',event.message)" />
+			
+	<mx:Script>
+		<![CDATA[
+		]]>
+	</mx:Script>
+	
+	
+	<mx:Boolean id="lockOwnControls">false</mx:Boolean>
+	<mx:Boolean id="canHideOwnControls">true</mx:Boolean>
+	
+	<mx:VBox verticalGap="2" paddingLeft="5" paddingTop="5" paddingRight="5" paddingBottom="5" id="vbContent">	
+		<mx:TextInput id="ti" text="Test">
+	
+		</mx:TextInput>
+	</mx:VBox>
+		
+	</mx:Application>

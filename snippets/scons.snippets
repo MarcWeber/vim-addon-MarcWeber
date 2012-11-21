@@ -1,0 +1,12 @@
+snippet basic_run
+	import os
+	env = Environment(ENV = {'PATH' : os.environ['PATH'] }
+	                         , CPPPATH = ['/pr/nix/nixsvn/trace/nix/trunk/externals/aterm-2.4.2-fixes/aterm']
+	                         , LIBPATH = ['/pr/nix/nixsvn/trace/nix/trunk/externals/aterm-2.4.2-fixes/aterm/.libs']
+	                         )
+	program = env.Program(source = 'main.cc', LIBS='ATerm')
+	
+	env.Command(
+	execute = env.Builder(action = './main')
+	Alias('run', env.Command([],['main'],'./main'))
+	env.Command(Alias('run'),'main','./main')

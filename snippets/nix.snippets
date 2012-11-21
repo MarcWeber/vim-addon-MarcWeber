@@ -1,0 +1,271 @@
+snippet checkConfig
+	let
+	
+		inherit (builtins)
+			head tail isList stringLength substring lessThan sub
+			listToAttrs attrNames hasAttr;
+	
+	in
+	rec {
+		mkOption = attrs: attrs // {_type = "option";};
+		typeOf = x: if x ? _type then x._type else "";
+	
+		options = {
+			services = {
+				extraJobs = mkOption {
+					default = [];
+					description = "
+						Additional Upstart jobs.
+					";
+				};
+			};
+		};
+	
+		config = {
+				services = 7;
+		};
+	
+		all = pred: list:
+			if list == [] then true
+			else if pred (head list) then all pred (tail list)
+			else false;
+	
+		checkConfig = { config, options, path ? [] } :
+			all (x: x==true) ( map ( attr : let
+						 t_path = path ++ [attr]; 
+						 in if (__hasAttr attr options)
+								then let opt = (__getAttr attr options);
+												 cfg = (__getAttr attr config);
+										 in if (typeOf opt == "option") # options says this attr path is a configuration option
+												then true # TODO check type ? string, int, list of strings (kernel modules) ...
+											else # has suboptions, recurse
+												checkConfig { config = cfg; options = opt; path = t_path;}
+								else abort "unkown configuration option ${builtins.toString t_path}"))
+					(__attrNames config);
+		test = checkConfig { config = config; options = options; };
+	}.test
+	
+snippet conf
+	args:
+	( args.mkDerivationByConfiguration {
+			flagConfig = {
+	
+			}; 
+	
+			extraAttrs = co : {
+				name = "<++>";
+	
+				src = args.fetchurl {
+					url = <++>;
+					sha256 = "<++>";
+				};
+	
+			meta = {
+				description = "<++>";
+				homepage = <++>;
+				# you can choose one of the following licenses: 
+				license = [];
+			};
+		};
+	} ) args
+snippet derivation
+		<++> = stdenv.mkDerivation {
+			name = "<++>";
+			buildInputs = [];
+			src = <template again>
+			meta = <+template again+>
+		}
+snippet fetchsvn
+	fetchsvn { rev = 7132; 
+									 url=https://svn.qgis.org/repos/qgis/trunk/qgis; md5="e3b3e69ba0baf78fed2e4b12e5bf9c2e"; 
+		};
+snippet job_new
+	{pkgs, config, ...}:
+	
+	###### interface
+	let
+		inherit (pkgs.lib) mkOption mkIf;
+	
+		options = {
+			services = {
+				pulseaudio = {
+					enable = mkOption {
+						default = false;
+						description = ''
+							Whether to enable the PulseAudio system-wide audio server.
+							Note that the documentation recommends running PulseAudio
+							daemons per-user rather than system-wide on desktop machines.
+						'';
+					};
+	
+					logLevel = mkOption {
+						default = "notice";
+						example = "debug";
+						description = ''
+							A string denoting the log level: one of
+							<literal>error</literal>, <literal>warn</literal>,
+							<literal>notice</literal>, <literal>info</literal>,
+							or <literal>debug</literal>.
+						'';
+					};
+				};
+			};
+		};
+	in
+	
+	###### implementation
+	
+	mkIf config.services.pulseaudio.enable {
+		require = [
+			options
+		];
+	
+		environment = {
+	
+			extraPackages =
+				pkgs.lib.optional
+					(!config.environment.cleanStart)
+					pkgs.pulseaudio;
+	
+			etc = [
+				# The system-wide crontab.
+				{ source = systemCronJobsFile;
+					target = "crontab";
+					mode = "0600"; # Cron requires this.
+				}
+			];
+	
+		};
+	
+		users = {
+			extraUsers = [
+				{ name = "pulse";
+					inherit uid;
+					group = "pulse";
+					description = "PulseAudio system-wide daemon";
+					home = "/var/run/pulse";
+				}
+			];
+	
+			extraGroups = [
+				{ name = "pulse";
+					inherit gid;
+				}
+			];
+		};
+	
+		services = {
+			extraJobs = [{
+				name = "pulseaudio";
+	
+				job = ''
+					description "PulseAudio system-wide server"
+	
+					start on startup
+					stop on shutdown
+	
+					start script
+						test -d /var/run/pulse ||			\
+						( mkdir -p --mode 755 /var/run/pulse &&	\
+							chown pulse:pulse /var/run/pulse )
+					end script
+	
+					respawn ${pkgs.pulseaudio}/bin/pulseaudio								\
+						--system --daemonize																	\
+						--log-level="${config.services.pulseaudio.logLevel}"
+				'';
+			}];
+		};
+	}
+snippet meta
+	meta = {
+		description = "";
+		homepage = ;
+		license = ;
+		maintainers = [stdenv.lib.maintainers.marcweber];
+		platforms = stdenv.lib.platforms.linux;
+	};
+snippet src
+	src = fetchurl {
+		url = ;
+		sha256 = "1hv0ak1fl80icrb9i7px5r0fghpnqi8r2wgwyi360dq0xf65hr92";
+	};
+snippet template
+	args:
+	let 
+		defList = [
+	(assert false) - correct it; List element is of form ["name" default]
+		];
+		#stdenv and fetchurl are added automatically
+		getVal = (args.lib.getValue args defList);
+		check = args.lib.checkFlag args;
+		reqsList = [
+	(assert false) - correct it; List element is of form ["name" "requirement-name" ... ]
+			["true"]
+			["false"]
+		];
+		buildInputsNames = args.lib.filter (x: (null!=getVal x)) 
+			(args.lib.uniqList {inputList = 
+			(args.lib.concatLists (map 
+			(x:(if (x==[]) then [] else builtins.tail x)) 
+			reqsList));});
+	in
+		assert args.lib.checkReqs args defList reqsList;
+	with args; 
+	args.stdenv.mkDerivation {
+		name = "<++>" ;
+	 
+		src<+template+>
+	 
+		buildInputs = args.lib.filter (x: x!=null) (map getVal buildInputsNames);
+	
+		meta<+template+>
+	}
+snippet t_simple
+	{stdenv, fetchurl}:
+
+	stdenv.mkDerivation {
+		name = "";
+
+
+		// enableParallelBuilding = true;
+	
+		src = fetchurl {
+			url = ;
+			sha256 = "";
+		};
+	
+		buildInputs = [];
+	
+		meta = {
+			description = "<++>";
+			homepage = <++>;
+			license = stdenv.lib.licenses.;
+			maintainers = [stdenv.lib.maintainers.marcweber];
+			platforms = stdenv.lib.platforms.linux;
+		};
+	}
+snippet b
+	builtins.
+snippet nix_repository_manager_svn
+	# REGION AUTO UPDATE: { name="$1"; type="svn"; url=""; [ groups = "group1 group2"; ] }
+	# END
+
+snippet nix_repository_manager_git
+	# REGION AUTO UPDATE: { name="$1"; type="git"; url=""; [ branch = ""; groups = "group1 group2"; ] }
+	# END
+
+snippet nix_repository_manager_hg
+	# REGION AUTO UPDATE: { name="$1"; type="hg"; url=""; [ branch = ""; groups = "group1 group2"; ] }
+	# END
+
+snippet nix_repository_manager_cvs
+	# REGION AUTO UPDATE: { name="$1"; type = "cvs"; cvsRoot = ":pserver:anonymous@cinepaint.cvs.sourceforge.net:/cvsroot/cinepaint"; module="cinepaint"; }
+	# END
+
+snippet i
+	inherit stdenv fetchurl ${1};
+
+
+snippet versionSpecific
+	stdenv.lib.mergeAttrsByVersion name: version: attrsByVersion: base:

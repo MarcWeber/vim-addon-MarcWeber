@@ -1,0 +1,45 @@
+snippet executable
+	Name:            as3tohaxe
+	version:         0.0
+	synopsis:        ${1:"synopsis"}
+	category:        Utils
+	maintainer:      ${4:"maintainer"}
+	description:     ${5:"description"}
+	build-type:      Simple
+	license:         GPLv3
+
+
+	executable "${2:executable-name}"
+
+	  build-depends:
+		    base 
+		  , mtl
+		  , ${3}
+
+	  main-is:        Main.hs
+	  hs-source-dirs: src
+	  ghc-options   : -Wall
+
+
+snippet executable_only
+	executable     testSimple
+	  main-is:        testSimple.hs
+	  if !(flag(BuildTestSimple))
+	    buildable: False
+	  hs-source-dirs: test, src
+	  build-depends:   haskell98
+	                  , base
+	                  , HList
+	                  , HaXml >= 1.19
+	                  , filepath
+	                  , mtl
+	                  , pretty
+	                  , containers
+	                  , template-haskell
+	  extensions: CPP
+	  include-dirs: include
+	  if flag(WeakValidation)
+	    cpp-options: -DWEAK_VALIDATION
+	    extensions: OverlappingInstances
+	  else
+	    extenions: OverlappingInstances

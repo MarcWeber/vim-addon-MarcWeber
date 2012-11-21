@@ -1,0 +1,36 @@
+snippet pdb_start
+  import pdb; pdb.set_trace()
+snippet lambda
+	lambda x: x**2
+snippet class
+	class ${1:name} ${2:(parent):
+		def __init__(self, ...):
+
+snippet debug
+	import pdb; pdb.set_trace()
+
+snippet main
+	if __name__ == "__main__":
+		main()
+snippet setup_py_distutils_simple
+	from distutils.core import setup
+	setup(name='foo',
+		version='1.0',
+		py_modules=['foo'],
+		)
+
+snippet with_skeleton
+	class Cache:
+		def __init__(self, use_cache, name, default):
+	
+		def __enter__(self):
+	
+		def __exit__(self, type, value, traceback):
+			
+snippet encoding
+	# -*- coding: utf-8 -*-
+	reload(sys)
+	sys.setdefaultencoding( "latin-1" )
+
+snippet empty                                                                          
+	${1:lines} = `"["`x.strip() for x in ${2} if x.strip()`"]"`

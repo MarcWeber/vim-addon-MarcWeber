@@ -1,0 +1,20 @@
+snippet doc
+	@SysInclude { doc }
+	@Doc @Text @Begin
+	@Display @Heading { Introduction by W. J. Harvey }
+	For Virginia Woolf, @I Middlemarch was ‘the magnificent book which for all its
+	imperfections is one of the few English novels written for grown-up people.’
+	@PP
+	She was, no doubt, thinking of George Eliot’s unblinking but compassionate
+	delineation of her characters, of the subtlety of psychological analysis and
+	the maturity of moral comment which underlie this complex and varied novel
+	of English provincial life in the early nineteenth century.
+	@End @Text
+snippet memory
+	paragraph: 
+	@PP
+	@I italic
+	{ ... } apply last for this text
+
+	@PageMark start
+	@PageOf { decl.of.ind }

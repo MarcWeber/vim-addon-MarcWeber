@@ -1,0 +1,94 @@
+snippet redirect_all_to_php
+	RewriteEngine on
+	RewriteCond %{REQUEST_FILENAME}  -d
+	RewriteRule  ^.*$  -  [L]
+	RewriteCond %{REQUEST_FILENAME}  -f
+	RewriteRule  ^.*$  -  [L]
+	RewriteRule ^(.*)$ index.php?/$1 [L,QSA]
+
+snippet log_php_errors
+	#PHP Errors loggen
+	php_value log_errors ON
+	php_value error_log /www/htdocs/w00d7ae0/akquise/err.log
+	
+snippet php_errors_off
+	php_flag display_startup_errors off
+	php_flag display_errors off
+	php_flag html_errors off
+	php_value docref_root 0
+	php_value docref_ext 0
+	php_value memory_limit 512M
+
+snippet php_xdebug_trace
+	# mit php_value in .htaccess
+	php_value xdebug.trace_output_dir /tmp/xdebugtrace
+	php_value xdebug.auto_trace On
+	php_value html_errors Off
+
+snippet php_magic_quotes
+	php_value magic_quotes off
+
+snippet php_short_open_tag
+	php_value short_open_tag On
+	
+snippet mod_rewrite
+	Options +FollowSymlinks
+	RewriteEngine On
+	RewriteBase /
+	RewriteRule ^(.*)\..*$ index.php?ct=$1&%{QUERY_STRING} [L]
+
+snippet mod_rewrite_domain
+	RewriteEngine On
+	RewriteCond %{HTTP_HOST} ^DOMAIN$
+	RewriteRule ^.*$     http://[www.]DOMAIN%{REQUEST_URI} [R=permanent]
+
+
+	# drop www
+	RewriteEngine On
+	RewriteCond %{HTTP_HOST} ^www.haml-to-php.com$ [NC]
+	RewriteRule ^(.*)$ http://haml-to-php.com/$1 [R=301,L]
+
+snippet options
+	Indexes
+
+snippet deny
+	Deny from all
+
+snippet htpasswd_protect
+	.htaccess
+	AuthUserFile /z/ric/secret/.htpasswd
+	AuthGroupFile /dev/null
+	AuthName "Ric's protected files"
+	AuthType Basic
+
+	<Limit GET>
+	require valid-user
+	</Limit>
+
+snippet directory_index
+	DirectoryIndex index.php
+
+
+snippet redirect_with_ssl
+	<VirtualHost *:80>
+		ServerName domain.com
+		ServerAlias www.domain.com
+	ProxyPass / http://www.domain.com/
+	</VirtualHost>
+	
+	<VirtualHost *:443>
+						SSLEngine on
+						SSLCertificateFile .crt
+						SSLCertificateKeyFile .key
+						SSLCACertificateFile .bundle
+						SSLProxyEngine On
+						SSLProxyEngine On
+						# SSLProxyCheckPeerCN on
+						ServerName domain.com
+						ServerAlias www.domain.com
+		ProxyPass / https://www.domain.com/
+	</VirtualHost>
+
+snippet force_https
+	RewriteCond     %{SERVER_PORT}   !^443$
+	RewriteRule     (.*)             https://%{HTTP_HOST}/$1   [L]

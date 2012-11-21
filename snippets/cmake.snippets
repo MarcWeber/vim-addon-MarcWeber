@@ -1,0 +1,48 @@
+snippet QT4
+	# http://qtnode.net/wiki?title=Qt_with_cmake
+	cmake_minimum_required(VERSION 2.8)
+	
+	project(test)
+	
+	# QT stuff:
+	# INCLUDE (${CMAKE_ROOT}/Modules/FindQt4.cmake)
+	find_package(Qt4 COMPONENTS QtCore QtGui REQUIRED )
+	include(${QT_USE_FILE})
+	qt_wrap_ui(test terraview_ui_headers (form.ui) )
+	
+		# add_library(terraview_ui_lib)
+	add_executable(test main.cpp)
+	
+	target_link_libraries(test ${QT_LIBRARIES})
+snippet QT3
+	# http://qtnode.net/wiki?title=Qt_with_cmake
+	cmake_minimum_required(VERSION 2.8)
+	
+	project(project_test)
+	
+	# INCLUDE (${CMAKE_ROOT}/Modules/FindQt3.cmake)
+	find_package(Qt3 REQUIRED)
+	
+	SET(QT_UIC_EXECUTABLE,uic)
+	SET(QT_MOC_EXECUTABLE,moc)
+	
+	SET(UI_FILES form1.ui)
+	
+	# .ui files
+	QT_WRAP_UI(project_test HDRS SRCS ${UI_FILES} )
+	
+	add_executable(project_test main.cpp ${SRCS})
+	# SET_TARGET_PROPERTIES(project_test PROPERTIES LINKER_LANGUAGE C)
+	target_link_libraries(project_test ${QT_LIBRARIES})
+snippet QT4uic3
+	# ?? http://websvn.kde.org/trunk/KDE/kdelibs/cmake/modules/KDE4Macros.cmake?view=log
+
+snippet glob
+	file(${1:GLOB|GLOB_RECURSE} ${2:var} ${3:rel_path} ${4:optiona lFOLLOW_SYMLINKS when GLOB_RECURSE} ${5:patterns})
+snippet CDT_one_error_per_line_gcc
+	IF(CMAKE_COMPILER_IS_GNUCC)
+		SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fmessage-length=0")
+	ENDIF(CMAKE_COMPILER_IS_GNUCC)
+	IF(CMAKE_COMPILER_IS_GNUCXX)
+		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fmessage-length=0")
+	ENDIF(CMAKE_COMPILER_IS_GNUCXX)

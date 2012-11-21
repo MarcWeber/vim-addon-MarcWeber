@@ -1,0 +1,111 @@
+snippet cabal_lib_executable
+	Name:            [%=vars['project-name'] %]
+	license:         [%=vars['license'] %]
+	author:          [%=vl#lib#vimscript#scriptsettings#Load('vl.dev.vimscript.vl.script_author','<+ script author & email +>')%]
+	synopsis:        [%=vars['synopsis']%]
+	category:        <++>
+	version:         0.0.0.0
+	Cabal-Version:   >=1.2
+	build-type:      Simple
+	LICENSE: GPL
+	
+	Library
+	  build-depends:   haskell98
+	                   ,base
+	                  , HList
+	                  , HaXml >= 1.19
+	                  , filepath
+	                  , mtl
+	                  , containers
+	                  , template-haskell
+	                  , directory
+	  exposed-modules: Text.XML.Validated.Types
+	                   Text.XML.Validated.Instance.String
+	                   Text.XML.Validated.TH
+	  other-modules:   Text.XML.Validated.Util
+	  include-dirs:
+	  install-includes:
+	  hs-source-dirs:  src
+	  extensions: CPP
+	
+	Executable     [%=vars['ex-executable'] %]
+	  main-is:        [%=vars['ex-main-is'] %]
+	  hs-source-dirs: [%=vars['ex-src-dir'] %]
+	  if !(flag(BuildTestSimple))
+	    buildable: False
+	  build-depends:   haskell98
+	                  , base
+	                  , HList
+	                  , HaXml >= 1.19
+	                  , filepath
+	                  , mtl
+	                  , pretty
+	                  , containers
+	                  , template-haskell
+	  extensions: 
+snippet cabal
+snippet deriva_all
+	(deriveAll [''Show,''Default, ''Read]
+	    [d|
+	
+	     |]
+	   )
+snippet ffi_hforeignimport
+	foreign import ccall "c.h testf" ctest :: Int
+snippet ffi
+snippet gtk
+snippet haskellformatter
+	Maur????cio <briqueabraque@yahoo.com>
+	module Main (Main.main) where
+	{ import System.IO;
+	  import Language.Haskell.Parser;
+	  import Language.Haskell.Pretty;
+	  import Text.PrettyPrint.HughesPJ;
+	
+	  main :: IO ();
+	  main
+	     = do
+	       { program <- getContents;
+	         ParseOk parse <- return $
+	                             parseModule program;
+	         estilo <- return $ Style PageMode 50 1.0;
+	         modo <- return $
+	                    PPHsMode 0 0 0 0 0 3 True
+	                       PPSemiColon
+	                       False
+	                       True;
+	         putStrLn $
+	            prettyPrintStyleMode estilo modo
+	               parse}}
+snippet hunit_main
+	module Main where
+	import Test.HUnit
+	
+	main = 
+		runTestTT (TestList [ ] )
+snippet snippets
+snippet th
+snippet withCurrentDirectory
+	-- copied from HUnit
+	withCurrentDirectory :: FilePath -> IO a -> IO a
+	withCurrentDirectory path f = do
+	    cur <- getCurrentDirectory
+	    setCurrentDirectory path
+	    finally f (setCurrentDirectory cur)
+snippet LANGUAGE
+	{-# LANGUAGE PatternGuards #-}
+snippet readEither
+	readEither :: Read a => String -> Either String a
+	readEither s =
+		case [ x | (x,"") <- readsPrec minPrec s ] of
+			[x] -> Right x
+			[]  -> Left "no parse"
+			_   -> Left "ambiguous parse"
+
+
+snippet defaultMain
+	module Main where
+	import Distribution.Simple
+	main = defaultMain
+snippet maybeRead
+	maybeRead = fmap fst . listToMaybe . reads

@@ -1,0 +1,70 @@
+snippet css_external_file
+	<link rel="stylesheet" type="text/css" href="css/content.css"/>
+snippet file
+	<input name="<++>" type="file" maxlength="100000" accept="text/*"/>
+snippet form
+	<form action="." method="post" enctype="multipart/form-data">
+	</form>
+snippet forms
+snippet html
+	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+	<html>
+	<head>
+	  <title>
+	  </title>
+	    <meta name="robots" content="index,nofollow" />
+	    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	</head>
+	<body>
+	
+	</body>
+	</html>
+snippet nocache
+	[% set paste %]<meta http-equiv="Pragma" content="no-cache"/>
+snippet script_js_external_file
+	<script src="<++>" type="text/eavascript"></script>
+snippet script_firebug
+	<script type="text/javascript" src="https://getfirebug.com/firebug-lite.js"></script>
+snippet script_js
+	<script type="text/javascript" charset="utf-8">
+	 //<![CDATA[
+	 $1
+	 //]]>
+	</script>
+snippet submit
+	<input type="submit" name="<++>" value="<++>" />
+snippet swf
+	<object
+		classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
+		codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0"
+		width="400"
+		height="300"
+		id="myFlashObject"
+	>
+		<param name="movie" value="${1:path}"/>
+		<param name="allowScriptAccess" value="always" />
+		<param name="quality" value="high" />
+		<param name="salign" value="lt" />
+		<param name="scale" value="noscale" />
+		<param name="menu" value="false" />
+		<param name="bgcolor" value="#ffffff"/>
+		<embed
+	 src="$1"
+	 quality="high"
+	 salign="lt"
+	 width="400"
+	 height="300"
+	 align="middle"
+	 scale="noscale"
+	 menu="false"
+	 bgcolor="#ffffff"
+	 name="myFlashObject"
+	 swLiveConnect="true"
+	 allowScriptAccess="always"
+	 type="application/x-shockwave-flash"
+	 pluginspage="http://www.macromedia.com/go/getflashplayer"
+		/>
+	</object>
+snippet h2
+	<h2>{VISUAL}</h2>

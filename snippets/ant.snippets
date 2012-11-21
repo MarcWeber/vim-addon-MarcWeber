@@ -1,0 +1,24 @@
+snippet AS3buildXML
+	<?xml version="1.0" encoding="utf-8"?>
+	<flex-config>
+	  <compiler>
+	    <source-path append="true">
+	      <!--<path-element>C:\Users\m\Documents\AS3Test\src</path-element>-->
+	      <!--<path-element>C:\Program Files (x86)\FlashDevelop\Library\AS3\classes</path-element>-->
+	    </source-path>
+	  </compiler>
+	  <file-specs>
+	    <path-element>Main.as</path-element>
+	  </file-specs>
+	  <default-background-color>#FFFFFF</default-background-color>
+	  <default-frame-rate>30</default-frame-rate>
+	  <default-size>
+	    <width>800</width>
+	    <height>600</height>
+	  </default-size>
+	</flex-config>
+snippet ivy_show_dep_graph:
+	get name="ivy.graph" description="generate jar dependency graph"
+	depends="resolve.dependencies">
+		<ivy-report todir="${doc.dir}" graph="true"/>
+	</target>

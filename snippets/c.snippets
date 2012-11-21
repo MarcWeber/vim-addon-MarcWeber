@@ -1,0 +1,46 @@
+snippet fifo
+	#define FIFO_EMPTY(name) (fifo_##name##_read_ptr == fifo_##name##_write_ptr)
+	#define FIFO(name, type, size) \
+	type fifo_##name[size]; \
+	type * fifo_##name##_write_ptr = &fifo_##name[0]; \
+	type * fifo_##name##_read_ptr = &fifo_##name[0]; \
+	type fifo_##name##_get( void ){ \
+		return *fifo_##name##_read_ptr++; \
+		if (fifo_##name##_read_ptr ==  fifo_##name) \
+			fifo_##name##_read_ptr -= size; \
+	} \
+	void fifo_##name##_put(type v){ \
+		*fifo_##name##_write_ptr++ = v; \
+		if (fifo_##name##_write_ptr ==	fifo_##name) \
+			fifo_##name##_write_ptr -= size; \
+	} \
+snippet main
+	int main(int argc, char * argv[])
+	{
+		int i;
+		for (i = 0; i < argc; i++)
+			printf(argv[i]);
+	}
+snippet main_test
+	#include <stdio.h>
+	#include <stdlib.h>
+	
+	int main(int argc, char * argv[])
+	{
+		int i;
+		for (i = 0; i < argc; i++)
+			printf("%s \n",argv[i]);
+	}
+snippet switch
+	switch (<++>){
+		case <++> : <++> break;
+		default :
+	}
+snippet b
+	{
+		${1}
+	}
+snippet debug
+	FILE * f_tmp = fopen("/tmp/log","a+");
+	fprintf(f_tmp,"${1}\n";
+	fclose(f_tmp);

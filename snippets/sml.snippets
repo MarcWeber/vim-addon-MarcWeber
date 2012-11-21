@@ -1,0 +1,18 @@
+snippet from_string_ml_lex_testing
+	fun from_string(s:string):(int->string) = (
+	let
+		val pos = ref(0);
+		val size = String.size s
+	in
+		fn (i:int) => (
+			pos := !pos+ i;
+			let
+				val count = if !pos > size then size - (!pos - i) else i;
+				val p = !pos - i
+			in
+				print ((Int.toString count) ^ "-" ^ (Int.toString (!pos)) ^ "-" ^ (Int.toString i));
+				if p >= size then "" else String.substring (s, p, count)
+			end
+		)
+	end
+	)

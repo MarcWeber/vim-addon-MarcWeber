@@ -1,0 +1,49 @@
+snippet au
+	augroup <++>
+		autocmd BufRead,BufNewFile <+pattern+>	<+command+>
+	augroup end
+snippet ftp
+snippet opt
+	let <++> = a:0 > 0 ? a:1 : <+default+>
+snippet tovl_plugin
+	" interface for <++>
+	function! plugins#tovl#log#Plugin<++>(p)
+	  let p = a:p
+	  let p['Tags'] = ['<++>']
+	  let p['Info'] = "<++>"
+	
+	  " run this to fix prefixes of autoload functions (remember that you can use undo.. :-)
+	  let p['mappings']['insert_template'] = {
+	    \ 'ft' : '', 'm':'n', 'lhs' : '<++>',
+	    \ 'rhs' : '<++>' 
+	    \ }
+	
+	  let child = {}
+	  fun! child.Load()
+	    call self.Parent_Load() 
+	  endfunction
+	  fun! child.Unload()
+	    call self.Parent_Unload()
+	  endf
+	  return p.createChildClass(child)
+	endfunction
+snippet try
+	try
+	catch /.*/
+		v:exception
+	endtry
+snippet SQL_MYSQL
+	augroup SQL
+		autocmd BufRead,BufNewFile *.sql,*.php* call tovl#ft#sql#Connect('mysql',{'host':'127.0.0.1','database':'${1:db_name}', 'user':'root', 'password' : 'mysqlpage'})
+	augroup end
+
+snippet SQL_PG
+	augroup MY_SQL
+		autocmd BufRead,BufNewFile *.sql call tovl#ft#sql#Connect('pg',{'database':'${1:db_name}'})
+	augroup end
+
+snippet completion
+	inoremap <buffer> <C-x><C-w> <c-r>=vim_addon_completion#CompleteUsing('vim_addon_completion#CompleteWordsInBuffer')<cr>
+
+snippet test
+	${1:ABC} ${2:DEF}

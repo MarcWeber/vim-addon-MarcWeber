@@ -1,0 +1,465 @@
+snippet demo
+	
+	import mypackage.Lib
+	
+	object Hello {
+
+		val = List.range(1, n+1)  // or 1 to 10
+
+		//  asSequence("abc","def")
+		def asSequence(a:String*) {
+		    for (s <- a) yield println(s)
+		}
+
+		// tuple to params
+		// (ourMethod _).tupled(ourTuple) or ourFunction.tupled(ourTuple)
+
+		// Unit type "Unit" is used when a function returns nothing
+	
+		// boy, even shorter than Ruby!
+		def x() = "a value"
+		// same as def x() = { "a value" }
+		def X() { "a value " } // returns Unit, thus no value because the "=" is missing
+	
+		@deprecated(":-)")
+		def sqr(x:Float) = x * x
+	
+		// as in Ruby no return is required
+		// the => means *lazy* evaluation
+		def takeFirst(x:Float, y: => Float) = x
+	
+		def error() = throw new Exception()
+	
+		def n(a:String):String = {
+			"abc"
+		}
+	
+		def headed(s:String, x:Any) = println(">>" +s+"\n"+x+"\n")
+	
+	
+		// subobjects
+		object WeekDay extends Enumeration {
+			type WeekDay = Value
+			val Mon, Tue, Wed, Thu, Fri, Sat, Sun = Value
+		}
+		import WeekDay._
+		def isWorkingDay(d: WeekDay) = ! (d == Sat || d == Sun)
+		// WeekDay.iterator filter isWorkingDay foreach println
+	
+		/*
+		*/
+	
+		def main (args: Array[String]){
+	
+			val avalue = "a value"
+	
+			// error() is never evaluated!
+			// I think this laziness is new to you
+			headed("ex 1", takeFirst(2, error()))
+	
+			// kind of fun: multi line strings
+			headed("multilne",
+							"""multi line
+								|magic
+								|test
+							""".stripMargin)
+	
+	
+			headed("weekday Mon", Mon)
+			headed("weekday Tue", Tue)
+	
+			// tuples builtin.
+			// a Tuple differs from an Array: the elemnts at nth position always have
+			// the type.
+			headed("tuple builtin shortcut", (2,4))
+			// in Java this was new Tuple<Int><Int>(2,2) or such ..
+			headed("tuple with Type constructor", Tuple2(2,4))
+	
+			headed("you can type xml, unbelievable?",
+				<thisisxml>{avalue}</thisisxml>
+				<thisisxml>{"</"}</thisisxml>
+			)
+	
+			var x  = 20
+			x match {
+					case 5 => println("5")
+					case 10 => println("10")
+					// case x => println("other"+x)
+					case _ => println("otherwise")
+			}
+	
+		}
+
+		val (a,b) = if true then
+		 ("abc",7) else ("other", 10)
+
+		for { i <- until n
+			  j <- untli i
+			  if isPrime (i+j)
+		} yield (i,j)
+
+		def anonymousArgs() = {
+			val invert: Boolean => Boolean = ! _
+			// same as:
+			val invert2: Boolean => Boolean = (x:Boolean) => !x
+			
+
+			// more args example:
+			val add: (Int, Int) => Int = _ + _
+
+			invert
+		}
+
+		// now up to you, let's write a function which does the job of a while statement
+		def While (p: => Boolean) (s: => Unit) {
+			if (p) { s ; While(p)(s) }
+			println("abr")
+		}
+	
+	}
+
+snippet array_to_arguments
+	List(path.text, "-server", port.text).toArray :  _*
+
+snippet refinment
+
+	// HaXe has something similar. I forgot about its name.
+	// This is also Ruby like. Don't care about the type of an object
+	// be happy if it has some methods..
+
+	case class Bird (val name: String) extends Object {
+		def fly(height: Int) = ...
+	...
+	}
+	case class Plane (val callsign: String) extends Object {
+		def fly(height: Int) = ...
+	...
+	}
+	def takeoff(
+				runway: Int,
+				r: { val callsign: String; def fly(height: Int) }) = {
+		tower.print(r.callsign + " requests take-off on runway " + runway)
+		tower.read(r.callsign + " is clear for take-off")
+		r.fly(1000)
+	}
+	val bird = new Bird("Polly the parrot"){ val callsign = name }
+	val a380 = new Plane("TZ-987")
+	takeoff(42, bird)
+	takeoff(89, a380)
+	
+snippet list_stuff
+	head :: tail (= cons)
+	1. vs (1) (longest token thus 1. is seen as float)
+	(1).toDegree etc
+
+	object Timer {
+		def oncePerSecond(callback: () => Unit) {
+			while (true) { callback(); Thread sleep 1000 }
+		}
+		def main(args: Array[String]) {
+			oncePerSecond(timeFlies)
+		}
+	}
+
+	by dcsobral
+	scala> class Acceptable[T]; object Acceptable { implicit object IntOk extends Acceptable[Int] }
+	defined class Acceptable
+	defined module Acceptable
+	
+	scala> def f[T: Acceptable](t: T) = t
+	f: [T](t: T)(implicit evidence$1: Acceptable[T])T
+	
+	scala> f(5)
+	res0: Int = 5
+	
+	scala> f(5.0)
+	<console>:8: error: could not find implicit value for evidence parameter of type Acceptable[Double]
+		f(5.0)
+
+
+	def sum[A](xs: List[A])(implicit m: Monoid[A]): A =
+		if (xs.isEmpty) m.unit
+		else m.add(xs.head, sum(xs.tail))
+	
+
+	( no new required )
+	abstract class Tree
+	case class Sum(l: Tree, r: Tree) extends Tree
+	case class Var(n: String) extends Tree
+	case class Const(v: Int) extends Tree
+
+
+	syntax:
+		obj method arg
+		obj method
+	same as
+		obj.method(arg)
+		obj.method()
+
+	all functions are methods!
+
+
+	class Note(val file: String, val msg: String, severity: Int, beg: Int, end: Int, val line: Int, val col: Int) {
+
+	"a" == "a" # true. In Java you have to use .equals!
+
+snippet sillyreturn1
+
+	package SillyReturn
+	
+	private object SillyReturnFinallyTest {
+	 
+	 def stack(x: => Unit) {
+		println("x before")
+		println(x)
+		println("x after")
+	 }
+	
+		def main(args: Array[String]): Unit = {
+		 
+		 println("have fun")
+			
+		 lazy val funReturn: () => Unit = { return }
+		 
+		 try {
+			 println("main before stack(funReturn)")
+			 stack(funReturn)
+			 println("main after stack(funReturn)")
+		 } finally {
+			 println("finally")
+		 }
+		 
+		 println("after calling fun(2,3)")
+		}
+	
+	}
+
+
+snippet sillyreturn2_exception
+
+	package reference
+	
+	private object Chapter1_Lex_Syntax {
+	 
+		def test(X: (Int, Int) => Int) {
+		 println("start test")
+		 println(X(20,10))
+		 println("after println X(20,10)")
+		}
+		
+		// using return is a stupid idea. I'd like to explore what can happen.
+		// so let's try
+		def stupidIdea():((Int, Int) => Int) = {
+		val A : (Int, Int) => Int = (a, b) => { a + b }
+		 
+		val X : (Int, Int) => Int = (a, b) => {
+		 println("start X a is"+a)
+		 if (a > 10 ) return A
+		 a + b
+		}
+		X
+		}
+	
+		def main(args: Array[String]): Unit = {
+		 val fun = stupidIdea()
+		 println(fun(20,3))
+		 println("after calling fun(2,3)")
+		}
+	
+	}
+
+snippet scala_rename_on_import_example
+	import Friendly.{greet => sayHi}
+
+	trait Set[A <% Ordered[A]] ...
+
+
+
+
+snippet named_arg (see sid)
+	def f(a:Int,b:Int)
+
+	f(b=10,a=20) // ok, b will be evaluated first!
+	f(c=10,d=20) // error
+
+
+	default args:
+
+	def f(a:Int =10)
+	// ...
+
+
+snippet REPL
+
+	"abc"
+	res0: "abc"
+	"def"
+	res0: "def"
+
+
+snippet implicit (pass argument automatically based on type of argument)
+
+	  abstract class SemiGroup[A] {
+		  def add(x: A, y: A): A
+		}
+		abstract class Monoid[A] extends SemiGroup[A] {
+		  def unit: A
+		}
+		object ImplicitTest extends Application {
+		  implicit object StringMonoid extends Monoid[String] {
+			def add(x: String, y: String): String = x concat y
+			def unit: String = ""
+		  }
+		  implicit object IntMonoid extends Monoid[int] {
+			def add(x: Int, y: Int): Int = x + y
+			def unit: Int = 0
+		  }
+		  def sum[A](xs: List[A])(implicit m: Monoid[A]): A =
+			if (xs.isEmpty) m.unit
+			else m.add(xs.head, sum(xs.tail))
+
+		  println(sum(List(1, 2, 3)))
+		  println(sum(List("a", "b", "c")))
+		}
+	  
+private[actors] class SuspendActorControl extends ControlThrowable
+
+snippet implicit_def_example
+	class EnhancedInt(val int:Int){
+		def toBinaryString():String = {
+			// ..
+		}
+	}
+	
+	implicit def intToEnhancedInt(i:Int):EnhancedInt={
+		new EnhancedInt()
+	}
+	
+	println(12 toBinaryString)
+
+snippet lambda
+
+	(_+_)
+	(a,b) = a+ b
+
+snippet sbt_dep_json_lift
+	val liftJson = "net.liftweb" % "lift-json_2.8.0" % "2.1
+snippet sbt_opencsv
+	val opencsvSource = "opencsv_soucre" at "http://oss.sonatype.org/content/groups/sourceforge/net/sf/opencsv/opencsv/"
+	// license Apache 2.0
+	val opencsv = "net.sf.opencsv" % "opencsv" % "2.0"
+
+snippet sbt_mvn_repository
+	val myRepo = "my maven repository" at "http://maven.example.org"
+
+snippet sbt_dep_htmlunit
+	val htmlunit = "net.sourceforge.htmlunit" % "htmlunit" % "2.1" withSources()
+
+snippet sbt_dep_htmlunit2.8
+	val htmlunitSource = "htmlunit_source" at "http://repo2.maven.org/maven2/net/sourceforge/htmlunit/htmlunit/"
+	val htmlunit = "net.sourceforge.htmlunit" % "htmlunit" % "2.8"
+
+snippet sbt_dep_neo4j
+	val neo4jSource = "neo4j-public-repository" at "http://m2.neo4j.org"
+	val neo4j = "org.neo4j" % "neo4j-kernel" % "1.0"
+
+snippet sbt_dep_squeryl
+	val squeryl = "org.squeryl" % "squeryl_2.8.0.RC6" % "0.9.4beta6" // wants scala 2.8.0RC6 ?
+
+snippet sbt_dep_scalatest
+	val scalatest = "org.scalatest" % "scalatest" % "1.2"
+
+snippet sbt_dep_postgresql
+	val postgresql = "postgresql" % "postgresql" % "8.4-701.jdbc3"
+
+snippet sbt_dep_mysql
+	val mysql = "mysql" % "mysql-connector-java" % "5.1.12"
+
+snippet sbt_dep_ant
+	val ant = "org.apache.ant" % "ant" % "1.7.0"
+
+snippet Elvis_Operator
+	class Elvis(val defaultValue: Any) {
+		def ?:(value: Any) = if (value != null) value else defaultValue
+	}
+
+snippet squeryl_mysql
+	Class.forName("com.mysql.jdbc.Driver");
+	
+	val c = DriverManager.getConnection("jdbc:mysql://localhost/test?user=squeryl&password=squeryl")
+	
+	//com.mysql.jdbc.Driver defaults to TRANSACTION_REPEATABLE_READ
+	c.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED)
+	
+	Session.create(c,new MySQLAdapter)
+
+snippet squeryl_postgres
+	Class.forName("org.postgresql.Driver");
+	val c = java.sql.DriverManager.getConnection("jdbc:postgresql://localhost:5432/DATABASE", "USERNAME", "PASSWORD")
+	c.setAutoCommit(false)
+	Session.create(c, new PostgreSqlAdapter)
+snippet runCommand
+	def runCommand(cmd:List[String]) = {
+		 val p = new java.lang.ProcessBuilder(cmd.toArray :  _*)
+		 .directory(projectDir)
+		 .start
+		 val lines = new ListBuffer[String]
+		 p.getInputStream
+	 val out = new BufferedReader(new InputStreamReader(p.getInputStream))
+	 val err = new BufferedReader(new InputStreamReader(p.getErrorStream))
+	 // reading linewise assuming that lines are shorter than the system buffer of pipe..
+		 var break = false
+		 var ec = 0
+		 while (!break){
+			val sout = out.readLine
+			val serr = err.readLine
+			if (sout != null) lines +=  sout
+			if (serr != null) lines +=  serr
+			if (sout == null && serr == null){
+				try	{
+					ec = p.exitValue
+						break = true // process exited
+				} catch {
+					case e:IllegalThreadStateException => {}
+						   case e => throw e
+				}
+			}
+		 }
+		 (ec, lines)
+	}
+
+
+snippet try
+	try	{
+			break = true // process exited
+	} catch {
+		case e:Exception => {}
+	   case e => throw e
+	}
+snippet htmlunit_start
+	LogFactory.getFactory().setAttribute("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.NoOpLog");
+	val webClient = new WebClient(BrowserVersion.FIREFOX_2);
+	webClient.setThrowExceptionOnScriptError(false);
+	webClient.setAjaxController(new NicelyResynchronizingAjaxController())
+	val firstPage = webClient.getPage(startUrl).asInstanceOf[HtmlPage];
+	// el.getByXPath("*/a") // sub elements
+	// el.getByXPath("//a") // all elements !
+snippet parMap future forkIO
+	http://stackoverflow.com/questions/1751953/concurrent-map-foreach-in-scala
+	vals.foreach(t => scala.actors.Futures.future(f(t))).map(_())
+snippet regex
+		new Regex("[^(]* \\(([^)]*)\\)\\*").findFirstMatchIn("Legacy Park (Chris Gallo)*").get.group(0)
+		// or more complicated?
+		val R = "(\\d)".r
+		val R(number) = "7"
+snippet properties
+	System.getProperties.asInstanceOf[Map[String,String])
+	Sytem.getProperties().getProperty("key")
+	
+	import java.io.FileWriter;
+	import java.util.Properties;
+	properties.load(new FileInputStream(file.getName))
+snippet tne
+	throw new Exception
+snippet dotclass
+	classOf[classname]

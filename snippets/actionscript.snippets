@@ -1,0 +1,5 @@
+snippet flash_trace_to_log useful_when_compiling_haxe_to_as3
+	haxe.Log.trace = function (v:String, infos: Object):void{
+		var loc:String = (infos == null) ? "" : infos.fileName+" "+infos.lineNumber+" ";
+		trace(loc+v);
+	}

@@ -1,0 +1,43 @@
+snippet mcd
+	CREATE DATABASE $1
+snippet cta
+	DROP TABLE IF EXISTS ${1} ;
+	CREATE TABLE $1 (
+		sid VARCHAR(26) NOT NULL,
+		uagent VARCHAR(200) NOT NULL,
+		d timestamp NOT NULL default CURRENT_TIMESTAMP,
+		KEY sid (sid)
+		-- mysql:
+		`word_id` int(10) unsigned NOT NULL auto_increment,
+		PRIMARY KEY  (`word_id`)
+	);
+snippet ata
+	ALTER TABLE ${1} ADD ${2};
+snippet atd
+	ALTER TABLE ${1} DROP ${2};
+snippet u
+	UPDATE ${1} SET ${2} WHERE ${3}
+snippet s
+	SELECT ${2} FROM ${1} WHERE ${3:1=1}
+snippet mysql_create_grant
+	CREATE user ${1:name}
+	CREATE DATABASE ${1}
+	GRANT all  ON  $1.*  TO '$1'@'localhost' IDENTIFIED BY 'PASSWORTXAE#$';
+snippet mysql_add_index
+	ALTER TABLE `${1}` ADD INDEX ( `${2:field_list}` );
+snippet ii
+	INSERT INTO ${1} VALUES (${2})
+snippet in
+	IS NULL
+snippet inn
+	IS NOT NULL
+snippet d
+	DELETE FROM $1 WHERE $2
+snippet ni
+	NOT IN 
+snippet pg_create_grant
+	CREATE USER "$1" [WITH PASSWORD "$2"];
+	GRANT ALL ON DATABASE ${database} TO "${user}";
+
+snippet s
+	SELECT ${2} FROM ${1} WHERE ${3}
