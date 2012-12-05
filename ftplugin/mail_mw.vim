@@ -42,5 +42,11 @@ Skype: skymawe
 irc.freenode.net: MarcWeber
 
 
+Inhaber: Marc Weber
+Konto-Nummer: 0102697901
+BLZ: 69490000 (Volksbank Villingen)
+
+
+
 " http://www.microsoft.com/downloads/details.aspx?displaylang=de&FamilyID=b5d1b8c3-fda5-4508-b0d0-1311d670e336
 

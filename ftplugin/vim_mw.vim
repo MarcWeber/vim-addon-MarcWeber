@@ -11,6 +11,7 @@ imap <buffer> <m-i><m-m> inoremap<space><buffer><space>
 imap <buffer> <m-m><m-p> noremap<space><buffer><space>
 inoremap <buffer> <m-b><m-r> <lt>buffer><space>
 inoremap <buffer> <m-esc> <lt>esc>
+inoremap <buffer> <m-s><m-g> string(
 inoremap <buffer> <m-s> s:
 inoremap <buffer> <m-a> a:
 inoremap <buffer> <m-r><m-n> return<space>

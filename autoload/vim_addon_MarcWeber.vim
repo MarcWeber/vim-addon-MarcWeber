@@ -10,10 +10,10 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
   let g:local_vimrc = {'names':['vl_project.vim']}
 
   " ,"vim-addon-mercurial"
+  " \ empty($XPTEMPLATE) ? 'snipmate-snippets' : 'xptemplate',
   let plugins = {
       \ 'always':
         \ [  'vim-addon-mru',
-            \ empty($XPTEMPLATE) ? 'snipmate-snippets' : 'xptemplate',
             \ 'vim-addon-commenting', 'vim-addon-local-vimrc', 'vim-addon-sql',"vim-addon-completion",
             \ 'vim-addon-async', 'tlib', "vim-addon-toggle-buffer",
             \ "vim-addon-git","vim-addon-mw-utils","vim-addon-goto-thing-at-cursor","vim-addon-other",
@@ -40,7 +40,7 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
     let g:ft_addons = {
       \ '^\%(cabal\|hs\|hsc\|lhs\)$': [ "vim-addon-haskell"],
       \ '^\%(php\|inc\|php.inc\|hsc\|lhs\)$': ["phpcomplete", "vim-addon-xdebug","ZenCoding", 'vim-addon-php-manual'],
-      \ 'ruby': [ 'vim-ruby',  "vim-addon-rdebug", 'vim-addon-ruby-debug-ide' ],
+      \ 'ruby': [ 'vim-ruby',  "vim-addon-rdebug", 'vim-addon-ruby-debug-ide', 'vim-textobj-rubyblock' ],
       \ 'nix': [ "vim-addon-nix" ],
       \ 'vim': ["reload", 'vim-dev-plugin'],
     \ }
@@ -118,7 +118,7 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
 
   augroup ADD_CONFLICT_MARKERS_MATCH_WORDS
     " git onlny for now
-    autocmd BufRead,BufNewFile * exec 'let b:match_words '.(exists('b:match_words') ? '.' : '').'= '.string(exists('b:match_words') ? ',' : ''.'<<<<<<<:=======:>>>>>>>')
+    autocmd BufRead,BufNewFile * exec 'let b:match_words '.(exists('b:match_words') ? '.' : '').'= '.string(exists('b:match_words') ? ',' : ''.'p<<<<<<<:=======:>>>>>>>')
   augroup end
 
 
@@ -200,19 +200,6 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
   endif
 
   set list listchars=tab:\ \ ,trail:· 
-
-  let g:snipMate = { 'scope_aliases' :
-	  \ {'objc' :'c'
-	  \ ,'cpp': 'c'
-	  \ ,'cs':'c'
-	  \ ,'xhtml': 'html'
-	  \ ,'html': 'javascript'
-	  \ ,'php': 'php,html,javascript'
-	  \ ,'ur': 'html,javascript'
-	  \ ,'mxml': 'actionscript'
-	  \ ,'haml': 'html,javascript'
-	  \ }}
-
 
   noremap <m-g><m-o> :call<space>vim_addon_MarcWeber#FileByGlobCurrentDir('**/*'.input('glob open '),"\\.git<bar>\\.hg" )<cr>
 
@@ -597,9 +584,12 @@ fun! vim_addon_MarcWeber#GlobalMappings()
 
 
   " insert helpers
+
+  inoremap <m-r><m-n> <c-r>=vim_addon_other#InsertLT('','return',' ')<cr>
   inoremap <m-=> <c-r>=vim_addon_other#InsertLT(' ','=',' ')<cr>
   inoremap <m-+> <c-r>=vim_addon_other#InsertLT(' ','+',' ')<cr>
   inoremap <m-*> <c-r>=vim_addon_other#InsertLT(' ','*',' ')<cr>
+
   inoremap <m-\> \\
   "inoremap <m-)> <c-r>=vl#dev#text#insertFunctions#InsertWithSpace(")")<cr>
   "inoremap <m-]> <c-r>=vl#dev#text#insertFunctions#InsertWithSpace("]")<cr>
@@ -722,6 +712,19 @@ fun! vim_addon_MarcWeber#GlobalMappings()
   set shm=a
   set bs=2
 
+  let g:snipMate = { 'scope_aliases' :
+	  \ {'objc' :'c'
+	  \ ,'cpp': 'c'
+	  \ ,'cs':'c'
+	  \ ,'xhtml': 'html'
+	  \ ,'html': 'javascript'
+	  \ ,'php': 'php'
+	  \ ,'ur': 'html,javascript'
+	  \ ,'mxml': 'actionscript'
+	  \ ,'haml': 'html,javascript'
+	  \ ,'nix': 'nix'
+	  \ }}
+
 
   let g:store_vl_stuff = expand('~/vl_store')
   let g:vl_top_dir = substitute(expand('<sfile>:h'),'[/\\]plugin$','','')
@@ -733,7 +736,7 @@ fun! vim_addon_MarcWeber#GlobalMappings()
     set term=builtin_vt320
   endif
   if has('unix')
-    let t = "/tmp/vim-swaps-".$HOME.getcwd()
+    let t = "/tmp/vim-swaps-".$USER.$HOME.getcwd()
     if !isdirectory(t) | call mkdir(t, "p") | endif
     exec 'set dir='.t
     unlet t

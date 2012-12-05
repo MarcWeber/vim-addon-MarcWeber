@@ -9,6 +9,13 @@
 "set tabstop=4
 "set sw=4
 setlocal autoindent
+
+fun! s:LTSp(s)
+  return vim_addon_other#InsertLT(' ',a:s,' ')
+endf
+
+inoremap <buffer> <m-.> <c-r>=s:LTSp(".=")<cr>
+
 inoremap <buffer> <m-d><m-e> define('','')<left><left><left><left><left>
 
 inoremap <buffer> <m-r> ->
@@ -16,8 +23,37 @@ noremap <m-g><m-e> :compiler php<bar>cf /var/marc/vimserver/error <bar> cope<cr>
 inoremap <buffer> <m-i> ['
 inoremap <buffer> <m-f> <space>=><space>
 inoremap <buffer> <m-t> $this->
-inoremap <buffer> <m-r><m-n> return
-" Inoremap <buffer> <m-r><m-n> <c-r>=vl#dev#text#insertFunctions#InsertWithSpace("return ")<cr>
+
+inoremap <buffer> <m-i><m-s><m-n> is_null(
+inoremap <buffer> <m-i><m-s><m-a> is_array(
+inoremap <buffer> <m-i><m-n><m-a> in_array(
+inoremap <buffer> <m-e><m-o> echo "\n";<left><left><left><left>
+
+inoremap <buffer> <m-a><m-m> array_merge(
+
+inoremap <buffer> <m-c><m-u><m-a> call_user_func_array()<left>
+inoremap <buffer> <m-c><m-u> call_user_func()<left>
+inoremap <buffer> <m-v><m-d> var_dump();<bs><bs>
+inoremap <buffer> <m-v><m-e> var_export(,true);<bs><bs><bs><bs><bs><bs>
+inoremap <buffer> <m-i><m-o> include_once<space>''<space>;<left><left><left>
+inoremap <buffer> <m-r><m-o> require_once<space>''<space>;<left><left><left>
+inoremap <buffer> <m-s->> <space>=<space>
+inoremap <buffer> <m-r><m-t> $result
+inoremap <buffer> <m-g><m-e> $_GET['']<esc>2h
+inoremap <buffer> <m-s><m-e> $_SESSION['']<esc>2h
+inoremap <buffer> <m-r><m-e> $_REQUEST['']<esc>2h
+inoremap <buffer> <m-g><m-l> $GLOBALS['']<esc>2h
+inoremap <buffer> <m-s><m-r> $SERVER['']<esc>2h
+inoremap <buffer> <m-p><m-t> $_POST['']<esc>2h
+
+inoremap <buffer> <m-p><m-r> print_r(
+inoremap <buffer> <m-p> <?php<space>
+inoremap <buffer> <m-a><m-y> array(
+
+" inoremap <buffer> <m-r><m-n> <c-r>=vl#dev#text#insertFunctions#InsertWithSpace("return ")<cr>
+"
+
+setlocal completefunc=vim_addon_sql#Complete
 
 finish
 "
@@ -75,13 +111,12 @@ AddTabCompletion ^\\\\\s*pd$  \<bs>rotected\<space> fitness:break
 AddTabCompletion pe$  \<bs>rivate ts:
 AddTabCompletion sc$  \<bs>tatic ts:
 AddTabCompletion sp$  \<bs>tatic\<space>public ts: fitness:break
-AddTabCompletion spf$  \<bs>\<bs>tatic\<space>public\<space>function ts: fitness:break
 AddTabCompletion paf$  \<bs>\<bs>ublic\<space>abstract\<space>function ts: fitness:break
 AddTabCompletion p$  ublic ts:
 AddTabCompletion pf$  \<bs>ublic\<space>function ts: fitness:break
 "AddTabCompletion pc$  \<bs>arent\:\:__construct( ts:
 AddTabCompletion cpc$  \<bs>\<bs>\<bs>call_user_func_array(array($this,'parent::'.__function__),\<space>$args); fitness:break
-Inoremap <buffer> <m-c><m-p> call_user_func_array(array($this,'parent::__construct'), $args);
+inoremap <buffer> <m-c><m-p> call_user_func_array(array($this,'parent::__construct'), $args);
 AddTabCompletion tne$  \<bs>\<bs>hrow\<space>new\<space>Exception( ts:
 AddTabCompletion tn$  \<bs>hrow\<space>new ts: fitness:break
 AddTabCompletion g$  lobal ts:
@@ -154,41 +189,19 @@ noremap <buffer> <c-5> :update <bar>exec 'BGQF php5 '.expand('%')<cr>
 
 
 " array 
-Inoremap <buffer> <m-a><m-k><m-e> array_key_exists('',)<esc>3l
+inoremap <buffer> <m-a><m-k><m-e> array_key_exists('',)<esc>3l
 
-Inoremap <buffer> <m-&> <c-r>=vl#dev#text#insertFunctions#InsertWithSpaceNotAfter('_',"&=")<cr>
-Inoremap <buffer> <m-l><m-o> 'file<space>:'.__file__.' class:<space>'.__class__.' function/method:<space>'.__method__.' line:'.__line__
-Inoremap <buffer> <m-i><m-c><m-o> <space>instanceof<space>
-Inoremap <buffer> <m-:> ::
-Inoremap <buffer> <m-p><m-r> print_r(
-Inoremap <buffer> <m-p> <?php<space>
-Inoremap <buffer> <m-p><m-e> <c-r>=vl#dev#text#insertFunctions#InsertWithSpace("<?php echo ")<cr>
-Inoremap <buffer> <m-e><m-o> echo "\n";<left><left><left><left>
-Inoremap <buffer> <m-e><m-d> echo<space>"\n<br><br>\n";<left><left><left><left><left><left><left><left>
-Inoremap <buffer> <m-v><m-d> var_dump();<bs><bs>
-Inoremap <buffer> <m-v><m-e> var_export(,true);<bs><bs><bs><bs><bs><bs>
-Inoremap <buffer> <m-i><m-o> include_once<space>''<space>;<left><left><left>
-Inoremap <buffer> <m-r><m-o> require_once<space>''<space>;<left><left><left>
-Inoremap <buffer> <m-s->> <space>=<space>
-Inoremap <buffer> <m-r><m-t> $result
-Inoremap <buffer> <m-g><m-e> $_GET['']<esc>2h
-Inoremap <buffer> <m-s><m-e> $_SESSION['']<esc>2h
-Inoremap <buffer> <m-r><m-e> $_REQUEST['']<esc>2h
-Inoremap <buffer> <m-g><m-l> $GLOBALS['']<esc>2h
-Inoremap <buffer> <m-s><m-r> $SERVER['']<esc>2h
-Inoremap <buffer> <m-p><m-t> $_POST['']<esc>2h
-" Inoremap <buffer> <m-.> <c-r>=vl#dev#text#insertFunctions#InsertWithSpace(".=")<cr>
-Inoremap <buffer> <m-i><m-s><m-n> is_null(
-Inoremap <buffer> <m-i><m-s><m-a> is_array(
-Inoremap <buffer> <m-i><m-n><m-a> in_array(
-Inoremap <buffer> <m-g><m-a> $args<space>=<space>func_get_args();
-Inoremap <buffer> <m-c><m-o> $args<space>=<space>func_get_args();<cr>$this->copyOptions($this, array(<++>), $args);
-Inoremap <buffer> <m-f><m-c><m-o> $args<space>=<space>func_get_args();<cr>$o=U::copyOptions(array(<++>), $args);
-Inoremap <buffer> <m-q> U::C('
-Inoremap <buffer> <m-a><m-m> array_merge(
-Inoremap <buffer> <m-b><m-m> $p->enterSection($sec = '<++>');<cr>$p->leaveSection($sec);
-Inoremap <buffer> <m-c><m-u><m-a> call_user_func_array()<left>
-Inoremap <buffer> <m-c><m-u> call_user_func()<left>
+inoremap <buffer> <m-&> <c-r>=vl#dev#text#insertFunctions#InsertWithSpaceNotAfter('_',"&=")<cr>
+inoremap <buffer> <m-l><m-o> 'file<space>:'.__file__.' class:<space>'.__class__.' function/method:<space>'.__method__.' line:'.__line__
+inoremap <buffer> <m-i><m-c><m-o> <space>instanceof<space>
+inoremap <buffer> <m-:> ::
+inoremap <buffer> <m-p><m-e> <c-r>=vl#dev#text#insertFunctions#InsertWithSpace("<?php echo ")<cr>
+inoremap <buffer> <m-e><m-d> echo<space>"\n<br><br>\n";<left><left><left><left><left><left><left><left>
+inoremap <buffer> <m-g><m-a> $args<space>=<space>func_get_args();
+inoremap <buffer> <m-c><m-o> $args<space>=<space>func_get_args();<cr>$this->copyOptions($this, array(<++>), $args);
+inoremap <buffer> <m-f><m-c><m-o> $args<space>=<space>func_get_args();<cr>$o=U::copyOptions(array(<++>), $args);
+inoremap <buffer> <m-q> U::C('
+inoremap <buffer> <m-b><m-m> $p->enterSection($sec = '<++>');<cr>$p->leaveSection($sec);
 
 noremap <c-m-p> :PHPHelp<cr>/
 
@@ -205,7 +218,7 @@ command! PHPDebugVars %s/^\s*\$\(\w*\)\(\s*=.*\)/$\1\2echo "debug \1";print_r(
 
 setlocal indentexpr=
 "setlocal cindent
-Inoremap <buffer> <m-a><m-c> <esc>%hv0ygvo<esc>l%a<c-r>='// '.matchstr(@",'^\s*\zs.*')<cr>
+inoremap <buffer> <m-a><m-c> <esc>%hv0ygvo<esc>l%a<c-r>='// '.matchstr(@",'^\s*\zs.*')<cr>
 
 nnoremap <buffer> <m-l><m-i> :call LabeledInput()<cr>
 
@@ -244,38 +257,36 @@ command! -buffer SetServerBN :exec "!echo ".v:servername." > /var/marc/vimserver
 call tovl#errorformat#SetErrorFormat('plugins#tovl#errorformats#PluginErrorFormats#grep')
 noremap <m-g><m-p> :call tovl#errorformat#SetErrorFormat('plugins#tovl#errorformats#PluginErrorFormats#php') <bar> cf /var/marc/vimserver/error-sel <bar> cope<cr>
 
-Inoremap <buffer> <m-p><m-r><m-e> echo<space>'<lt>pre>';<cr>echo<space>'<lt>/pre>';
+inoremap <buffer> <m-p><m-r><m-e> echo<space>'<lt>pre>';<cr>echo<space>'<lt>/pre>';
 
 "set_include_path('.:/home/marc/pear/pear/phpunit:/home/marc/pear/test_sel_extra');
 "
 " webkos booking date Format
 "DATE_FORMAT(ab_datum, \'%d.%m.%Y\') AS ab_datum
 "DATE_FORMAT(ab_zeit, \'%H:%i\') AS ab_zeit
-Inoremap <buffer> <m-m><m-d> DATE_FORMAT(<++>, \'%d.%m.%Y\')
-Inoremap <buffer> <m-m><m-t> DATE_FORMAT(<++>, \'%H:%i\')
+inoremap <buffer> <m-m><m-d> DATE_FORMAT(<++>, \'%d.%m.%Y\')
+inoremap <buffer> <m-m><m-t> DATE_FORMAT(<++>, \'%H:%i\')
 noremap <buffer> <m-x><m-d> :let @*='?XDEBUG_SESSION_START=start_session_name'<cr>
 noremap <m-x><m-d> :let @*='?XDEBUG_SESSION_START=name'<cr>
 command! -buffer XDebugConsoleStart let $XDEBUG_CONFIG="idekey=start_session_name"
 noremap <buffer> <m-b><m-p> :Bp<cr>
-Inoremap <buffer> <m-n><m-f> number_format(<++>, 2, '.', '')
-Inoremap <buffer> <m-s><m-p><m-f> sprintf("%02d",<space><++>)
-Inoremap <buffer> <m-r><m-n> return<space>
-Inoremap <buffer> <m-l><m-e> ."\n";
+inoremap <buffer> <m-n><m-f> number_format(<++>, 2, '.', '')
+inoremap <buffer> <m-s><m-p><m-f> sprintf("%02d",<space><++>)
+inoremap <buffer> <m-r><m-n> return<space>
+inoremap <buffer> <m-l><m-e> ."\n";
 AddTabCompletion tnp$  \<bs>\<bs>hrow\<space>new\<space>PHPUnit_Framework_AssertionFailedError(<+message+>);
 
 AddTabCompletion it \<bs>\<bs>$this->markTestIncomplete('<++>');
 AddTabCompletion st \<bs>\<bs>$this->markTestSkipped('<++>');
-Inoremap <buffer> <m-c><m-l> console.log();<left><left>
+inoremap <buffer> <m-c><m-l> console.log();<left><left>
 "if (preg_match('/^(\p{Nd}{1,2}):(\p{Nd}{1,2}):(\p{Nd}{1,2})$/',$d, $m) !== 1)
 "
 " € EURO
 "outline
 "call vl#ui#navigation#jump_to_code_by_regex#AddOutlineMappings('.*\%(\\<function\>\\|\<class\>\\|\<interface\>\\).*')
 
-setlocal completefunc=vim_addon_sql#Complete
 
-
-Inoremap <buffer> <m-a><m-y> array(
+inoremap <buffer> <m-a><m-y> array(
 
 "abbrev off $db->innodb--;
 "abbrev on $db->innodb++;

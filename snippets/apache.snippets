@@ -1,4 +1,4 @@
-snippet redirect_all_to_php
+onippet redirect_all_to_php
 	RewriteEngine on
 	RewriteCond %{REQUEST_FILENAME}  -d
 	RewriteRule  ^.*$  -  [L]
@@ -92,3 +92,15 @@ snippet redirect_with_ssl
 snippet force_https
 	RewriteCond     %{SERVER_PORT}   !^443$
 	RewriteRule     (.*)             https://%{HTTP_HOST}/$1   [L]
+
+
+snippet redirect_all_but_existing_files
+	RewriteEngine On
+	RewriteBase /domain
+
+	RewriteRule ^Images/auto/(.*\.(jpg|png))$ Images/cache.php?thema=&pic=$1&%{QUERY_STRING} [L]
+
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteCond %{REQUEST_URI} !Images.*
+	RewriteRule (.*) index.php?page=$1&%{QUERY_STRING} [L]

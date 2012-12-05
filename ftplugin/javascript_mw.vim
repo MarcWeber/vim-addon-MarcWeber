@@ -9,8 +9,9 @@ inoremap <buffer> <m-d><m-g> document.getElementById['
 
 " ['foo -> ['foo']
 inoremap <buffer> <m-i> ['
+inoremap <buffer> <m-v> var<space>
 
-if &ft=="js"
+if &ft=="javascript"
   inoremap <buffer> <m-t> this.
 endif
 inoremap <buffer> <m-r><m-n> return 

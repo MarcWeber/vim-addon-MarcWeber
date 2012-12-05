@@ -1,8 +1,3 @@
-########################################
-# Ruby snippets - for Rails, see below #
-########################################
-
-# #!/usr/bin/env ruby
 snippet #!
 	#!/usr/bin/env ruby
 
@@ -51,9 +46,6 @@ snippet ife
 	else
 		${3}
 	end
-snippet elsif
-	elsif ${1:condition}
-		${2}
 snippet unless
 	unless ${1:condition}
 		${2}
@@ -70,52 +62,10 @@ snippet until
 	until ${1:condition}
 		${2}
 	end
-snippet cla class .. end
-	class ${1:`substitute(Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
-		${2}
-	end
-snippet cla class .. initialize .. end
-	class ${1:`substitute(Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
-		def initialize(${2:args})
-			${3}
-		end
 
-
-	end
-snippet cla class .. < ParentClass .. initialize .. end
-	class ${1:`substitute(Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} < ${2:ParentClass}
-		def initialize(${3:args})
-			${4}
-		end
-
-
-	end
-snippet cla ClassName = Struct .. do .. end
-	${1:`substitute(Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} = Struct.new(:${2:attr_names}) do
-		def ${3:method_name}
-			${4}
-		end
-
-
-	end
 snippet cla class BlankSlate .. initialize .. end
 	class ${1:BlankSlate}
 		instance_methods.each { |meth| undef_method(meth) unless meth =~ /\A__/ }
-snippet cla class << self .. end
-	class << ${1:self}
-		${2}
-	end
-# class .. < DelegateClass .. initialize .. end
-snippet cla-
-	class ${1:`substitute(Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} < DelegateClass(${2:ParentClass})
-		def initialize(${3:args})
-			super(${4:del_obj})
-
-			${5}
-		end
-
-
-	end
 snippet mod module .. end
 	module ${1:`substitute(Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
 		${2}
@@ -948,6 +898,28 @@ snippet singleton
 			@@logger
 		end
 	end
+
+	# from http://dalibornasevic.com/posts/9-ruby-singleton-pattern-again
+	class Logger
+	  def initialize
+		@log = File.open("log.txt", "a")
+	  end
+	   
+	  @@instance = Logger.new
+	 
+	  def self.instance
+		return @@instance
+	  end
+	 
+	  def log(msg)
+		@log.puts(msg)
+	  end
+	 
+	  private_class_method :new
+	end
+	 
+	Logger.instance.log('message 1')
+
 snippet md5
 	require 'digest/md5'
 	Digest::MD5.hexdigest("Hello World\n")
@@ -1007,60 +979,6 @@ snippet Cached
 			r
 		end
 	end
-snippet autoload
-	# minimal autoload feature for Ruby:
-	# glob all files for class names
-	# instruct Ruby to automatically load them.
-	# Because some Ruby versions may have issues with threading
-	# you can use pass :eager_load => true to force loading before starting threads
-	# This way you still don't have to think about loading files in the correct order
-	$autoload = lambda {|a,b| autoload a,b}
-	# usage : AutoloadClasses.new(:glob_patterns => ['*.rb'], :use_cache => false, :eager_load => true)
-	class AutoloadClasses < FileCached
-	
-		def initialize(config)
-			super(config)
-			# config keys:
-			eager_load = config[:eager_load]
-			glob_patterns = @config[:glob_patterns] || []
-	
-			files = glob_patterns.flat_map {|b| Dir.glob b}
-			with {|cache|
-				require "set"
-				s_files = Set.new(files)
-				files.each {|filename| 
-					mtime = File.mtime filename
-					if (not cache[filename]) or mtime > cache[filename][:mtime]
-						# recache
-						m = {:mtime => mtime, :autoload => []}
-						File.open(filename).each {|line|
-							case line
-							when /(^[ \t]*class)[ ]*([A-Z][^;\r\n; )(]*)/; m[:autoload] << $ 2 # drop space
-							end
-						}
-						cache[filename] = m
-					end
-					# register autoload stuff
-					cache[filename][:autoload].each {|a|
-						$autoload.call(a.to_sym, filename)
-					}
-				}
-				cache.keys.each {|k| cache.delete k unless s_files.include? k }
-			}
-			self.eager_load if eager_load
-		end
-
-		def class_names
-			with {|cache| cache.values.each {|f| f[:autoload] }.flatten }
-		end
-	
-		def eager_load; class_names {|cn| Kernel.const_get(cn)}; end
-	end
-	autoload_classes = AutoloadClasses.new(:glob_patterns => ['*.rb'], :use_cache => false, :eager_load => true) 
-	
-	def C_without_new(*c) c.map { |c| "def #{c}(*args); #{c}.send(:new, *args); end" }.join("\n") end
-	C_without_new(autoload_classes.class_names)
-	
 	
 snippet Object_extend
 	# some ideas taken from http://dannytatom.me/metaid/
@@ -1096,7 +1014,7 @@ snippet Object_extend
 
 	end
 
-snippet
+snippet guard
 	# encoding: utf-8
 	# Guardfile
 	
@@ -1120,4 +1038,56 @@ snippet
 snippet d
 	do
 		${1}
+	end
+
+snippet ext_array_products
+	def products
+	return [] if self.length == 0
+	([self.first.map {|v| [v]}]
+		.concat(self.drop(1))
+	).reduce {|k,v| 
+			puts "reducing #{k} #{v}"
+			r = k.product(v).map {|k| 
+		puts "k #{k}"
+		k[0] + [k[1]] } 
+			puts "r #{r}"
+			r
+	}
+	end
+
+snippet c
+	class ${1}
+	end
+
+snippet pp
+	require "pp"
+	pp ${1}
+
+snippet gemfile_tags
+	group :tags do
+		gem 'guard-ctags-bundler', :git => 'https://github.com/MarcWeber/guard-ctags-bundler.git'
+	end
+
+snippet gemfile_metrics
+	group :metrics do
+		gem 'flay',            '~> 1.4.2'
+		gem 'flog',            '~> 2.5.1'
+		gem 'reek',            '~> 1.2.8', :git => 'https://github.com/dkubb/reek.git'
+		gem 'roodi',           '~> 2.1.0'
+		gem 'yardstick',       '~> 0.5.0'
+		gem 'yard-spellcheck', '~> 0.1.5'
+		gem 'pelusa',          '~> 0.2.1'
+	end
+snippet freezer
+	# see github.com/mbj/adamentium
+	def define_memoize_method(method, freezer)
+		original = instance_method(method)
+		undef_method(method)
+		define_method(method) do |*args|
+	 memory.fetch(method) do
+		 value  = original.bind(self).call(*args)
+		 frozen = freezer.call(value)
+		 store_memory(method, frozen)
+	 end
+		end
 	end

@@ -8,19 +8,21 @@ fun! s:LTSp(s)
   return vim_addon_other#InsertLT(' ',a:s,' ')
 endf
 
-inoremap <buffer> <m-$> <c-r>=LTSp("$")<cr>
-inoremap <buffer> <m-<> <c-r>=LTSp("<-")<cr>
-inoremap <buffer> <m->> <c-r>=LTSp("->")<cr>
-inoremap <buffer> <m-r> <c-r>=LTSp("=>")<cr>
-inoremap <buffer> <m-.> <c-r>=LTSp(".")<cr>
-inoremap <buffer> <m-p> <c-r>=LTSp("++")<cr>
-inoremap <buffer> <m-q><m-d> <c-r>=LTSp("qualified")<cr>
-inoremap <buffer> <m-l><m-m> <c-r>=LTSp("liftM")<cr>
-inoremap <buffer> <m-l><m-2> <c-r>=LTSp("liftM2")<cr>
-inoremap <buffer> <m-l><m-3> <c-r>=LTSp("liftM3")<cr>
-inoremap <buffer> <m-l><m-b> <c-r>=LTSp("=<<")<cr>
-inoremap <buffer> <m-r><m-b> <c-r>=LTSp(">>=")<cr>
-inoremap <m-:> <c-r>=LTSp("::")<cr>
+inoremap <buffer> <m-$> <c-r>=<sid>LTSp("$")<cr>
+inoremap <buffer> <m-<> <c-r>=<sid>LTSp("<-")<cr>
+inoremap <buffer> <m->> <c-r>=<sid>LTSp("->")<cr>
+inoremap <buffer> <m-r> <c-r>=<sid>LTSp("=>")<cr>
+inoremap <buffer> <m-.> <c-r>=<sid>LTSp(".")<cr>
+inoremap <buffer> <m-p> <c-r>=<sid>LTSp("++")<cr>
+inoremap <buffer> <m-q><m-d> <c-r>=<sid>LTSp("qualified")<cr>
+inoremap <buffer> <m-l><m-m> <c-r>=<sid>LTSp("liftM")<cr>
+inoremap <buffer> <m-l><m-2> <c-r>=<sid>LTSp("liftM2")<cr>
+inoremap <buffer> <m-l><m-3> <c-r>=<sid>LTSp("liftM3")<cr>
+inoremap <buffer> <m-l><m-b> <c-r>=<sid>LTSp("=<<")<cr>
+inoremap <buffer> <m-r><m-b> <c-r>=<sid>LTSp(">>=")<cr>
+inoremap <m-:> <c-r>=<sid>LTSp("::")<cr>
+inoremap <buffer> <m-s><m-g> String
+
 finish
 noremap <buffer> <m-e><m-m> :e /pr/haskell/amendment/Missing/
 call vl#dev#haskell#ghc#UI()
@@ -147,7 +149,7 @@ function! s:SetCompiler(...)
   call vl#dev#haskell#cabal#DefineTagFilesBasedOnPacakges()
 endfunction
 
-fun! LTSp(s)
+fun! <sid>LTSp(s)
   return vim_addon_other#InsertLT(' ',a:s,' ')
 endf
 
@@ -160,7 +162,6 @@ inoremap <buffer> <m-s-L> Left
 inoremap <buffer> <m-s-j> Just
 inoremap <buffer> <m-s-n> Nothing
 
-inoremap <buffer> <m-s><m-g> String
 inoremap <buffer> <m-m><m-n> main<space>=<space>do<cr>
 inoremap <buffer> <m-m><m-b> Maybe<space>
 inoremap <buffer> <m-i><m-c> instance<space>
