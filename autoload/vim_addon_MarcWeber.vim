@@ -441,6 +441,30 @@ fun! vim_addon_MarcWeber#Old()
 endf
 
 fun! vim_addon_MarcWeber#GlobalMappings()
+  " ultisnips setup
+  let g:UltiSnips = {}
+  let g:UltiSnips.always_use_first_snippet = 1
+  let g:UltiSnips.ExpandTrigger = "<c-tab>"
+  let g:UltiSnips.JumpForwardTrigger = "<c-j>"
+  let g:UltiSnips.JumpBackwardTrigger = "<c-k>"
+
+  let g:UltiSnips.snipmate_ft_filter = {
+              \ 'default' : {'filetypes': ["FILETYPE"] },
+              \ 'html'    : {'filetypes': ["html_minimal", "javascript"] },
+              \ 'php'    : {'filetypes': ["php", "html_minimal", "javascript"] },
+              \ 'xhtml'    : {'filetypes': ["html_minimal", "javascript"] },
+              \ }
+
+  " don't load snipmate snippets by default
+  let g:UltiSnips.UltiSnips_ft_filter = {
+              \ 'default' : {'filetypes': ['FILETYPE'] },
+              \ 'html'    : {'filetypes': ["html_minimal", "javascript"] },
+              \ 'php'    : {'filetypes': ["php", "html_minimal", "javascript"] },
+              \ 'xhtml'    : {'filetypes': ["html_minimal", "javascript"] },
+              \ 'all' : {'filetypes': ['all'] },
+              \ }
+
+
   noremap \og :<c-u> e /home/marc/mwr/github-MarcWeber/autoload/vim_addon_MarcWeber.vim<cr>
   noremap g, g;g;
   let mapleader='\'
