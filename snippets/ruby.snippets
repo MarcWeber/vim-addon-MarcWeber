@@ -155,10 +155,12 @@ snippet file File.foreach() { |line| .. }
 	File.foreach(${1:"path/to/file"}) { |${2:line}| ${3} }
 snippet file File.read()
 	File.read(${1:"path/to/file"})${2}
+
 snippet Dir Dir.global() { |file| .. }
 	Dir.glob(${1:"dir/glob/*"}) { |${2:file}| ${3} }
-snippet Dir Dir[".."]
+snippet Dir Dir_glob
 	Dir[${1:"glob/**/*.rb"}]${2}
+
 snippet dir
 	Filename.dirname(__FILE__)
 snippet deli
@@ -945,6 +947,10 @@ snippet Cached
 				:default => {},
 				:from_file => lambda{|filename| require "yaml"; YAML::parse_file(filename) },
 				:to_binary => lambda{|t| require "yaml"; t.to_yaml },
+                                # binary:
+                                # :from_file => lambda{|filename| File.open(filename, "rb") { |file| Marshal.load(file) } },
+                                # :to_binary => lambda{|t| require "yaml"; Marshal.dump(t) },
+
 				:use_cache => true,
 				:load_cache => config[:use_cache] || config[:load_cache],
 				:write_cache => config[:use_cache] || config[:write_cache],
@@ -1040,6 +1046,15 @@ snippet d
 		${1}
 	end
 
+snippet d.
+	do |${1}|
+		${2}
+	end
+snippet d..
+	do |${1},${2}|
+		${3}
+	end
+
 snippet ext_array_products
 	def products
 	return [] if self.length == 0
@@ -1091,3 +1106,146 @@ snippet freezer
 	 end
 		end
 	end
+
+
+snippet mechanize
+	http://mechanize.rubyforge.org/EXAMPLES_rdoc.html
+	require 'rubygems'
+        require 'mechanize'
+        
+        a = Mechanize.new { |agent|
+          agent.user_agent_alias = 'Mac Safari'
+        }
+        
+        a.get('http://google.com/') do |page|
+          search_result = page.form_with(:name => 'f') do |search|
+            search.q = 'Hello world'
+          end.submit
+        
+          search_result.links.each do |link|
+            puts link.text
+          end
+        end
+
+snippet zlib
+	Zlib::Inflate.inflate(Zlib::Deflate.deflate("abc", 9))
+
+snippet mechanize_traverse
+	def traverse(agent, cache, options)
+	  require "addressable/uri"
+	  require "set"
+	
+	  start_url = Addressable::URI.parse(options.fetch(:start_url))
+	
+	  # memorize visited urls
+	  cache[:visited] ||= Set.new
+	
+	  cache[:bad] ||= Hash.new
+	
+	  cache[:skipped] ||= Set.new
+	  cache[:skipped_rec_limit_reached] ||= Set.new
+	  cache[:to_be_visited] ||= [[1, start_url.to_s]]
+	
+	  visited = cache[:visited]
+	  bad = cache[:bad]
+	  to_be_visited = cache[:to_be_visited]
+	
+	  follow_addressable = options.fetch(:follow_addressable,
+	    lambda {|addressable| 
+	    (addressable.host == start_url.host || addressable.host.nil? ) \
+	    and ["", ".html", ".htm", ".php"].include? addressable.extname.downcase
+	    }
+	    )
+	  visitor = options.fetch(:visitor, lambda {|uri, page|})
+	
+	  max_recursion = options.fetch(:max_recursion, 5)
+	
+	  while to_be_visited.length > 0
+	    rec, next_ = to_be_visited[0]
+	    if rec > max_recursion
+	      cache[:skipped_rec_limit_reached] << next_
+	    else
+	      cache[:skipped_rec_limit_reached].delete next_
+	
+	      next_uri = Addressable::URI.parse(next_)
+	      if not visited.include? next_ and (not bad.include?(next_)) and follow_addressable.call(next_uri)
+	        #debugging
+	        begin
+	          page = agent.get(next_)
+	          cache[:visited] << next_
+	          visitor.call(next_uri, page, cache)
+	          refs = []
+	          if (page.respond_to? :links)
+	            page.links.to_a.each {|a|
+	              href = a.attributes["href"]
+	              if href
+	                href.gsub!('#.*','')
+	                # don't follow "." href values
+	                # don't follow #foo href values
+	                uri = Addressable::URI.parse(href)
+	
+	                # make absolute:
+	                uri = next_uri + uri
+	                # normalize query values:
+	                uri.query_values = uri.query_values
+	
+	                if follow_addressable.call(uri) and not /^\.$|^#/ =~ href
+	                  refs << [rec+1, uri.to_s] unless bad.include? href or visited.include? href
+	                else
+	                  cache[:skipped] << href
+	                end
+	              end
+	            }
+	            to_be_visited.concat(refs)
+	            cache[next_] = refs
+	          end
+	        rescue Mechanize::ResponseCodeError, Mechanize::UnsupportedSchemeError, OpenSSL::SSL::SSLError => e
+	          bad[next_] =e.to_s
+	        end
+	        visited << next_
+	      end
+	    end
+	    to_be_visited.delete_at(0)
+	  end
+	
+	end
+
+snippet imap_examine
+	def examine(user, password, host, sep, port, ssl) 
+	  folders = Hash.new
+	  ssl = ssl.nil? ? false : ssl
+	  opts = {}
+	  opts[:ssl] = {:verify_mode=> OpenSSL::SSL::VERIFY_NONE} if ssl
+	  opts[:port] = port unless port.nil?
+	  imap = Net::IMAP.new(host, opts)
+	  begin
+	    imap.login( user, password)
+	    total = 0
+	    recurse_folders(imap, nil, sep, lambda {|foldername|
+	      # puts "counting in #{foldername} #{imap}"
+	      #debugging
+	      count = -1
+	      begin
+	        count = imap.search(["ALL"]).length
+	      rescue Exception => e
+	        # puts "failed retrieving emails #{foldername}"
+	      end
+	
+	      foldername.gsub!(/^INBOX\./,'')
+	      foldername.gsub!(/^INBOX$/,'Inbox')
+	      folders[foldername] = count
+	      total += count
+	    })
+	    folders["total"] = total
+	  rescue Exception => e
+	    puts e.message
+	    puts e.backtrace
+	  ensure
+	    imap.logout
+	    imap.disconnect
+	  end
+	  folders
+	end
+
+snippet format
+	05d" % v

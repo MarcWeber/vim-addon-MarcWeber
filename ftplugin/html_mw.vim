@@ -1,4 +1,6 @@
 " setlocal sw=2
+
+command! -buffer FormatHTML %!xmllint --format --html %
 finish
 
 " close xml tags:
@@ -52,7 +54,6 @@ if expand('%') =~ 'localhost.*.html'
   %!tidy -indent
 endif
 
-command! -buffer FormatHTML %!xmllint --format --html %
 
 runtime ftplugin/javascript*.vim
 

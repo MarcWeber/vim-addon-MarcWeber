@@ -5,3 +5,7 @@ snippet case
 		*)
 		;;
 	esac
+
+# calling external basename process may be slow
+snippet basename
+	{${1:var}/*\//}

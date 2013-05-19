@@ -39,8 +39,12 @@ snippet mod_rewrite
 
 snippet mod_rewrite_domain
 	RewriteEngine On
-	RewriteCond %{HTTP_HOST} ^DOMAIN$
-	RewriteRule ^.*$     http://[www.]DOMAIN%{REQUEST_URI} [R=permanent]
+	# RewriteCond %{HTTP_HOST} ^DOMAIN$
+	# RewriteRule ^.*$     http://[www.]DOMAIN%{REQUEST_URI} [R=permanent]
+
+
+        RewriteCond %{HTTP_HOST} !^www\.
+        RewriteRule ^(.*)$ http://www.%{HTTP_HOST}/$1 [R=301,L]
 
 
 	# drop www

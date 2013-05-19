@@ -51,12 +51,10 @@ inoremap <buffer> <m-p> <?php<space>
 inoremap <buffer> <m-a><m-y> array(
 
 " inoremap <buffer> <m-r><m-n> <c-r>=vl#dev#text#insertFunctions#InsertWithSpace("return ")<cr>
-"
-
 setlocal completefunc=vim_addon_sql#Complete
 
 finish
-"
+
 " switch files
 noremap <buffer> <m-s><m-b> :call vl#lib#files#switch_files#SwitchFile()<cr>
 let dir1 = '/pr/webkos/svn/booksys/branches/Marc/libraries/lm/'

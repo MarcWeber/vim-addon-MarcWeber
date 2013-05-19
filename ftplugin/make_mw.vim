@@ -1,5 +1,7 @@
 " context completion
 setlocal noexpandtab
+
+finish
 call vl#lib#completion#contextcompletion#ContextCompletionDefault()
 
 AddTabCompletion ^\\\\.  PHONY\:\<esc>

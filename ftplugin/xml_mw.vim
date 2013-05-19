@@ -4,9 +4,9 @@
 imap <c-c> </<c-x><c-o>
 
 " insert <wordbefore cursor>|
-Inoremap <m-m> ><esc>bi<<esc>f>a
+" Inoremap <m-m> ><esc>bi<<esc>f>a
 " insert <wordbefore cursor>|</twordbefore cursorag> 
-Inoremap <m-c> ><esc>vbyi<<esc>f>a</<c-r>=@"<cr><esc>F<i
+" Inoremap <m-c> ><esc>vbyi<<esc>f>a</<c-r>=@"<cr><esc>F<i
 
 fun! b:AfterReturn()
   let line = getline('.')

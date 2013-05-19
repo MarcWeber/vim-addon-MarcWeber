@@ -15,6 +15,7 @@ if search('###','nw') > 0
   setlocal foldexpr=getline(v:lnum)=~'###'?'>1':1
   setlocal foldmethod=expr
   setlocal foldtext=getline(v:foldstart)
+  normal zR
 endif
 
 " gf-Handler / to be able to jump to files using gf

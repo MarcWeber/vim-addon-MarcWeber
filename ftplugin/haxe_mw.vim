@@ -1,17 +1,24 @@
 " syntax match Entity "pos => #pos([^)]*)" conceal cchar=& | setlocal conceallevel=2
 " %s/pos => #pos([^)]*)//g
 " 
-setlocal tags+=~/haxe-lib/tags
+" setlocal tags+=~/haxe-lib/tags
 " %s/pos =>[^(]*([^)]*)//g
 " CFComplete haxe#CompleteClassNames
 " OFComplete haxe#CompleteHAXE
 
+inoremap <buffer> <c-q> ${}<left>
+fun! s:LTSp(s)
+  return vim_addon_other#InsertLT(' ',a:s,' ')
+endf
+
 inoremap <buffer> <c-c> //<space>
+inoremap <buffer> <c-n><c-h> new<space>Hash();
 inoremap <buffer> <m-s><m-g> String
 inoremap <buffer> <m-a><m-y> Array<
 inoremap <buffer> <m-n> new<space>
 inoremap <buffer> <m-<> <>\<left>
 inoremap <buffer> <m-v><m-d> Void
+inoremap <buffer> <m-.> <c-r>=<sid>LTSp(".=")<cr>
 
 setlocal fdm=marker
 
@@ -35,6 +42,8 @@ inoremap <buffer> <m-r><m-n> return
 inoremap <buffer> <m-v> var<space>
 inoremap <buffer> <m-p> pubilc<space>
 inoremap <buffer> <m-t> this.
+
+inoremap <buffer> <m->> <c-r>=<sid>LTSp("->")<cr>
 
 noremap <buffer> qd :FlexDoc<space><c-r>=expand('<cword>')<cr>
 

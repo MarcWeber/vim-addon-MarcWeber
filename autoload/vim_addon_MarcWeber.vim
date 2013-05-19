@@ -10,7 +10,7 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
   let g:local_vimrc = {'names':['vl_project.vim']}
 
   " ,"vim-addon-mercurial"
-  " \ empty($XPTEMPLATE) ? 'snipmate-snippets' : 'xptemplate',
+  " \ empty($XPTEMPLATE) ? 'vim-snippets' : 'xptemplate',
   let plugins = {
       \ 'always':
         \ [  'vim-addon-mru',
@@ -18,7 +18,8 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
             \ 'vim-addon-async', 'tlib', "vim-addon-toggle-buffer",
             \ "vim-addon-git","vim-addon-mw-utils","vim-addon-goto-thing-at-cursor","vim-addon-other",
             \ 'matchit.zip', 'vim-addon-syntax-checker', 'vim-addon-rfc',
-            \ 'vim-addon-mw-utils', 'vim-addon-surround', 'vim-addon-toc'
+            \ 'vim-addon-mw-utils', 'vim-addon-surround', 'vim-addon-toc',
+            \ 'vim-haxe', 'vim-addon-haskell'
             \ ],
       \ 'extra' : ['textobj-diff', "textobj-function",  "narrow_region"],
       \ }
@@ -70,9 +71,8 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
 
   " command MergePluginFiles call vam#install#MergePluginFiles(g:merge+["tlib"], '\%(cmdlinehelp\|concordance\|evalselection\|glark\|hookcursormoved\|linglang\|livetimestamp\|localvariables\|loremipsum\|my_tinymode\|pim\|scalefont\|setsyntax\|shymenu\|spec\|tassert\|tbak\|tbibtools\|tcalc\|tcomment\|techopair\|tgpg\|tmarks\|tmboxbrowser\|tortoisesvn\|tregisters\|tselectbuffer\|tselectfile\|tsession\|tskeleton\|tstatus\|viki\|vikitasks\)\.vim_merged')
   " command UnmergePluginFiles call vam#install#UnmergePluginFiles()
-  "
-
-  let g:syntastic = { 'list_type': 'c'}
+  noremap ; :
+  noremap : ;
 
   noremap <m-w>/ /\<\><left><left>
   noremap <m-w>? ?\<\><left><left>
@@ -191,7 +191,7 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
   nnoremap <m-s-t> :tabnew<cr>
   exec "noremap <m-s-f><m-s-t><m-s-p> :exec 'e ".fnamemodify(s:thisf,':h:h')."/ftplugin/'.&filetype.'_mw.vim'<cr>"
   noremap \co :<c-u>exec 'cope '.&lines/3<cr>
-  noremap <m-s><m-p> :SnipMateOpenSnippetFiles<cr>
+  noremap <m-s><m-p> :UltiSnipsEdit<cr>
   " noremap <esc>s<esc>p :SnipMateOpenSnippetFiles<cr>
   inoremap <c-e> <esc>A
 

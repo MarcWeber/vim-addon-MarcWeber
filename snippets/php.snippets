@@ -26,6 +26,10 @@ snippet fen
 	foreach ($${1:variable} as $${2:value}) {
 		${3:// code...}
 	}
+snippet fenr
+	foreach ($${1:variable} as &$${2:value}) {
+		${3:// code...}
+	} unset($$$2);
 snippet fek
 	foreach ($${1:variable} as $${2:key} => $${3:value}) {
 		${4:// code...}
@@ -34,6 +38,9 @@ snippet __call
 	public function __call($name, $arguments) {
 	}
 snippet __construct
+	function __construct(argument){
+	}
+snippet new
 	function __construct(argument){
 	}
 snippet ve
@@ -247,9 +254,9 @@ snippet file_locking
 		@fclose($fp);
 
 snippet d
-	function d($ar, $key, $default){ return isset($ar[$key]) ? $ar[$key] : $default; }
-
-
+	d(${1:ar}, ${2:key}, ${3:null})
+snippet d_f
+	function &d($ar, $key, $default){ return isset($ar[$key]) ? $ar[$key] : $default; }
 
 snippet wordpress_nonce_security
 	if ( function_exists('wp_nonce_field') )
@@ -481,10 +488,11 @@ snippet fpdf_ext
 			}
 	}
 
-snippet microtime_bench_start
+snippet bench_microtime
 	define('MICROTIME_START',microtime(true));
 
-snippet microtime_bench
+	// CODE
+
 	$debug_handle = fopen('/tmp/php.log', 'a+');
 	fwrite($debug_handle, var_export("${1} ".(microtime(true) - MICROTIME_START),true)."\n");
 	fclose($debug_handle);
@@ -603,3 +611,64 @@ snippet spf
 	}
 snippet g
 	global $
+
+snippet set_if_not_set
+	if (!isset(${1:${2}[${3}]})) $1 =
+snippet in
+      is_null($1)
+snippet nin
+      !is_null($1)
+
+snippet is
+	isset($1${VISUAL})
+snippet iis
+	if (isset($1)){
+	}
+
+snippet mysql_fetch_assoc
+	function query($sql){
+	  global $conn;
+	  $r = array();
+	  $result = mysql_query($sql);
+	  if (!$result){ die('bad query: '.$sql); }
+	  while ($row = mysql_fetch_assoc($result)) {
+	     $r[] = $row;
+	  }
+	  mysql_free_result($result);
+	  return $r;
+	}
+	
+snippet errors_all
+	error_reporting(E_ALL);
+	ini_set('display_errors', '1');
+
+snippet mysql_bench
+	function my_mysql_query(){
+	  global $mysql_time;
+	  $args = func_get_args();
+	  $time = microtime(true);
+	  $r = call_user_func_array('mysql_query', $args);
+	  $time_diff = microtime(true) - $time;
+	
+	  $debug_handle = fopen('/tmp/php2.log', 'a+');
+	  fwrite($debug_handle, 'gebrauchte Zeit: '.print_r($time_diff,true). "\nsql: >>> ".print_r($args,true)."\n");
+	  fclose($debug_handle);
+	
+	  $mysql_time += $time_diff;
+	  return $r;
+	}
+	
+snippet  pf
+	public function $1($2){
+		$3
+	}
+snippet my_exec
+	function my_exec($cmd){
+	  $handle = popen($cmd.' 2>&1', 'r');
+	  $s = '';
+	  while(!feof($handle)) 
+	    $s .= fread($handle, 1024); 
+	  if (0 !== pclose($handle))
+	    throw new Exception('command failed, non zero exit code');
+	  return $s;
+	}
