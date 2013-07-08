@@ -12,7 +12,7 @@ fun! s:LTSp(s)
 endf
 
 inoremap <buffer> <m-f> <c-r>=<sid>LTSp("=>")<cr>
-inoremap <m-o><m-=> <c-r>=vim_addon_other#InsertLT(' ','\|\|=',' ')<cr>
+inoremap <m-o>= <c-r>=vim_addon_other#InsertLT(' ','\|\|=',' ')<cr>
 inoremap <m-r><m-r> require_relative "
 inoremap <m-:> ::
 

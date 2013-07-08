@@ -38,7 +38,7 @@ setlocal cindent
 
 inoremap <buffer> <m-t><m-r> trace("");<left><left><left>
 inoremap <buffer> <m-t><m-s> trace(haxe.Serializer.run( <++> ));<left><left><left>
-inoremap <buffer> <m-r><m-n> return
+inoremap <buffer> <m-r><m-n> return<space>
 inoremap <buffer> <m-v> var<space>
 inoremap <buffer> <m-p> pubilc<space>
 inoremap <buffer> <m-t> this.

@@ -11,12 +11,12 @@ nnoremap <buffer> <m-n> /^\s\{2}
 inoremap <buffer> <c-q> ${}<left>
 
 " don't fold if there are no heaaders (default.nix files)
-if search('###','nw') > 0
-  setlocal foldexpr=getline(v:lnum)=~'###'?'>1':1
-  setlocal foldmethod=expr
-  setlocal foldtext=getline(v:foldstart)
-  normal zR
-endif
+" if search('###','nw') > 0
+"   setlocal foldexpr=getline(v:lnum)=~'###'?'>1':1
+"   setlocal foldmethod=expr
+"   setlocal foldtext=getline(v:foldstart)
+"   normal zR
+" endif
 
 " gf-Handler / to be able to jump to files using gf
 "call tovl#ui#open_thing_at_cursor#AddOnThingHandler(

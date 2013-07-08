@@ -19,7 +19,7 @@ inoremap <buffer> <m-.> <c-r>=s:LTSp(".=")<cr>
 inoremap <buffer> <m-d><m-e> define('','')<left><left><left><left><left>
 
 inoremap <buffer> <m-r> ->
-noremap <m-g><m-e> :compiler php<bar>cf /var/marc/vimserver/error <bar> cope<cr>
+noremap <m-g><m-e> :cfile /var/marc/vimserver/error <bar> cope<cr>
 inoremap <buffer> <m-i> ['
 inoremap <buffer> <m-f> <space>=><space>
 inoremap <buffer> <m-t> $this->

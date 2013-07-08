@@ -23,7 +23,13 @@ inoremap <buffer> <m-r><m-b> <c-r>=<sid>LTSp(">>=")<cr>
 inoremap <m-:> <c-r>=<sid>LTSp("::")<cr>
 inoremap <buffer> <m-s><m-g> String
 
+inoremap <buffer> <m-m><m-b> Maybe<space>
+inoremap <buffer> <m-i><m-c> instance<space>
+inoremap <buffer> <m-d><m-v> deriving<space>(
+inoremap <buffer> <m-s-n> Nothing
+
 finish
+
 noremap <buffer> <m-e><m-m> :e /pr/haskell/amendment/Missing/
 call vl#dev#haskell#ghc#UI()
 
@@ -160,12 +166,9 @@ inoremap <buffer> <m-_> _<space>=<space>
 inoremap <buffer> <m-s-L> Left
 "inoremap <buffer> <m-s-R> Right
 inoremap <buffer> <m-s-j> Just
-inoremap <buffer> <m-s-n> Nothing
 
 inoremap <buffer> <m-m><m-n> main<space>=<space>do<cr>
 inoremap <buffer> <m-m><m-b> Maybe<space>
-inoremap <buffer> <m-i><m-c> instance<space>
-inoremap <buffer> <m-d><m-v> deriving<space>(
 inoremap <buffer> <m-bar> <space><lt><bar>><space>
 inoremap <buffer> <m-r><m-n> return<space>
 inoremap <buffer> <m-l><m-i> liftIO<space>

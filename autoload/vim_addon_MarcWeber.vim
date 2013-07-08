@@ -19,7 +19,7 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
             \ "vim-addon-git","vim-addon-mw-utils","vim-addon-goto-thing-at-cursor","vim-addon-other",
             \ 'matchit.zip', 'vim-addon-syntax-checker', 'vim-addon-rfc',
             \ 'vim-addon-mw-utils', 'vim-addon-surround', 'vim-addon-toc',
-            \ 'vim-haxe', 'vim-addon-haskell'
+            \ 'vim-addon-haskell'
             \ ],
       \ 'extra' : ['textobj-diff', "textobj-function",  "narrow_region"],
       \ }
@@ -40,11 +40,21 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
     " \ '^\%(c\|cpp\)$': [ 'plugin-for-c-development' ],
     let g:ft_addons = {
       \ '^\%(cabal\|hs\|hsc\|lhs\)$': [ "vim-addon-haskell"],
-      \ '^\%(php\|inc\|php.inc\|hsc\|lhs\)$': ["phpcomplete", "vim-addon-xdebug","ZenCoding", 'vim-addon-php-manual'],
+      \ '^\%(php\|inc\|php.inc\|hsc\|lhs\)$': ["phpcomplete", "vim-addon-xdebug", 'vim-addon-php-manual'],
       \ 'ruby': [ 'vim-ruby',  "vim-addon-rdebug", 'vim-addon-ruby-debug-ide', 'vim-textobj-rubyblock' ],
       \ 'nix': [ "vim-addon-nix" ],
       \ 'vim': ["reload", 'vim-dev-plugin'],
+      \ '\%(html\|xml\|php\|php.inc\|inc\)': ["sparkup"],
     \ }
+
+    if $VAXE != ''
+      call add(plugins['always'], 'vaxe')
+    else
+      let g:ft_addons['haxe'] = ["vim-haxe-syntax"]
+      call add(plugins['always'], 'vim-haxe')
+    endif
+
+
     au FileType * for l in values(filter(copy(g:ft_addons), string(expand('<amatch>')).' =~ v:key')) | call vam#ActivateAddons(l, {'force_loading_plugins_now':1}) | endfor
 
   let activate = []
@@ -71,8 +81,8 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
 
   " command MergePluginFiles call vam#install#MergePluginFiles(g:merge+["tlib"], '\%(cmdlinehelp\|concordance\|evalselection\|glark\|hookcursormoved\|linglang\|livetimestamp\|localvariables\|loremipsum\|my_tinymode\|pim\|scalefont\|setsyntax\|shymenu\|spec\|tassert\|tbak\|tbibtools\|tcalc\|tcomment\|techopair\|tgpg\|tmarks\|tmboxbrowser\|tortoisesvn\|tregisters\|tselectbuffer\|tselectfile\|tsession\|tskeleton\|tstatus\|viki\|vikitasks\)\.vim_merged')
   " command UnmergePluginFiles call vam#install#UnmergePluginFiles()
-  noremap ; :
-  noremap : ;
+  nnoremap ; :
+  nnoremap : ;
 
   noremap <m-w>/ /\<\><left><left>
   noremap <m-w>? ?\<\><left><left>
@@ -441,6 +451,9 @@ fun! vim_addon_MarcWeber#Old()
 endf
 
 fun! vim_addon_MarcWeber#GlobalMappings()
+
+
+
   " ultisnips setup
   let g:UltiSnips = {}
   let g:UltiSnips.always_use_first_snippet = 1
@@ -449,8 +462,8 @@ fun! vim_addon_MarcWeber#GlobalMappings()
   let g:UltiSnips.JumpBackwardTrigger = "<c-k>"
 
   let g:UltiSnips.snipmate_ft_filter = {
-              \ 'default' : {'filetypes': ["FILETYPE"] },
-              \ 'html'    : {'filetypes': ["html_minimal", "javascript"] },
+              \ 'default' : {'filetypes': ["FILETYPE", "_"] },
+              \ 'html'    : {'filetypes': ["html_minimal", "javascript", "_"] },
               \ 'php'    : {'filetypes': ["php", "html_minimal", "javascript"] },
               \ 'xhtml'    : {'filetypes': ["html_minimal", "javascript"] },
               \ }
@@ -464,6 +477,8 @@ fun! vim_addon_MarcWeber#GlobalMappings()
               \ 'all' : {'filetypes': ['all'] },
               \ }
 
+  let g:commentary = {}
+  let g:commentary['lhs_commenting'] = '\c'
 
   noremap \og :<c-u> e /home/marc/mwr/github-MarcWeber/autoload/vim_addon_MarcWeber.vim<cr>
   noremap g, g;g;
@@ -493,6 +508,8 @@ fun! vim_addon_MarcWeber#GlobalMappings()
   inoremap <m-s-r> <esc>:w<cr>
   nnoremap <m-s-r> :w<cr>
   nnoremap <m-m><m-n> :Man<space>
+
+  noremap <s-f2> :MapAction<cr>
 
   " inoremap <c-e> <esc>A
   "inoremap <c-r> <s-C> <c-r>=system('xclip -o -selection clipboard')<cr>

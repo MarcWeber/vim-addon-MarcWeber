@@ -5,6 +5,7 @@ snippet lambda
 snippet class
 	class ${1:name} ${2:(parent):
 		def __init__(self, ...):
+                	super.__init__(self)
 
 snippet debug
 	import pdb; pdb.set_trace()

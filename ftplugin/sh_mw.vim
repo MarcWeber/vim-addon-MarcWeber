@@ -1,6 +1,7 @@
 syn match Error '\\\s\+$' contained
 
 inoremap <buffer> -sh #!/bin/sh
+noremap \cx :!chmod +x %<cr>
 
 " call vl#lib#completion#contextcompletion#ContextCompletionDefault()
 

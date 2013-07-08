@@ -67,17 +67,17 @@ snippet cla class BlankSlate .. initialize .. end
 	class ${1:BlankSlate}
 		instance_methods.each { |meth| undef_method(meth) unless meth =~ /\A__/ }
 snippet mod module .. end
-	module ${1:`substitute(Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
+	module ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
 		${2}
 	end
 snippet mod module .. module_function .. end
-	module ${1:`substitute(Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
+	module ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
 		module_function
 
 		${2}
 	end
 snippet mod module .. ClassMethods .. end
-	module ${1:`substitute(Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
+	module ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
 		module ClassMethods
 			${2}
 		end
@@ -469,7 +469,7 @@ snippet clafn
 snippet sinc
 	class << self; self end
 snippet nam
-	namespace :${1:`Filename()`} do
+	namespace :${1:`vim_snippets#Filename()`} do
 		${2}
 	end
 snippet tas
@@ -665,7 +665,7 @@ snippet mct
 		t.column :${2:name}, :${3:type}
 	end
 snippet migration
-	class ${1:`Snippet_MigrationNameFromFilename()`} < ActiveRecord::Migration
+	class ${1:`Snippet_MigrationNameFromvim_snippets#Filename()`} < ActiveRecord::Migration
 		def self.up
 			${2}
 		end
@@ -1249,3 +1249,114 @@ snippet imap_examine
 
 snippet format
 	05d" % v
+
+snippet SlowValue
+	require "thread"
+	
+	$mutex = Mutex.new
+	class Workers
+	
+	  # from https://github.com/grosser/parallel/blob/master/lib/parallel.rb#L63
+	  def processor_count
+	    @processor_count ||= case RbConfig::CONFIG['host_os']
+	    when /darwin9/
+	      `hwprefs cpu_count`.to_i
+	    when /darwin/
+	      (hwprefs_available? ? `hwprefs thread_count` : `sysctl -n hw.ncpu`).to_i
+	    when /linux|cygwin/
+	      `grep -c ^processor /proc/cpuinfo`.to_i
+	    when /(open|free)bsd/
+	      `sysctl -n hw.ncpu`.to_i
+	    when /mswin|mingw/
+	      require 'win32ole'
+	      wmi = WIN32OLE.connect("winmgmts://")
+	      cpu = wmi.ExecQuery("select NumberOfLogicalProcessors from Win32_Processor")
+	      cpu.to_enum.first.NumberOfLogicalProcessors
+	    when /solaris2/
+	      `psrinfo -p`.to_i # this is physical cpus afaik
+	    else
+	      $stderr.puts "Unknown architecture ( #{RbConfig::CONFIG["host_os"]} ) assuming one processor."
+	      1
+	    end
+	  end
+	
+	  def initialize()
+	    @job_queue = Queue.new
+	    for i in 0..processor_count
+	      Thread.new do
+	        @job_queue.deq.call
+	      end
+	    end
+	  end
+	
+	  def do_work(&blk)
+	    @job_queue.enq (blk)
+	  end
+	
+	  @@instance = Workers.new
+	
+	end
+	
+	class SlowValue
+	
+	  def initialize(&blk)
+	    @blk = blk
+	  end
+	
+	  def compute
+	    $mutex.synchronize do
+	      return if defined? @result_queue
+	      @result_queue = Queue.new
+	      Workers.instance.do_work do
+	        @result_queue.enq(@blk.call)
+	      end
+	    end
+	    self
+	  end
+	
+	  def value
+	    compute
+	    $mutex.synchronize {
+	      @result ||= @result_queue.deq
+	    }
+	    return @result
+	  end
+	
+	  def method_missing(meth, *args, &blk)
+	    value.__send(meth, *args, &blk)
+	  end
+	
+	  def to_s
+	    value.to_s
+	  end
+	
+	  def ==(b)
+	    value == b
+	  end
+	
+	end
+	
+	slow_big_endian_test = SlowValue.new do
+	  sleep 3
+	  "#define HAS_BIG_ENDIAN"
+	end
+	
+	has_header_x = SlowValue.new($workers) do
+	  sleep 3
+	  "#define HAS_HEADER_X"
+	end
+	
+	config_h = []
+	config_h << slow_big_endian_test.compute
+	config_h << has_header_x.compute
+	
+	puts config_h
+	
+	class Logger
+	  private_class_method :new
+	  @@logger = nil
+	  def Logger.create
+	    @@logger = new unless @@logger
+	    @@logger
+	  end
+	end

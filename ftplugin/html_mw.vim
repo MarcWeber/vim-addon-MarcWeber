@@ -70,3 +70,5 @@ function! UmlauteReplace()
 endfunction
 
 nnoremap <F5> i&shy;<esc>l
+
+noremap <c-y> <c-y>,

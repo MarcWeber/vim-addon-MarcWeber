@@ -263,9 +263,17 @@ snippet nix_repository_manager_cvs
 	# REGION AUTO UPDATE: { name="$1"; type = "cvs"; cvsRoot = ":pserver:anonymous@cinepaint.cvs.sourceforge.net:/cvsroot/cinepaint"; module="cinepaint"; }
 	# END
 
+
+snippet nix_repository_manager_bzr
+	# REGION AUTO UPDATE: { name=""; type="bzr"; url=""; [ args="extra args such as -Ossl.cert_reqs=none"; groups = "group1 group2"; ] }
+	# END
+
 snippet i
 	inherit stdenv fetchurl ${1};
 
 
 snippet versionSpecific
 	stdenv.lib.mergeAttrsByVersion name: version: attrsByVersion: base:
+
+snippet make_num_cores
+	-j$NIX_BUILD_CORES -l$NIX_BUILD_CORES

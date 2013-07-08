@@ -1,6 +1,7 @@
 set sw=2
 set expandtab
 setlocal formatoptions=
+setlocal textwidth=0
 inoremap <buffer> <m-l> let<space>
 
 
@@ -12,14 +13,13 @@ inoremap <buffer> <m-l> let<space>
 noremap <m-s><m-c> :SetOcamlCompiler<cr>
 command! -buffer SetOcamlCompiler :set aw|call s:SetCompiler()
 
-
 " let regex = 'type\|class\|module'
 " call vl#ui#navigation#jump_to_code_by_regex#AddOutlineMappings('.*\%('.regex.'\).*')
-set tags+=/tmp/mgy9gblb5ysxlqcfs5ll4fg7ii6z7l2y-ocaml-3.11.1.tar.bz2-unpacked/tags
+set tags+=/tmp/wf8ihbq4lxhvp19m7pglaxfgbpj2xmpq-ocaml-3.12.1.tar.bz2-unpacked/ocaml-3.12.1/tags
 set notagbsearch
 
+fun! s:LTSp(s)
+  return vim_addon_other#InsertLT(' ',a:s,' ')
+endf
 
-noremap <buffer> \T :call OCamlPrintType("normal")<RETURN>
-noremap <buffer> \D :call OCamlGotoDefinition("normal")<RETURN>
-"vmap <LocalLeader>t :call OCamlPrintType("visual")<RETURN>
-"vmap <LocalLeader>d :call OCamlGotoDefinition("visual")<RETURN>
+inoremap <m-:> <c-r>=<sid>LTSp("::")<cr>
