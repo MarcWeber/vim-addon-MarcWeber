@@ -20,7 +20,7 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
             \ 'matchit.zip', 'vim-addon-syntax-checker', 'vim-addon-rfc',
             \ 'vim-addon-mw-utils', 'vim-addon-surround', 'vim-addon-toc',
             \ 'vim-addon-haskell',
-            \ (has('python') || has('python3')) ? 'UltiSnips' : "snipmate"
+            \ snippet_engine
             \ ],
       \ 'extra' : ['textobj-diff', "textobj-function",  "narrow_region"],
       \ }
@@ -79,6 +79,41 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
   call vam#ActivateAddons(activate,{'auto_install':1})
   " open file with spaces by using E instead of e
   command! -nargs=* E exec 'e '.fnameescape(join([<f-args>], ' '))
+
+
+
+
+  if snippet_engine == "UltiSnips"
+    " ultisnips setup
+    let g:UltiSnips = {}
+    let g:UltiSnips.always_use_first_snippet = 1
+    let g:UltiSnips.ExpandTrigger = "<c-tab>"
+    let g:UltiSnips.JumpForwardTrigger = "<c-j>"
+    let g:UltiSnips.JumpBackwardTrigger = "<c-k>"
+
+    let g:UltiSnips.snipmate_ft_filter = {
+                \ 'default' : {'filetypes': ["FILETYPE", "_"] },
+                \ 'html'    : {'filetypes': ["html_minimal", "javascript", "_"] },
+                \ 'php'    : {'filetypes': ["php", "html_minimal", "javascript"] },
+                \ 'xhtml'    : {'filetypes': ["html_minimal", "javascript"] },
+                \ }
+
+    " don't load snipmate snippets by default
+    let g:UltiSnips.UltiSnips_ft_filter = {
+                \ 'default' : {'filetypes': ['FILETYPE'] },
+                \ 'html'    : {'filetypes': ["html_minimal", "javascript"] },
+                \ 'php'    : {'filetypes': ["php", "html_minimal", "javascript"] },
+                \ 'xhtml'    : {'filetypes': ["html_minimal", "javascript"] },
+                \ 'all' : {'filetypes': ['all'] },
+                \ }
+
+    noremap <m-s><m-p> :UltiSnipsEdit<cr>
+  else
+
+    noremap <m-s><m-p> :SnipMateOpenSnippetFiles<cr>
+  endif
+
+
 
   " command MergePluginFiles call vam#install#MergePluginFiles(g:merge+["tlib"], '\%(cmdlinehelp\|concordance\|evalselection\|glark\|hookcursormoved\|linglang\|livetimestamp\|localvariables\|loremipsum\|my_tinymode\|pim\|scalefont\|setsyntax\|shymenu\|spec\|tassert\|tbak\|tbibtools\|tcalc\|tcomment\|techopair\|tgpg\|tmarks\|tmboxbrowser\|tortoisesvn\|tregisters\|tselectbuffer\|tselectfile\|tsession\|tskeleton\|tstatus\|viki\|vikitasks\)\.vim_merged')
   " command UnmergePluginFiles call vam#install#UnmergePluginFiles()
@@ -202,8 +237,8 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
   nnoremap <m-s-t> :tabnew<cr>
   exec "noremap <m-s-f><m-s-t><m-s-p> :exec 'e ".fnamemodify(s:thisf,':h:h')."/ftplugin/'.&filetype.'_mw.vim'<cr>"
   noremap \co :<c-u>exec 'cope '.&lines/3<cr>
-  noremap <m-s><m-p> :UltiSnipsEdit<cr>
-  " noremap <esc>s<esc>p :SnipMateOpenSnippetFiles<cr>
+
+
   inoremap <c-e> <esc>A
 
   if isdirectory('src/main/scala')
@@ -452,31 +487,6 @@ fun! vim_addon_MarcWeber#Old()
 endf
 
 fun! vim_addon_MarcWeber#GlobalMappings()
-
-
-
-  " ultisnips setup
-  let g:UltiSnips = {}
-  let g:UltiSnips.always_use_first_snippet = 1
-  let g:UltiSnips.ExpandTrigger = "<c-tab>"
-  let g:UltiSnips.JumpForwardTrigger = "<c-j>"
-  let g:UltiSnips.JumpBackwardTrigger = "<c-k>"
-
-  let g:UltiSnips.snipmate_ft_filter = {
-              \ 'default' : {'filetypes': ["FILETYPE", "_"] },
-              \ 'html'    : {'filetypes': ["html_minimal", "javascript", "_"] },
-              \ 'php'    : {'filetypes': ["php", "html_minimal", "javascript"] },
-              \ 'xhtml'    : {'filetypes': ["html_minimal", "javascript"] },
-              \ }
-
-  " don't load snipmate snippets by default
-  let g:UltiSnips.UltiSnips_ft_filter = {
-              \ 'default' : {'filetypes': ['FILETYPE'] },
-              \ 'html'    : {'filetypes': ["html_minimal", "javascript"] },
-              \ 'php'    : {'filetypes': ["php", "html_minimal", "javascript"] },
-              \ 'xhtml'    : {'filetypes': ["html_minimal", "javascript"] },
-              \ 'all' : {'filetypes': ['all'] },
-              \ }
 
   let g:commentary = {}
   let g:commentary['lhs_commenting'] = '\c'
