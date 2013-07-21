@@ -19,7 +19,8 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
             \ "vim-addon-git","vim-addon-mw-utils","vim-addon-goto-thing-at-cursor","vim-addon-other",
             \ 'matchit.zip', 'vim-addon-syntax-checker', 'vim-addon-rfc',
             \ 'vim-addon-mw-utils', 'vim-addon-surround', 'vim-addon-toc',
-            \ 'vim-addon-haskell'
+            \ 'vim-addon-haskell',
+            \ (has('python') || has('python3')) ? 'UltiSnips' : "snipmate"
             \ ],
       \ 'extra' : ['textobj-diff', "textobj-function",  "narrow_region"],
       \ }
