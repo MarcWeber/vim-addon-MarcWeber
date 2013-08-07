@@ -23,3 +23,6 @@ fun! s:LTSp(s)
 endf
 
 inoremap <m-:> <c-r>=<sid>LTSp("::")<cr>
+inoremap <m->> <c-r>=<sid>LTSp("->")<cr>
+
+setlocal autoindent

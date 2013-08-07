@@ -18,8 +18,9 @@ inoremap <m-:> ::
 
 noremap <m-g><m-e> :cfile errors-dev.txt<cr>
 inoremap <m-p><m-s> puts<space>"
-inoremap <m-i><m-n> .include?
-inoremap <m-b><m-g> block_given?
+inoremap <m-i><m-n> .include?<space>
+inoremap <m-r><m-t> .respond_to?<space>
+inoremap <m-f><m-t> .fetch()<left>
 inoremap <m-d><m-e> defined?
 inoremap <c-l> lambda {\|
 inoremap <c-y> yield

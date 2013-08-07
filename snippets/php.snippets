@@ -38,10 +38,7 @@ snippet __call
 	public function __call($name, $arguments) {
 	}
 snippet __construct
-	function __construct(argument){
-	}
-snippet new
-	function __construct(argument){
+	function __construct($1){
 	}
 snippet ve
 	var_export(${1}, true)
@@ -611,7 +608,6 @@ snippet spf
 	}
 snippet g
 	global $
-
 snippet set_if_not_set
 	if (!isset(${1:${2}[${3}]})) $1 =
 snippet in

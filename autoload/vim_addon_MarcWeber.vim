@@ -11,6 +11,7 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
 
   " ,"vim-addon-mercurial"
   " \ empty($XPTEMPLATE) ? 'vim-snippets' : 'xptemplate',
+  let snippet_engine = has('python') || has('python3') ? 'UltiSnips' : "snipmate"
   let plugins = {
       \ 'always':
         \ [  'vim-addon-mru',
@@ -87,7 +88,7 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
     " ultisnips setup
     let g:UltiSnips = {}
     let g:UltiSnips.always_use_first_snippet = 1
-    let g:UltiSnips.ExpandTrigger = "<c-tab>"
+    let g:UltiSnips.ExpandTrigger = "<tab>"
     let g:UltiSnips.JumpForwardTrigger = "<c-j>"
     let g:UltiSnips.JumpBackwardTrigger = "<c-k>"
 
@@ -111,9 +112,19 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
   else
 
     noremap <m-s><m-p> :SnipMateOpenSnippetFiles<cr>
+    let g:snipMate = { 'scope_aliases' :
+	  \ {'objc' :'c'
+	  \ ,'cpp': 'c'
+	  \ ,'cs':'c'
+	  \ ,'xhtml': 'html'
+	  \ ,'html': 'javascript'
+	  \ ,'php': 'php'
+	  \ ,'ur': 'html,javascript'
+	  \ ,'mxml': 'actionscript'
+	  \ ,'haml': 'html,javascript'
+	  \ ,'nix': 'nix'
+	  \ }}
   endif
-
-
 
   " command MergePluginFiles call vam#install#MergePluginFiles(g:merge+["tlib"], '\%(cmdlinehelp\|concordance\|evalselection\|glark\|hookcursormoved\|linglang\|livetimestamp\|localvariables\|loremipsum\|my_tinymode\|pim\|scalefont\|setsyntax\|shymenu\|spec\|tassert\|tbak\|tbibtools\|tcalc\|tcomment\|techopair\|tgpg\|tmarks\|tmboxbrowser\|tortoisesvn\|tregisters\|tselectbuffer\|tselectfile\|tsession\|tskeleton\|tstatus\|viki\|vikitasks\)\.vim_merged')
   " command UnmergePluginFiles call vam#install#UnmergePluginFiles()
@@ -247,7 +258,7 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
 
   set list listchars=tab:\ \ ,trail:· 
 
-  noremap <m-g><m-o> :call<space>vim_addon_MarcWeber#FileByGlobCurrentDir('**/*'.input('glob open '),"\\.git<bar>\\.hg" )<cr>
+  noremap \og :call<space>vim_addon_MarcWeber#FileByGlobCurrentDir('**/*'.input('glob open '),"\\.git<bar>\\.hg" )<cr>
 
   set sw =2
   call vim_addon_MarcWeber#Old()
@@ -325,28 +336,6 @@ fun! vim_addon_MarcWeber#Old()
   augroup sh
     au BufRead,BufNewFile *.sh imap -sh #!/bin/bash<CR>
   augroup end
-
-    " for LINUX only""{{{
-    if exists('g:linux') 
-      " scilab:"{{{
-      augroup scilab
-	autocmd BufRead,BufNewFile *.sci map <buffer> <F3> :call Exec('w','!cat %\|scilab \-nw')
-	autocmd BufRead,BufNewFile *.sci set aw
-      augroup end"}}}
-      " set for C/C++ (linux)"{{{
-      augroup CCpp
-	autocmd BufRead,BufNewFile *.cpp setlocal tags+=/usr/lib/gcc-lib/i686-pc-linux-gnu/3.3.5-20050130/include/tags,/usr/include/TAGS
-	autocmd BufRead,BufNewFile *.h setlocal tags+=/usr/lib/gcc-lib/i686-pc-linux-gnu/3.3.5-20050130/include/tags,/usr/include/TAGS
-	autocmd BufRead,BufNewFile *.c setlocal tags+=/usr/lib/gcc-lib/i686-pc-linux-gnu/3.3.5-20050130/include/tags,/usr/include/TAGS
-      augroup end"}}}
-      " gnuplot"{{{
-      augroup GnuPlot
-	autocmd BufRead,BufNewFile *.gp :setlocal aw
-	autocmd BufRead,BufNewFile *.gp :setlocal makeprg=gnuplot\ -persist
-	autocmd BufRead,BufNewFile *.gp map <buffer> <F3> :make %<CR>
-      augroup end"}}}
-    endif
-  "}}}
 
   augroup warn
     aug BufRead,BufNewFile *_darcs* echoe " be carefule, darcs_file !"
@@ -491,7 +480,6 @@ fun! vim_addon_MarcWeber#GlobalMappings()
   let g:commentary = {}
   let g:commentary['lhs_commenting'] = '\c'
 
-  noremap \og :<c-u> e /home/marc/mwr/github-MarcWeber/autoload/vim_addon_MarcWeber.vim<cr>
   noremap g, g;g;
   let mapleader='\'
   map <leader>cx :!chmod +x %<cr>
@@ -743,7 +731,6 @@ fun! vim_addon_MarcWeber#GlobalMappings()
 
 
   set history=300
-  set ruler
   set noshowcmd
   set incsearch
   set modeline
@@ -752,31 +739,10 @@ fun! vim_addon_MarcWeber#GlobalMappings()
   set expandtab
   set wildmode=list:longest
   set wildmenu
-  "set wildmode=list:longest
-
-
-  " let g:scaleFont='Luxi\ Mono\ #{SIZE}'
-  " let g:scaleFontSize=12
-  " let g:scaleFontWidth=9
-  set lazyredraw
   set expandtab
   set sw=2
   set shm=a
   set bs=2
-
-  let g:snipMate = { 'scope_aliases' :
-	  \ {'objc' :'c'
-	  \ ,'cpp': 'c'
-	  \ ,'cs':'c'
-	  \ ,'xhtml': 'html'
-	  \ ,'html': 'javascript'
-	  \ ,'php': 'php'
-	  \ ,'ur': 'html,javascript'
-	  \ ,'mxml': 'actionscript'
-	  \ ,'haml': 'html,javascript'
-	  \ ,'nix': 'nix'
-	  \ }}
-
 
   let g:store_vl_stuff = expand('~/vl_store')
   let g:vl_top_dir = substitute(expand('<sfile>:h'),'[/\\]plugin$','','')
@@ -793,37 +759,11 @@ fun! vim_addon_MarcWeber#GlobalMappings()
     exec 'set dir='.t
     unlet t
   endif
-
-  map \or <m-o><m-r>
 endf
 
 set wildignore+=.git
 set wildignore+=.hg
 set wildignore+=.svn
-
-
-" function! If(condition, then_v, else_v)
-"   if a:condition
-"     exec a:then_v
-"   else
-"     exec u:else_v
-"   endif
-" endfunction
-" function! IfE(condition, then_v, else_v)
-"   if a:condition
-"     exec 'return '.a:then_v
-"   else
-"     exec 'return '.a:else_v
-"   endif
-" endfunction
-
-fun! Exec(...)
-  let i=1
-  while i<=a:0
-    exec a:{i}
-    let i+=1
-  endwhile
-endfun
 
 let g:aliases_file='/home/marc/.mutt-aliases'
 augroup ADD_CONFLICT_MARKERS_MATCH_WORDS

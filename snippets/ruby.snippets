@@ -5,6 +5,12 @@ snippet ..
 	{|${2:k,v}| ${1}}
 snippet ...
 	{|${2:a,b,c}| ${1}}
+snippet beg
+	begin
+		${3}
+	rescue ${1:Exception} => ${2:e}
+	end
+
 snippet begin
 	begin
 		raise 'A test exception.'
@@ -21,6 +27,9 @@ snippet csv_write
 	require "csv"
 	CSV.open("${path}", "wb") do |csv|
 	  csv << ["row", "of", "CSV", "data"]
+	end
+snippet csv_read
+	CSV.foreach(${1:file}, {:headers => true, :header_converters => :symbol}) do |row|
 	end
 snippet file_write
 	File.open(${1:"path/to/file.dump"}, "wb") { |file| file.write() }
