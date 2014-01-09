@@ -9,9 +9,7 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
 
   let g:local_vimrc = {'names':['vl_project.vim']}
 
-  " ,"vim-addon-mercurial"
-  " \ empty($XPTEMPLATE) ? 'vim-snippets' : 'xptemplate',
-  let snippet_engine = has('python') || has('python3') ? 'UltiSnips' : "snipmate"
+  let snippet_engine = has('python') || has('python3') ? 'github:MarcWeber/ultisnips' : "snipmate"
   let plugins = {
       \ 'always':
         \ [  'vim-addon-mru',
@@ -21,7 +19,7 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
             \ 'matchit.zip', 'vim-addon-syntax-checker', 'vim-addon-rfc',
             \ 'vim-addon-mw-utils', 'vim-addon-surround', 'vim-addon-toc',
             \ 'vim-addon-haskell',
-            \ snippet_engine
+            \ snippet_engine, 'vim-snippets'
             \ ],
       \ 'extra' : ['textobj-diff', "textobj-function",  "narrow_region"],
       \ }
@@ -40,24 +38,26 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
       " \ 'ocaml' : ["vim-addon-ocaml"],
 
     " \ '^\%(c\|cpp\)$': [ 'plugin-for-c-development' ],
-    let g:ft_addons = {
-      \ '^\%(cabal\|hs\|hsc\|lhs\)$': [ "vim-addon-haskell"],
-      \ '^\%(php\|inc\|php.inc\|hsc\|lhs\)$': ["phpcomplete", "vim-addon-xdebug", 'vim-addon-php-manual'],
-      \ 'ruby': [ 'vim-ruby',  "vim-addon-rdebug", 'vim-addon-ruby-debug-ide', 'vim-textobj-rubyblock' ],
-      \ 'nix': [ "vim-addon-nix" ],
-      \ 'vim': ["reload", 'vim-dev-plugin'],
-      \ '\%(html\|xml\|php\|php.inc\|inc\)': ["sparkup"],
-    \ }
+    " \ '\%(html\|xml\|php\|php.inc\|inc\)': ["sparkup"],
+    let g:ft_addons = [
+      \ { 'on_ft': '^\%(cabal\|hs\|hsc\|lhs\)$', 'activate':  [ "vim-addon-haskell"]},
+      \ { 'on_ft': '^\%(php\|inc\|php.inc\|hsc\|lhs\)$', 'activate' : ["phpcomplete", "vim-addon-xdebug", 'vim-addon-php-manual']},
+      \ { 'on_ft': 'rb$', 'activate': [ 'vim-ruby', "vim-addon-rdebug", 'vim-addon-ruby-debug-ide', 'vim-textobj-rubyblock' ] },
+      \ { 'on_ft': 'nix$', 'activate': [ "vim-addon-nix" ] },
+      \ { 'on_ft': 'vim$', 'activate': ["reload", 'vim-dev-plugin']},
+      \ { 'on_name': '\.scad$', 'activate': ['openscad', 'vim-addon-openscadx']}
+    \ ]
 
     if $VAXE != ''
       call add(plugins['always'], 'vaxe')
     else
-      let g:ft_addons['haxe'] = ["vim-haxe-syntax"]
+      call add(g:ft_addons, {'on_ft': 'haxe', 'activate': ["vim-haxe-syntax"]})
       call add(plugins['always'], 'vim-haxe')
     endif
 
 
-    au FileType * for l in values(filter(copy(g:ft_addons), string(expand('<amatch>')).' =~ v:key')) | call vam#ActivateAddons(l, {'force_loading_plugins_now':1}) | endfor
+    au FileType * for l in filter(copy(g:ft_addons), 'has_key(v:val, "on_ft") && '.string(expand('<amatch>')).' =~ v:val.on_ft') | call vam#ActivateAddons(l.activate, {'force_loading_plugins_now':1}) | endfor
+    au BufNewFile,BufRead * for l in filter(copy(g:ft_addons), 'has_key(v:val, "on_name") && '.string(expand('<amatch>')).' =~ v:val.on_name') | call vam#ActivateAddons(l.activate, {'force_loading_plugins_now':1}) | endfor
 
   let activate = []
   for [k,v] in items(plugins)
@@ -82,21 +82,22 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
   command! -nargs=* E exec 'e '.fnameescape(join([<f-args>], ' '))
 
 
-
-
-  if snippet_engine == "UltiSnips"
+  if snippet_engine =~? "UltiSnips"
     " ultisnips setup
-    let g:UltiSnips = {}
-    let g:UltiSnips.always_use_first_snippet = 1
-    let g:UltiSnips.ExpandTrigger = "<tab>"
-    let g:UltiSnips.JumpForwardTrigger = "<c-j>"
-    let g:UltiSnips.JumpBackwardTrigger = "<c-k>"
+    let g:UltiSnips = {
+          \ 'always_use_first_snippet': 1,
+          \ 'ExpandTrigger': "<tab>",
+          \ 'JumpForwardTrigger': "<c-j>",
+          \ 'JumpBackwardTrigger': "",
+          \ 'ListSnippets': ""
+          \ }
 
     let g:UltiSnips.snipmate_ft_filter = {
                 \ 'default' : {'filetypes': ["FILETYPE", "_"] },
                 \ 'html'    : {'filetypes': ["html_minimal", "javascript", "_"] },
                 \ 'php'    : {'filetypes': ["php", "html_minimal", "javascript"] },
                 \ 'xhtml'    : {'filetypes': ["html_minimal", "javascript"] },
+                \ 'haml'    : {'filetypes': ["haml", "javascript"] },
                 \ }
 
     " don't load snipmate snippets by default
@@ -125,6 +126,8 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
 	  \ ,'nix': 'nix'
 	  \ }}
   endif
+
+
 
   " command MergePluginFiles call vam#install#MergePluginFiles(g:merge+["tlib"], '\%(cmdlinehelp\|concordance\|evalselection\|glark\|hookcursormoved\|linglang\|livetimestamp\|localvariables\|loremipsum\|my_tinymode\|pim\|scalefont\|setsyntax\|shymenu\|spec\|tassert\|tbak\|tbibtools\|tcalc\|tcomment\|techopair\|tgpg\|tmarks\|tmboxbrowser\|tortoisesvn\|tregisters\|tselectbuffer\|tselectfile\|tsession\|tskeleton\|tstatus\|viki\|vikitasks\)\.vim_merged')
   " command UnmergePluginFiles call vam#install#UnmergePluginFiles()
@@ -185,6 +188,7 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
   command! ARubyIrb call repl_ruby#RubyBuffer({'cmd':'irb','move_last' : 1})
   command! ARubySh call repl_ruby#RubyBuffer({'cmd':'/bin/sh','move_last' : 1})
   command! APython call repl_python#PythonBuffer({'cmd':'python -i','move_last' : 1, 'prompt': '^>>> '})
+  command! APHP call repl_php#PHPBuffer({'cmd':'php -a','move_last' : 1, 'prompt': 'php >'})
   command! ASMLNJ call repl_ruby#RubyBuffer({'cmd':'sml','move_last' : 1, 'prompt': '^- '})
 
   "autocommands:"{{{
@@ -246,7 +250,7 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
   noremap <m-s-t><m-s-p> :<c-u>tprevious<cr>
   noremap <m-s-t><m-s-n> :<c-u>tnext<cr>
   nnoremap <m-s-t> :tabnew<cr>
-  exec "noremap <m-s-f><m-s-t><m-s-p> :exec 'e ".fnamemodify(s:thisf,':h:h')."/ftplugin/'.&filetype.'_mw.vim'<cr>"
+  exec "noremap \\ftp :exec 'e ".fnamemodify(s:thisf,':h:h')."/ftplugin/'.&filetype.'_mw.vim'<cr>"
   noremap \co :<c-u>exec 'cope '.&lines/3<cr>
 
 

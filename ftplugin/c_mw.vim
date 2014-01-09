@@ -4,6 +4,8 @@
 
 " let b:include_dirs=['/usr/include/octave-2.1.73']
 
+syn match Error 'for\s*(\s*\(\S\+\)[^;]*;\s*\1\s*<=[^;]*;\s*\%(++\)\?\1\%(++\)\?\s*)'
+
 setlocal sw=2
 setlocal aw
 

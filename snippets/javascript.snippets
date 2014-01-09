@@ -123,14 +123,6 @@ snippet fold
 	  }
 	}
 	);
-snippet switch
-	switch(<++>) {
-	  case <++>:
-	    break;
-	  case <++>:
-	    break;
-	  default:
-	}
 snippet utf8
 	[% set paste %]
 	function decode_utf8(utftext) {
@@ -215,6 +207,12 @@ snippet jquery_domready
 	$(document).ready(function(){
 		$1
 	});
+
+snippet jquery_namespace
+	(function( $ ) {
+		// Your jQuery code here, using the $
+	})( jQuery );
+
 snippet type_shorcut
 	type x  same as con x :: Type
 	type y = T same as con X :: Type = T

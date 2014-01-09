@@ -10,6 +10,7 @@
 
 " pressing return will automatically insert closing ) and ; if necessary
 
+finish
 setlocal sw=2
 
 let s:matchfunction='public\|private\|protected\|friendly\|void|\static\|class'

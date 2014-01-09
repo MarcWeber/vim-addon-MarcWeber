@@ -1,0 +1,50 @@
+snippet bench_time
+	static public function time(){
+	#if (js || flash9)
+			return Date.now().getTime();
+	#else
+			return neko.Sys.time();
+	#end
+	}
+	
+snippet bench
+	static public function time(){
+	#if (js || flash9)
+			return Date.now().getTime();
+	#else
+			return Sys.time();
+	#end
+	}
+
+	static public function bench_action(a) {
+		var s = time();
+		var r = a(); 
+		return {time : time() - s, result = r};
+	}
+
+
+snippet trace_expr
+  trace(~/expr => /g.replace(~/, pos => #pos[^)]*\)/g.replace(${1:e}+"", ""), ""));
+
+
+# public readonly property
+snippet prp
+  public var $1(default, null): $2;
+
+snippet uc
+	untyped __call__("${1:func_name}", ${2:args ...} );
+
+snippet av
+	__var__("${1:_SESSION}", "${2:name}")
+
+snippet #if
+	#if $1
+        #else
+          #error TODO
+        #end
+
+snippets tink_forward
+	import tink.lang.Cls;
+	
+	class B implements Cls {
+	  @:forward(print_x) var a:A;

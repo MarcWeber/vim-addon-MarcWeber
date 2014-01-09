@@ -3,7 +3,7 @@ setlocal thesaurus+=~/.mutt-aliases
 map <buffer> <m-s>  :call search('\csubject:\s*\zs\ze','')<cr>
 map <buffer> <m-t> :call search('\cTo:\s*\zs\ze','')<cr>
 
-inoremap <buffer> \tr Marc<space>Weber<cr>Im<space>Tannhoernle<space>4/1<cr>D-78052<space>Villingen-Schwenningen<cr>Germany<cr><cr>Mobil: 017660032282<cr><cr>Steuernummer: 22483/ 29259<cr>Finanzamt Villingen-Schwenningen
+inoremap <buffer> \tr Marc<space>Weber<cr>Im<space>Tannhoernle<space>4/1<cr>D-78052<space>Villingen-Schwenningen<cr>Germany<cr><cr>Mobil: 017660032282<cr><cr>Steuernummer: 22483/ 29259<cr>Finanzamt Villingen-Schwenningen<cr>DE12345678
 inoremap <buffer> <m-t><m-r> Marc<space>Weber<cr>Im<space>Tannhoernle<space>4/1<cr>D-78052<space>Villingen-Schwenningen<cr>Germany<cr><cr>Handy: 017660032282<cr><cr>Steuernummer: 22483/ 29259<cr>Finanzamt Villingen-Schwenningen
 inoremap <buffer> <m-a><m-c> :%s/Cc:/Cc: mt@ymc.ch
 abbrev mfg mit freundlichem Gruss
@@ -36,6 +36,7 @@ finish
 nix-commits@cs.uu.nl
 
 
+Wie angefragt 
 ICQ: 343698523
 MSN: my email
 Skype: skymawe
@@ -46,6 +47,8 @@ Inhaber: Marc Weber
 Konto-Nummer: 0102697901
 BLZ: 69490000 (Volksbank Villingen)
 
+BIC:	GENODE61VS1
+IBAN:	DE03694900000102697901
 
 
 " http://www.microsoft.com/downloads/details.aspx?displaylang=de&FamilyID=b5d1b8c3-fda5-4508-b0d0-1311d670e336

@@ -5,18 +5,12 @@ snippet ..
 	{|${2:k,v}| ${1}}
 snippet ...
 	{|${2:a,b,c}| ${1}}
-snippet beg
-	begin
-		${3}
-	rescue ${1:Exception} => ${2:e}
-	end
-
 snippet begin
 	begin
 		raise 'A test exception.'
 	rescue Exception => e
 		puts e.message
-		puts e.backtrace
+		puts e.backtrace.inspect
 	else
 		# other exception
 	ensure
@@ -27,9 +21,6 @@ snippet csv_write
 	require "csv"
 	CSV.open("${path}", "wb") do |csv|
 	  csv << ["row", "of", "CSV", "data"]
-	end
-snippet csv_read
-	CSV.foreach(${1:file}, {:headers => true, :header_converters => :symbol}) do |row|
 	end
 snippet file_write
 	File.open(${1:"path/to/file.dump"}, "wb") { |file| file.write() }
@@ -268,7 +259,6 @@ snippet mechanize
             puts link.text
           end
         end
-	a.history.clear
 
 snippet zlib
 	Zlib::Inflate.inflate(Zlib::Deflate.deflate("abc", 9))
@@ -503,16 +493,3 @@ snippet SlowValue
 	    @@logger
 	  end
 	end
-
-snippet mail
-	require 'mail'
-	Mail.deliver do
-	   from     'me@test.lindsaar.net'
-	   to       'you@test.lindsaar.net'
-	   subject  'Here is the image you wanted'
-	   body     File.read('body.txt')
-	   add_file '/full/path/to/somefile.png'
-	end
-
-snippet thread_abort_on_exception
-	Thread.abort_on_exception = true

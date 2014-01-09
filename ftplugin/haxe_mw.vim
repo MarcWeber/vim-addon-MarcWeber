@@ -5,6 +5,11 @@
 " %s/pos =>[^(]*([^)]*)//g
 " CFComplete haxe#CompleteClassNames
 " OFComplete haxe#CompleteHAXE
+"
+setlocal nocindent | setlocal nosmartindent
+setlocal sw=2
+
+inoremap <buffer> <expr> <c-x><c-q> vim_addon_completion#CompleteUsing('vim_addon_sql#Complete')
 
 inoremap <buffer> <c-q> ${}<left>
 fun! s:LTSp(s)
@@ -33,6 +38,8 @@ setlocal fdm=marker
 " setlocal autoindent
 " AddTabCompletion i import
 setlocal cindent
+setlocal indentkeys=
+setlocal autoindent
 
 "au Haxe BufWritePost <buffer> exec "normal \<F2>:wincmd p\<cr>"
 

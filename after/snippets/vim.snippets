@@ -1,0 +1,18 @@
+snippet haml_gf_open_file
+	fun! HAMLOpenFile()
+		let haml_file = substitute(getline('.'), ".\\{-}\\([^.'\" \\t(){}]\\+\\.haml\\).*", '\1', '')
+		let res = []
+		if haml_file != ''
+		 call add(res, 'lib_me/haml/'.haml_file)
+		endif
+		return res
+	endfun
+	
+	call on_thing_handler#AddOnThingHandler('g', funcref#Function('HAMLOpenFile'))
+
+
+snippet eo
+	echoe string(${1})
+
+snippet testx
+	`"${<digit>}"`

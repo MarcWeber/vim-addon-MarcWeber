@@ -25,6 +25,7 @@ inoremap <m-d><m-e> defined?
 inoremap <c-l> lambda {\|
 inoremap <c-y> yield
 
+noremap <buffer> \ge :exec 'Errorformat ruby'<bar>cfile last-camping-error.txt<cr>
 
 fun! Ri(s)
 endf
