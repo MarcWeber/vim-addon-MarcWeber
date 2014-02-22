@@ -70,9 +70,12 @@ endfunction
 
 "vnoremap <m-a> :call function! vl#lib#listdict#list#AlignByChar(',')<cr>
 "noremap <m-s><m-c> :map <F2> :set makeprg=mysql <bar> make < %<cr>
-noremap <buffer> <m-s><m-c> :map <buffer> <F2> :exec "call vl#lib#quickfix#runtaskinbackground#RunInBGQF(['time','sh', '-c','mysql -u root < '.expand('%')])"<lt>cr><cr>
+" noremap <buffer> <m-s><m-c> :map <buffer> <F2> :exec "call vl#lib#quickfix#runtaskinbackground#RunInBGQF(['time','sh', '-c','mysql -u root < '.expand('%')])"<lt>cr><cr>
+" noremap <buffer> <m-s><m-c> :map <buffer> \sql :exec "call vl#lib#quickfix#runtaskinbackground#RunInBGQF(['time','sh', '-c','mysql -u root < '.expand('%')])"<lt>cr><cr>
 
 setlocal completefunc=vim_addon_sql#Complete
+
+call vim_addon_sql#UI()
 
 finish
 

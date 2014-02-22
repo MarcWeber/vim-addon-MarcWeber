@@ -45,7 +45,8 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
       \ { 'on_ft': 'rb$', 'activate': [ 'vim-ruby', "vim-addon-rdebug", 'vim-addon-ruby-debug-ide', 'vim-textobj-rubyblock' ] },
       \ { 'on_ft': 'nix$', 'activate': [ "vim-addon-nix" ] },
       \ { 'on_ft': 'vim$', 'activate': ["reload", 'vim-dev-plugin']},
-      \ { 'on_name': '\.scad$', 'activate': ['openscad', 'vim-addon-openscadx']}
+      \ { 'on_name': '\.scad$', 'activate': ['openscad', 'vim-addon-openscadx']},
+      \ { 'on_name': '\.rs$', 'activate': ['rust']}
     \ ]
 
     if $VAXE != ''
@@ -546,7 +547,8 @@ fun! vim_addon_MarcWeber#GlobalMappings()
   "nnoremap <m-l><m-p> :lp<cr>
 
  " by Piet Delport a few years ago.
- command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
+ " built into Vim, see :h DiffOrig
+ "<command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
 
 
   "quick open

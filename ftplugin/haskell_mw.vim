@@ -27,13 +27,13 @@ inoremap <buffer> <m-m><m-b> Maybe<space>
 inoremap <buffer> <m-i><m-c> instance<space>
 inoremap <buffer> <m-d><m-v> deriving<space>(
 inoremap <buffer> <m-s-n> Nothing
+inoremap <buffer> <c-c> --<space>
 
 finish
 
 noremap <buffer> <m-e><m-m> :e /pr/haskell/amendment/Missing/
 call vl#dev#haskell#ghc#UI()
 
-inoremap <buffer> <c-c> --<space>
 inoremap <buffer> <m-s-u> <c-x><c-u>
 let s:exeEnding = vl#lib#vimscript#scriptsettings#GetValueByNameOrDefault('g:exeEnding','')
 

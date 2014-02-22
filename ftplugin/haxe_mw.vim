@@ -7,6 +7,7 @@
 " OFComplete haxe#CompleteHAXE
 "
 setlocal nocindent | setlocal nosmartindent
+setlocal expandtab
 setlocal sw=2
 
 inoremap <buffer> <expr> <c-x><c-q> vim_addon_completion#CompleteUsing('vim_addon_sql#Complete')

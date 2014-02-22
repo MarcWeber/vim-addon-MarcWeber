@@ -48,3 +48,7 @@ snippets tink_forward
 	
 	class B implements Cls {
 	  @:forward(print_x) var a:A;
+
+
+snippets tink_print
+    trace(tink.macro.tools.Printer.print($1));
