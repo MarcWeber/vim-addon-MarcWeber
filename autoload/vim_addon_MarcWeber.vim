@@ -759,7 +759,7 @@ fun! vim_addon_MarcWeber#GlobalMappings()
     set term=builtin_vt320
   endif
   if has('unix')
-    let t = $HOME."vim-swaps-".$USER.$HOME.getcwd()
+    let t = $HOME."/vim-swaps/".getcwd()
     if !isdirectory(t) | call mkdir(t, "p") | endif
     exec 'set dir='.t
     unlet t
