@@ -1,2 +1,2 @@
-map <buffer> <F2> :make %
-setlocal aw
+" map <buffer> <F2> :make %
+" setlocal aw

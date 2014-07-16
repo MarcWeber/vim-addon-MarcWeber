@@ -58,3 +58,246 @@ snippet executable_only
 	    extensions: OverlappingInstances
 	  else
 	    extenions: OverlappingInstances
+snippet executable "executable"
+
+
+snippet executable_only "executable_only"
+executable     testSimple
+  main-is:        testSimple.hs
+  if !(flag(BuildTestSimple))
+    buildable: False
+  hs-source-dirs: test, src
+  build-depends:   haskell98
+                  , base
+                  , HList
+                  , HaXml >= 1.19
+                  , filepath
+                  , mtl
+                  , pretty
+                  , containers
+                  , template-haskell
+  extensions: CPP
+  include-dirs: include
+  if flag(WeakValidation)
+    cpp-options: -DWEAK_VALIDATION
+    extensions: OverlappingInstances
+  else
+    extenions: OverlappingInstances
+endsnippet
+
+snippet executable "executable"
+
+
+snippet executable_only "executable_only"
+executable     testSimple
+  main-is:        testSimple.hs
+  if !(flag(BuildTestSimple))
+    buildable: False
+  hs-source-dirs: test, src
+  build-depends:   haskell98
+                  , base
+                  , HList
+                  , HaXml >= 1.19
+                  , filepath
+                  , mtl
+                  , pretty
+                  , containers
+                  , template-haskell
+  extensions: CPP
+  include-dirs: include
+  if flag(WeakValidation)
+    cpp-options: -DWEAK_VALIDATION
+    extensions: OverlappingInstances
+  else
+    extenions: OverlappingInstances
+endsnippet
+
+snippet executable "executable"
+
+
+endsnippet
+
+snippet executable_only "executable_only"
+
+
+
+snippet flag
+	Flag Build${1}
+		Default: False
+		Description: wether to build the executable $1
+snippet executable "executable"
+
+
+snippet executable_only "executable_only"
+executable     testSimple
+  main-is:        testSimple.hs
+  if !(flag(BuildTestSimple))
+    buildable: False
+  hs-source-dirs: test, src
+  build-depends:   haskell98
+                  , base
+                  , HList
+                  , HaXml >= 1.19
+                  , filepath
+                  , mtl
+                  , pretty
+                  , containers
+                  , template-haskell
+  extensions: CPP
+  include-dirs: include
+  if flag(WeakValidation)
+    cpp-options: -DWEAK_VALIDATION
+    extensions: OverlappingInstances
+  else
+    extenions: OverlappingInstances
+endsnippet
+
+snippet executable "executable"
+
+
+endsnippet
+
+snippet executable_only "executable_only"
+
+
+snippet executable "executable"
+
+
+endsnippet
+
+snippet executable_only "executable_only"
+
+
+snippet executable "executable"
+
+
+ndsnippet
+
+endsnippet
+
+snippet executable_only "executable_only"
+
+
+
+endsnippet
+
+snippet flag "flag"
+Flag Build$1
+	Default: False
+	Description: wether to build the executable $1
+endsnippet
+
+snippet executable "executable"
+
+
+snippet executable_only "executable_only"
+executable     testSimple
+  main-is:        testSimple.hs
+  if !(flag(BuildTestSimple))
+    buildable: False
+  hs-source-dirs: test, src
+  build-depends:   haskell98
+                  , base
+                  , HList
+                  , HaXml >= 1.19
+                  , filepath
+                  , mtl
+                  , pretty
+                  , containers
+                  , template-haskell
+  extensions: CPP
+  include-dirs: include
+  if flag(WeakValidation)
+    cpp-options: -DWEAK_VALIDATION
+    extensions: OverlappingInstances
+  else
+    extenions: OverlappingInstances
+endsnippet
+
+snippet executable "executable"
+
+
+endsnippet
+
+snippet executable_only "executable_only"
+
+
+snippet executable "executable"
+
+
+endsnippet
+
+snippet executable_only "executable_only"
+
+
+snippet executable "executable"
+
+
+ndsnippet
+
+endsnippet
+
+snippet executable_only "executable_only"
+
+
+
+endsnippet
+
+snippet flag "flag"
+Flag Build${1}
+	Default: False
+	Description: wether to build the executable $1
+endsnippet
+
+snippet executable "executable"
+
+
+endsnippet
+
+snippet executable_only "executable_only"
+
+
+snippet executable "executable"
+
+
+ndsnippet
+
+endsnippet
+
+snippet executable_only "executable_only"
+
+
+endsnippet
+
+snippet executable "executable"
+
+
+ndsnippet
+
+endsnippet
+
+snippet executable_only "executable_only"
+
+
+endsnippet
+
+snippet executable "executable"
+
+
+dsnippet
+
+ndsnippet
+
+endsnippet
+
+snippet executable_only "executable_only"
+
+
+
+ndsnippet
+
+endsnippet
+
+snippet flag "flag"
+
+

@@ -13,9 +13,9 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
   let plugins = {
       \ 'always':
         \ [  'vim-addon-mru',
-            \ 'vim-addon-commenting', 'vim-addon-local-vimrc', 'vim-addon-sql',"vim-addon-completion",
+            \ 'vim-addon-commenting', 'vim-addon-sql',"vim-addon-completion",
             \ 'vim-addon-async', 'tlib', "vim-addon-toggle-buffer",
-            \ "vim-addon-git","vim-addon-mw-utils","vim-addon-goto-thing-at-cursor","vim-addon-other",
+            \ "vim-addon-git","vim-addon-mw-utils","vim-addon-goto-thing-at-cursor",
             \ 'matchit.zip', 'vim-addon-syntax-checker', 'vim-addon-rfc',
             \ 'vim-addon-mw-utils', 'vim-addon-surround', 'vim-addon-toc',
             \ 'vim-addon-haskell',
@@ -46,7 +46,8 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
       \ { 'on_ft': 'nix$', 'activate': [ "vim-addon-nix" ] },
       \ { 'on_ft': 'vim$', 'activate': ["reload", 'vim-dev-plugin']},
       \ { 'on_name': '\.scad$', 'activate': ['openscad', 'vim-addon-openscadx']},
-      \ { 'on_name': '\.rs$', 'activate': ['rust']}
+      \ { 'on_name': '\.rs$', 'activate': ['rust']},
+      \ { 'on_name': '\.ly$', 'activate': ['vim-addon-lilypond']}
     \ ]
 
     if $VAXE != ''
@@ -204,7 +205,7 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
   
  
   "window cursor movement
-  nnoremap <m-s-v><m-s-p> :exec "wincmd g\<c-]>" <bar> exec 'syntax keyword Tag '.expand('<cword>')<cr>
+  nnoremap <m-s-v><m-s-p> :sp <bar> exec 'tag '.expand('<cword>')<bar> exec 'syntax keyword Tag '.expand('<cword>')<cr>
   vnoremap <m-s-v><m-s-p> y:sp<bar>tjump <c-r>"<cr>
   noremap <m-s-s> :<c-u>tjump<space>
    
@@ -509,8 +510,6 @@ fun! vim_addon_MarcWeber#GlobalMappings()
   inoremap <m-s-n> \n
   inoremap <m-t><m-d> TODO
   inoremap <m-f><m-m> FIXME
-  inoremap <m-s-r> <esc>:w<cr>
-  nnoremap <m-s-r> :w<cr>
   nnoremap <m-m><m-n> :Man<space>
 
   noremap <s-f2> :MapAction<cr>
@@ -760,7 +759,7 @@ fun! vim_addon_MarcWeber#GlobalMappings()
     set term=builtin_vt320
   endif
   if has('unix')
-    let t = "/tmp/vim-swaps-".$USER.$HOME.getcwd()
+    let t = $HOME."vim-swaps-".$USER.$HOME.getcwd()
     if !isdirectory(t) | call mkdir(t, "p") | endif
     exec 'set dir='.t
     unlet t

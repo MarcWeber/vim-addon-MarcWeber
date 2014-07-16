@@ -87,11 +87,12 @@ snippet Cached
 		def initialize(config)
 			@config = {
 				:default => {},
-				:from_file => lambda{|filename| require "yaml"; YAML::parse_file(filename) },
-				:to_binary => lambda{|t| require "yaml"; t.to_yaml },
+                                # yaml:
+				# :from_file => lambda{|filename| require "yaml"; YAML::parse_file(filename) },
+				# :to_binary => lambda{|t| require "yaml"; t.to_yaml },
                                 # binary:
-                                # :from_file => lambda{|filename| File.open(filename, "rb") { |file| Marshal.load(file) } },
-                                # :to_binary => lambda{|t| require "yaml"; Marshal.dump(t) },
+                                :from_file => lambda{|filename| File.open(filename, "rb") { |file| Marshal.load(file) } },
+                                :to_binary => lambda{|t| Marshal.dump(t) },
 
 				:use_cache => true,
 				:load_cache => config[:use_cache] || config[:load_cache],
@@ -302,7 +303,7 @@ snippet mechanize_traverse
 	    and ["", ".html", ".htm", ".php"].include? addressable.extname.downcase
 	    }
 	    )
-	  visitor = options.fetch(:visitor, lambda {|uri, page|})
+	  visitor = options.fetch(:visitor, lambda {|uri, page, cache|})
 	
 	  max_recursion = options.fetch(:max_recursion, 5)
 	
@@ -519,3 +520,18 @@ snippet mail
 
 snippet thread_abort_on_exception
 	Thread.abort_on_exception = true
+
+snippet google_lat_lng
+	def google_lat_lon(address)
+	  require "addressable/uri"
+	  require 'net/http'
+	  url = Addressable::URI.parse('http://maps.google.com/maps/api/geocode/json?&sensor=false&region=de')
+	  url.query_values = url.query_values.merge({:address => address})
+	  req = Net::HTTP::Get.new(url.request_uri)
+	  res = Net::HTTP.start(url.host, url.port) {|http|
+	    http.request(req)
+	  }
+	  j = JSON.parse(res.body)
+	  raise 'google query limit exceeded' if j[:status] && j[:status] == 'OVER_QUERY_LIMIT'
+	  j.fetch("results", []).fetch(0, {}).fetch("geometry", {}).fetch("location", nil)
+	end
