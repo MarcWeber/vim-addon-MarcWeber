@@ -96,7 +96,7 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
 
     let g:UltiSnips.snipmate_ft_filter = {
                 \ 'default' : {'filetypes': ["FILETYPE", "_"] },
-                \ 'html'    : {'filetypes': ["html_minimal", "javascript", "_"] },
+                \ 'html'    : {'filetypes': ["html_minimal", "html", "javascript", "_"] },
                 \ 'php'    : {'filetypes': ["php", "html_minimal", "javascript"] },
                 \ 'xhtml'    : {'filetypes': ["html_minimal", "javascript"] },
                 \ 'haml'    : {'filetypes': ["haml", "javascript"] },

@@ -535,3 +535,9 @@ snippet google_lat_lng
 	  raise 'google query limit exceeded' if j[:status] && j[:status] == 'OVER_QUERY_LIMIT'
 	  j.fetch("results", []).fetch(0, {}).fetch("geometry", {}).fetch("location", nil)
 	end
+snippet sequel
+	require 'sequel'
+	# mysql2 for utf-8
+	DB = Sequel.connect('mysql2://user:pass@host/databasename')
+	# DB.loggers << Logger.new($stdout)
+	DB[:table].where(x => 7).first/all/update/delete
