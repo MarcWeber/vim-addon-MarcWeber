@@ -27,9 +27,6 @@ inoremap <buffer> <m-t><m-o> var<space>o<space>=<space>this.options;
 setlocal makeprg=js
 setlocal aw
 noremap <buffer> <F1> :exec 'BGMake '.expand("%")<cr>
-if expand('%') =~ '.js$'
-  noremap <buffer> <F2> :silent! update <bar>silent! call vl#lib#quickfix#runtaskinbackground#RunInBGQF(['js',expand('%')], 'js')<cr>
-endif
 
 "outline
 "

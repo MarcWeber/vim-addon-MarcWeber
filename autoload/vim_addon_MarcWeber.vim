@@ -45,6 +45,7 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
       \ { 'on_ft': 'rb$', 'activate': [ 'vim-ruby', "vim-addon-rdebug", 'vim-addon-ruby-debug-ide', 'vim-textobj-rubyblock' ] },
       \ { 'on_ft': 'nix$', 'activate': [ "vim-addon-nix" ] },
       \ { 'on_ft': 'vim$', 'activate': ["reload", 'vim-dev-plugin']},
+      \ { 'on_name': '\.iced$', 'activate': ["vim-iced-coffe-script"]},
       \ { 'on_name': '\.scad$', 'activate': ['openscad', 'vim-addon-openscadx']},
       \ { 'on_name': '\.rs$', 'activate': ['rust']},
       \ { 'on_name': '\.ly$', 'activate': ['vim-addon-lilypond']}
@@ -100,6 +101,7 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
                 \ 'php'    : {'filetypes': ["php", "html_minimal", "javascript"] },
                 \ 'xhtml'    : {'filetypes': ["html_minimal", "javascript"] },
                 \ 'haml'    : {'filetypes': ["haml", "javascript"] },
+                \ 'coffee.iced-coffee'    : {'filetypes': ["iced", "javascript"] },
                 \ }
 
     " don't load snipmate snippets by default
@@ -108,6 +110,7 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
                 \ 'html'    : {'filetypes': ["html_minimal", "javascript"] },
                 \ 'php'    : {'filetypes': ["php", "html_minimal", "javascript"] },
                 \ 'xhtml'    : {'filetypes': ["html_minimal", "javascript"] },
+                \ 'coffee.iced-coffee'    : {'filetypes': ["iced", "javascript"] },
                 \ 'all' : {'filetypes': ['all'] },
                 \ }
 
