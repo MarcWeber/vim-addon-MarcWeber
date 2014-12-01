@@ -12,55 +12,8 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
   let snippet_engine = has('python') || has('python3') ? 'github:MarcWeber/ultisnips' : "snipmate"
   let plugins = {
       \ 'always':
-        \ [  'vim-addon-mru',
-            \ 'vim-addon-commenting', 'vim-addon-sql',"vim-addon-completion",
-            \ 'vim-addon-async', 'tlib', "vim-addon-toggle-buffer",
-            \ "vim-addon-git","vim-addon-mw-utils","vim-addon-goto-thing-at-cursor",
-            \ 'matchit.zip', 'vim-addon-syntax-checker', 'vim-addon-rfc',
-            \ 'vim-addon-mw-utils', 'vim-addon-surround', 'vim-addon-toc',
-            \ 'vim-addon-haskell',
-            \ snippet_engine, 'vim-snippets'
-            \ ],
-      \ 'extra' : ['textobj-diff', "textobj-function",  "narrow_region"],
+        \ [ snippet_engine, 'vim-snippets' ],
       \ }
-
-      " \ 'sql': [],
-      " \ 'as3': ["vim-addon-fcsh","Flex_Development_Support"],
-      " \ 'coq' : ['vim-addon-coq'],
-      " \ 'haskell-scion' : ["scion-backend-vim"],
-      " \ 'delphi' : [ "vim-addon-delphi" ],
-      " \ 'haxe' : [ 'vim-haxe' ],
-      " \ 'scala': ["ensime", "vim-addon-scala","vim-addon-sbt"],
-      " \ 'sml': ["vim-addon-sml"],
-      " \ 'agda' : ["vim-addon-agda"],
-      " \ 'lilypond' : ['vim-addon-lilypond'],
-      " \ 'urweb': ["vim-addon-urweb"],
-      " \ 'ocaml' : ["vim-addon-ocaml"],
-
-    " \ '^\%(c\|cpp\)$': [ 'plugin-for-c-development' ],
-    " \ '\%(html\|xml\|php\|php.inc\|inc\)': ["sparkup"],
-    let g:ft_addons = [
-      \ { 'on_ft': '^\%(cabal\|hs\|hsc\|lhs\)$', 'activate':  [ "vim-addon-haskell"]},
-      \ { 'on_ft': '^\%(php\|inc\|php.inc\|hsc\|lhs\)$', 'activate' : ["phpcomplete", "vim-addon-xdebug", 'vim-addon-php-manual']},
-      \ { 'on_ft': 'rb$', 'activate': [ 'vim-ruby', "vim-addon-rdebug", 'vim-addon-ruby-debug-ide', 'vim-textobj-rubyblock' ] },
-      \ { 'on_ft': 'nix$', 'activate': [ "vim-addon-nix" ] },
-      \ { 'on_ft': 'vim$', 'activate': ["reload", 'vim-dev-plugin']},
-      \ { 'on_name': '\.iced$', 'activate': ["vim-iced-coffe-script"]},
-      \ { 'on_name': '\.scad$', 'activate': ['openscad', 'vim-addon-openscadx']},
-      \ { 'on_name': '\.rs$', 'activate': ['rust']},
-      \ { 'on_name': '\.ly$', 'activate': ['vim-addon-lilypond']}
-    \ ]
-
-    if $VAXE != ''
-      call add(plugins['always'], 'vaxe')
-    else
-      call add(g:ft_addons, {'on_ft': 'haxe', 'activate': ["vim-haxe-syntax"]})
-      call add(plugins['always'], 'vim-haxe')
-    endif
-
-
-    au FileType * for l in filter(copy(g:ft_addons), 'has_key(v:val, "on_ft") && '.string(expand('<amatch>')).' =~ v:val.on_ft') | call vam#ActivateAddons(l.activate, {'force_loading_plugins_now':1}) | endfor
-    au BufNewFile,BufRead * for l in filter(copy(g:ft_addons), 'has_key(v:val, "on_name") && '.string(expand('<amatch>')).' =~ v:val.on_name') | call vam#ActivateAddons(l.activate, {'force_loading_plugins_now':1}) | endfor
 
   let activate = []
   for [k,v] in items(plugins)

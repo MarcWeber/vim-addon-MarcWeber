@@ -662,3 +662,14 @@ snippet my_exec
 	    throw new Exception('command failed, non zero exit code');
 	  return $s;
 	}
+
+snippet for
+	for($${1:i} = 0; $$1 < $2; $$1++){
+		$3
+	}
+
+snippet l
+	function($x){return $2;}
+snippet fer
+	foreach($$1 as &$$2){
+	}unset($$2);

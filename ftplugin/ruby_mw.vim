@@ -16,7 +16,7 @@ inoremap <m-o>= <c-r>=vim_addon_other#InsertLT(' ','\|\|=',' ')<cr>
 inoremap <m-r><m-r> require_relative "
 inoremap <m-:> ::
 
-noremap <m-g><m-e> :cfile errors-dev.txt<cr>
+" noremap <m-g><m-e> :cfile errors-dev.txt<cr>
 inoremap <m-p><m-s> puts<space>"
 inoremap <m-i><m-n> .include?<space>
 inoremap <m-r><m-t> .respond_to?<space>

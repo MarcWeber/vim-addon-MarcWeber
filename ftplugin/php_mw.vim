@@ -6,8 +6,8 @@
 "setlocal expandtab
 "set shiftwidth=4
 "set softtabstop=4
-"set tabstop=4
-"set sw=4
+setlocal expandtab
+setlocal sw=2
 setlocal autoindent
 
 fun! s:LTSp(s)

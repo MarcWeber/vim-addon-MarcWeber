@@ -225,3 +225,15 @@ snippet f
 
 snippet to_s
 	JSON.stringify($1, undefined, 4)
+
+snippet r
+	require("$1")
+
+snippet rethinkdb_connect
+	r = require("rethinkdb")
+	r.connect( {host: 'localhost', port: 28015}, function(err, conn) {
+		if (err) throw err;
+		connection = conn;
+	})
+snippet sl
+	console.log($1)
