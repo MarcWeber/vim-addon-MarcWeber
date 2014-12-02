@@ -1,7 +1,10 @@
-
 let s:thisf = expand('<sfile>')
 
-fun! vim_addon_MarcWeber#Activate(vam_features)
+let s:did_activate = 0
+fun! vim_addon_MarcWeber#Activate()
+  if s:did_activate | return | endif
+  let s:did_activate = 1
+
   let g:vim_addon_urweb = { 'use_vim_addon_async' : 1 }
   let g:netrw_silent = 0
   let g:linux=1
@@ -10,30 +13,7 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
   let g:local_vimrc = {'names':['vl_project.vim']}
 
   let snippet_engine = has('python') || has('python3') ? 'github:MarcWeber/ultisnips' : "snipmate"
-  let plugins = {
-      \ 'always':
-        \ [ snippet_engine, 'vim-snippets' ],
-      \ }
 
-  let activate = []
-  for [k,v] in items(plugins)
-    if k == 'always' 
-          \ || (type(a:vam_features) == type([]) && index(a:vam_features, k) >= 0)
-          \ || (type(a:vam_features) == type('') && a:vam_features == 'all')
-      call extend(activate, v)
-    endif
-  endfor
-
-  " trailing-whitespace.vim 
-  " "yaifa",
-  " "vim-addon-blender-scripting",
-  " scion-backend-vim",
-  " "JSON", 
-  " "vim-addon-povray",
-  " "vim-addon-lout",
-
-    " \ "delimitMate",
-  call vam#ActivateAddons(activate,{'auto_install':1})
   " open file with spaces by using E instead of e
   command! -nargs=* E exec 'e '.fnameescape(join([<f-args>], ' '))
 
@@ -58,10 +38,12 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
                 \ }
 
     " don't load snipmate snippets by default
+    " 
+    " 'php'    : {'filetypes': ["php", "html_minimal", "javascript"] },
     let g:UltiSnips.UltiSnips_ft_filter = {
                 \ 'default' : {'filetypes': ['FILETYPE'] },
                 \ 'html'    : {'filetypes': ["html_minimal", "javascript"] },
-                \ 'php'    : {'filetypes': ["php", "html_minimal", "javascript"] },
+                \ 'php'    : {'filetypes': [] },
                 \ 'xhtml'    : {'filetypes': ["html_minimal", "javascript"] },
                 \ 'coffee.iced-coffee'    : {'filetypes': ["iced", "javascript"] },
                 \ 'all' : {'filetypes': ['all'] },
@@ -72,17 +54,17 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
 
     noremap <m-s><m-p> :SnipMateOpenSnippetFiles<cr>
     let g:snipMate = { 'scope_aliases' :
-	  \ {'objc' :'c'
-	  \ ,'cpp': 'c'
-	  \ ,'cs':'c'
-	  \ ,'xhtml': 'html'
-	  \ ,'html': 'javascript'
-	  \ ,'php': 'php'
-	  \ ,'ur': 'html,javascript'
-	  \ ,'mxml': 'actionscript'
-	  \ ,'haml': 'html,javascript'
-	  \ ,'nix': 'nix'
-	  \ }}
+          \ {'objc' :'c'
+          \ ,'cpp': 'c'
+          \ ,'cs':'c'
+          \ ,'xhtml': 'html'
+          \ ,'html': 'javascript'
+          \ ,'php': 'php'
+          \ ,'ur': 'html,javascript'
+          \ ,'mxml': 'actionscript'
+          \ ,'haml': 'html,javascript'
+          \ ,'nix': 'nix'
+          \ }}
   endif
 
 
@@ -158,8 +140,8 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
       \   exe "normal g`\"" |
       \ endif
   "}}}e
-  
- 
+
+
   "window cursor movement
   nnoremap <m-s-v><m-s-p> :sp <bar> exec 'tag '.expand('<cword>')<bar> exec 'syntax keyword Tag '.expand('<cword>')<cr>
   vnoremap <m-s-v><m-s-p> y:sp<bar>tjump <c-r>"<cr>
@@ -194,10 +176,10 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
   noremap <leader>dg :diffget<cr>
   noremap <leader>du :diffupdate<cr>
   noremap <leader>ts :if exists("syntax_on") <Bar>
-	\   syntax off <Bar>
-	\ else <Bar>
-	\   syntax enable <Bar>
-	\ endif <CR>
+        \   syntax off <Bar>
+        \ else <Bar>
+        \   syntax enable <Bar>
+        \ endif <CR>
   inoremap <s-cr> <esc>o
   noremap <m-s-e><m-s-n> :enew<cr>
   inoremap <c-cr> <esc>O
@@ -218,7 +200,7 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
     noremap <m-s> :e src/main/scala/*
   endif
 
-  set list listchars=tab:\ \ ,trail:· 
+  set list listchars=tab:\ \ ,trail:Â· 
 
   noremap \og :call<space>vim_addon_MarcWeber#FileByGlobCurrentDir('**/*'.input('glob open '),"\\.git<bar>\\.hg" )<cr>
 
@@ -226,7 +208,6 @@ fun! vim_addon_MarcWeber#Activate(vam_features)
   call vim_addon_MarcWeber#Old()
   call vim_addon_MarcWeber#GlobalMappings()
 endf
-
 
 " TODO refactor: create glob function
 function! vim_addon_MarcWeber#FileByGlobCurrentDir(glob, exclude_pattern)
