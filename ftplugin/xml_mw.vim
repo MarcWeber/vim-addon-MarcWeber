@@ -8,24 +8,6 @@ imap <c-c> </<c-x><c-o>
 " insert <wordbefore cursor>|</twordbefore cursorag> 
 " Inoremap <m-c> ><esc>vbyi<<esc>f>a</<c-r>=@"<cr><esc>F<i
 
-fun! b:AfterReturn()
-  let line = getline('.')
-  let result=''
-  if (len(line)-len(substitute(line,'\\"\|[^"=','','g')))%2==1
-    " one " is missing
-    let result .= '"'
-    let line .= "\""
-  endif
-  if line =~ '^\s*[^<]*\%(<[^>]*>[^<]*\)*<[^>]*$'
-    " one > is missing
-    let result .= ">"
-    let line .= ">"
-  endif
-  return result."\<cr>"
-endfun
-
-"inoremap <cr> <c-r>=b:AfterReturn()<cr>
-
 command! -buffer Format :%!xmllint --format %
 
 function! s:GotoDTD()
