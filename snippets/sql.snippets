@@ -1,7 +1,11 @@
+snippet d
+	describe $1
 snippet mcd
 	CREATE DATABASE $1
 snippet dt
 	DROP TABLE IF EXISTS ${1} ;
+snippet df
+  DELETE FROM $1
 snippet mct
 	DROP TABLE IF EXISTS ${1} ;
 	CREATE TABLE $1 (
@@ -22,7 +26,7 @@ snippet u
 snippet mysql_create_grant
 	CREATE user ${1:name}
 	CREATE DATABASE ${1}
-	GRANT all  ON  $1.*  TO '$1'@'localhost' IDENTIFIED BY 'PASSWORTXAE#$';
+	GRANT all  ON  ${1}.*  TO '${1}'@'localhost' IDENTIFIED BY 'PASSWORT${3}';
 snippet mysql_add_index
 	ALTER TABLE `${1}` ADD INDEX ( `${2:field_list}` );
 snippet ii
@@ -34,3 +38,7 @@ snippet pg_create_grant
 	GRANT ALL ON DATABASE ${database} TO "${user}";
 snippet nn
 	NOT NULL
+snippet mysql_convert_tz
+  CONVERT_TZ($1,'GMT','MET');
+snippet sc
+  SELECT count(*) FROM 

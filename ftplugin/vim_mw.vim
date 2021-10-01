@@ -45,7 +45,7 @@ inoremap <buffer> <m-~> <space>=~<space>'
 inoremap <buffer> <m-=> <c-r>=<sid>LTSp("=")<cr>
 inoremap <buffer> <m-.> <c-r>=<sid>LTSp(".=")<cr>
 inoremap <buffer> <m-+> <space>+=<space>
-inoremap <m-c><m-r> <lt>c-r>=
+inoremap <buffer> <m-c><m-r> <lt>c-r>=
 inoremap <buffer> <m-i><m-w><m-s> <c-r>=vl#dev#text#insertFunctions#InsertWithSpace('<lt>c-r>=vl#dev#text#insertFunctions#InsertWithSpace("')<cr>
 inoremap <buffer> <m-i><m-w><m-s><m-a> <c-r>=vl#dev#text#insertFunctions#InsertWithSpace('<lt>c-r>=InsertWithSpaceAfter("')<cr>
 inoremap <buffer> <m-i><m-w><m-s><m-n> <c-r>=vl#dev#text#insertFunctions#InsertWithSpace('<lt>c-r>=vl#dev#text#insertFunctions#InsertWithSpaceNotAfterBefore("')<cr>

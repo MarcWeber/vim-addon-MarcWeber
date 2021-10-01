@@ -8,7 +8,7 @@
 "set softtabstop=4
 setlocal expandtab
 setlocal sw=2
-setlocal autoindent
+set autoindent
 
 fun! s:LTSp(s)
   return vim_addon_other#InsertLT(' ',a:s,' ')
@@ -19,11 +19,11 @@ inoremap <buffer> <m-.>= <c-r>=<SID>LTSp(".=")<cr>
 inoremap <buffer> <m-d><m-e> define('','')<left><left><left><left><left>
 
 inoremap <buffer> <m-r> ->
-noremap <m-g><m-e> :exec "set efm=%f:%l" <bar> cfile /var/marc/vimserver/error <bar> cope<cr>
 inoremap <buffer> <m-i> ['
 inoremap <buffer> <m-f> <space>=><space>
 inoremap <buffer> <m-t> $this->
 
+inoremap <buffer> <m-a><m-y> array(
 inoremap <buffer> <m-i><m-s><m-n> is_null(
 inoremap <buffer> <m-i><m-s><m-a> is_array(
 inoremap <buffer> <m-i><m-n><m-a> in_array(
@@ -48,11 +48,11 @@ inoremap <buffer> <m-p><m-t> $_POST['']<esc>2h
 
 inoremap <buffer> <m-p><m-r> print_r(
 inoremap <buffer> <m-p> <?php<space>
-inoremap <buffer> <m-a><m-y> array(
 
 " inoremap <buffer> <m-r><m-n> <c-r>=vl#dev#text#insertFunctions#InsertWithSpace("return ")<cr>
 setlocal completefunc=vim_addon_sql#Complete
 
+inoremap <buffer> <m-a><m-k><m-e> array_key_exists('',)<esc>3l
 finish
 
 " switch files
@@ -67,7 +67,7 @@ let b:switchFile = [ [ '%:p', dir1, "substitute(file, ".string(dir1).", ".string
 call vl#lib#tags#taghelper#TagsOfParentDirsAdd(expand('%:h'))
 
 " templates
-   " adds commands and mappings for template usage
+" adds commands and mappings for template usage
 "call vl#lib#template#template#AddTemplateUI(vl#settings#DotvimDir().'/templates/php')
 "call vl#lib#template#template#AddTemplatesFromDirectory(vl#settings#DotvimDir().'/templates/html')
 
@@ -187,7 +187,6 @@ noremap <buffer> <c-5> :update <bar>exec 'BGQF php5 '.expand('%')<cr>
 
 
 " array 
-inoremap <buffer> <m-a><m-k><m-e> array_key_exists('',)<esc>3l
 
 inoremap <buffer> <m-&> <c-r>=vl#dev#text#insertFunctions#InsertWithSpaceNotAfter('_',"&=")<cr>
 inoremap <buffer> <m-l><m-o> 'file<space>:'.__file__.' class:<space>'.__class__.' function/method:<space>'.__method__.' line:'.__line__
@@ -256,10 +255,8 @@ call tovl#errorformat#SetErrorFormat('plugins#tovl#errorformats#PluginErrorForma
 noremap <m-g><m-p> :call tovl#errorformat#SetErrorFormat('plugins#tovl#errorformats#PluginErrorFormats#php') <bar> cf /var/marc/vimserver/error-sel <bar> cope<cr>
 
 inoremap <buffer> <m-p><m-r><m-e> echo<space>'<lt>pre>';<cr>echo<space>'<lt>/pre>';
-
 "set_include_path('.:/home/marc/pear/pear/phpunit:/home/marc/pear/test_sel_extra');
-"
-" webkos booking date Format
+"webkos booking date Format
 "DATE_FORMAT(ab_datum, \'%d.%m.%Y\') AS ab_datum
 "DATE_FORMAT(ab_zeit, \'%H:%i\') AS ab_zeit
 inoremap <buffer> <m-m><m-d> DATE_FORMAT(<++>, \'%d.%m.%Y\')
@@ -295,3 +292,23 @@ setlocal synmaxcol=2000
 inoremap <buffer> <C-x><C-p> <c-r>=vim_addon_completion#CompleteUsing('phpcomplete#CompletePHP')<cr>
 
 inoremap <buffer> <c-c> // 
+
+finish
+
+
+
+  $tz  = new DateTimeZone('Europe/Brussels');
+  $dt = DateTime::createFromFormat('d.m.Y', $bwm, $tz);
+
+  return [
+    'age' => 
+      $dt
+        ->diff(new DateTime('now', $tz))
+        ->y,
+    'accuracy' => $bwm == $since ? "" : "-1?"
+  ];
+
+$date = new DateTime('now', $tz);
+$date->modify('+1 week');
+$date->modify('+1 day');
+$date->format('Y-m-d H:i');

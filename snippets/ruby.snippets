@@ -1,4 +1,6 @@
 # block
+snippet rr
+	require_relative '${1}'
 snippet .
 	{|${2:v}| ${1}}
 snippet ..
@@ -14,6 +16,8 @@ snippet beg
 snippet begin
 	begin
 		raise 'A test exception.'
+	rescue SystemExit, Interrupt
+		raise
 	rescue Exception => e
 		puts e.message
 		puts e.backtrace
@@ -79,24 +83,19 @@ snippet ei
 snippet Cached
 	# cache something in a file
 	# usage:
-	#   cache = FileCached.new({:filename => "xx", use_cache => false)
+	#   cache = FileCached.new({:filename => "xx"})
 	#   cache.with {|cached_thing| cached_thing[:key] = "value" unless cached_thing.include? :key }
 	# the cache will be written automatically
 	# TODO: make it threadsafe?
 	class FileCached
 		def initialize(config)
-			@config = {
-				:default => {},
-                                # yaml:
-				# :from_file => lambda{|filename| require "yaml"; YAML::parse_file(filename) },
-				# :to_binary => lambda{|t| require "yaml"; t.to_yaml },
-                                # binary:
-                                :from_file => lambda{|filename| File.open(filename, "rb") { |file| Marshal.load(file) } },
-                                :to_binary => lambda{|t| Marshal.dump(t) },
-
-				:use_cache => true,
-				:load_cache => config[:use_cache] || config[:load_cache],
-				:write_cache => config[:use_cache] || config[:write_cache],
+		@config = {
+			:default => {},
+			:filename => 'cache',
+			:from_file => lambda{|filename| File.open(filename, "rb") { |file| Marshal.load(file) } },
+			:to_binary => lambda{|t| Marshal.dump(t) },
+				:load_cache  => true,
+				:write_cache => true
 			}.merge(config)
 		end
 	
@@ -253,25 +252,24 @@ snippet freezer
 
 snippet mechanize
 	http://mechanize.rubyforge.org/EXAMPLES_rdoc.html
-	require 'rubygems'
-        require 'mechanize'
-        
-        a = Mechanize.new { |agent|
-          agent.user_agent_alias = 'Mac Safari'
-        }
-        
-        a.get('http://google.com/') do |page|
-          search_result = page.form_with(:name => 'f') do |search|
-            search.q = 'Hello world'
-          end.submit
-        
-          search_result.links.each do |link|
-            puts link.text
-          end
-        end
+	require 'mechanize'
+	
+	a = Mechanize.new { |agent|
+		agent.user_agent_alias = 'Mac Safari'
+	}
+	        
+	a.get('http://google.com/') do |page|
+			search_result = page.form_with(:name => 'f') do |search|
+			search.q = 'Hello world'
+		end.submit
+		        
+		search_result.links.each do |link|
+			puts link.text
+		end
+	end
 	a.history.clear
-
-        # page = agent.parse(uri, resp, body)
+	
+	# page = agent.parse(uri, resp, body)
 
 
 snippet zlib
@@ -541,3 +539,166 @@ snippet sequel
 	DB = Sequel.connect('mysql2://user:pass@host/databasename')
 	# DB.loggers << Logger.new($stdout)
 	DB[:table].where(x => 7).first/all/update/delete
+
+snippet me
+	require 'mechanize'
+	a = Mechanize.new
+
+snippet dag
+	module DAG
+		class Node
+			attr_reader :childs
+			attr_reader :value
+			def initialize(value, childs = [])
+				@value = value
+				@childs = childs
+			end
+
+			def to_string(indent = 0)
+				s = ""
+				s += "	" * indent + @value.to_s + "\n"
+				@childs.each do |c|
+					s += c.to_string(indent+1)
+				end
+				s
+			end
+		end
+
+		class DAG
+			attr_reader :root_nodes
+
+			def initialize(*root_nodes)
+				@root_nodes = root_nodes
+			end
+
+			def to_string(indent = 0)
+				s = ""
+				root_nodes.each do |node|
+					s += node.to_string(indent)+"\n"
+				end
+				s
+			end
+
+			def self.from_vertices(*vertices)
+				roots = Set.new
+				content_to_node_object = Hash.new {|h,t|
+					n = Node.new(t)
+					roots << n
+					h[t] = n
+					h[t]
+				}
+
+				i = 0
+				while i < vertices.length
+					from = content_to_node_object[vertices[i]]
+					to = content_to_node_object[vertices[i+1]]
+					roots.delete to
+					from.childs << to
+					i+=2
+				end
+
+				DAG.new(*roots.to_a)
+			end
+		end
+	end
+snippet try_times
+	def try_times(num)
+		ex = nil
+		0.upto(num).each do |v|
+			begin
+				return yield
+			rescue SystemExit, Interrupt
+				raise
+			rescue Exception => e
+				ex = e
+				puts "retrying"
+			end
+		end
+		raise ex
+	end
+
+snippet steps_runner
+	class StepsRunner
+		def initialize(o)
+			@steps			 = o.fetch(:steps)
+			@num_threads = o.fetch(:num_threads, 1)
+		end
+	
+		def run_all
+			@steps.each {|v| run v}
+		end
+	
+		def results_of(step_name, opts)
+			add_numbers = opts.fetch(:add_numbers)
+			$DB[:tasks].where(:step_name => step_name).select(:result).map do |v|
+				result = v[:result] 
+				result.add_numbers if opts[:add_numbers]
+			end
+		end
+	
+		def run(step)
+			step_name = step.fetch(:step_name)
+			puts "running #{step_name}, updating tasks .."
+	
+			inputs = {}
+			step.fetch(:inputs, []).map { |name| 
+				inputs[name] = results_of(name)
+			}
+	
+			step[:generate].call(inputs).each_slice(100).each do |tasks|
+				$DB[:tasks].insert_conflict.multi_insert(tasks.map {|task| {:step_name => step_name}.merge(:task => Sequel.pg_jsonb_wrap(task)) } )
+			end
+			puts "done, getting tasks without results: "
+	
+			tasks = $DB[:tasks].where(:step_name => step_name).where( :result => nil).where(:exception => nil).all
+	
+			puts "done, task count: #{tasks.length}, starting work using #{@num_threads} threads"
+	
+			m = Mutex.new
+	
+			loop = lambda do
+				while true
+					task = m.synchronize { tasks.shift }
+					puts "task #{task.inspect}"
+					break if task.nil?
+					up = $DB[:tasks].where(:id =>task[:id])
+					result = begin
+										 r = step[:run].call(task[:task])
+										 m.synchronize { up.update(:result => Sequel.pg_jsonb_wrap(r)) }
+									 rescue Exception => e
+										 # r = step[:run].call(task[:task])
+										 # m.synchronize { up.update(:result => Sequel.pg_jsonb_wrap(r)) }
+	
+										 puts e.message
+										 puts e.backtrace.inspect
+										 m.synchronize { up.update(:exception => e.message) }
+										 e.message
+									 end
+					puts "#{step_name}: #{task.inspect} -> #{result.inspect}"
+				end
+			end
+	
+			case @num_threads
+			when 1
+				loop.call
+			else
+				threads = []
+				1.upto(@num_threads).each do |v|
+					threads << Thread.new do
+						loop.call
+					end
+				end
+	
+				threads.each do |thread|
+					thread.join
+				end
+			end
+			puts "#{step_name} done"
+		end
+	end
+snippet ep
+	eachpair do |k,v|
+	end
+snippet ev
+	each do |v|
+	end

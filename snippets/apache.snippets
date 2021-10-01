@@ -38,11 +38,6 @@ snippet mod_rewrite
 	RewriteRule ^(.*)\..*$ index.php?ct=$1&%{QUERY_STRING} [L]
 
 snippet mod_rewrite_domain
-	RewriteEngine On
-	# RewriteCond %{HTTP_HOST} ^DOMAIN$
-	# RewriteRule ^.*$     http://[www.]DOMAIN%{REQUEST_URI} [R=permanent]
-
-
         RewriteCond %{HTTP_HOST} !^www\.
         RewriteRule ^(.*)$ http://www.%{HTTP_HOST}/$1 [R=301,L]
 
@@ -108,3 +103,7 @@ snippet redirect_all_but_existing_files
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteCond %{REQUEST_URI} !Images.*
 	RewriteRule (.*) index.php?page=$1&%{QUERY_STRING} [L]
+
+snippet RewriteLogWithIP
+        LogLevel alert rewrite:trace6
+        ErrorLog "| grep IP > file.txt"

@@ -277,3 +277,32 @@ snippet versionSpecific
 
 snippet make_num_cores
 	-j$NIX_BUILD_CORES -l$NIX_BUILD_CORES
+
+snippet tmp
+	let pkgs = import <nixpkgs> {};
+	in 
+
+snippet fetchurl
+	fetchurl {
+		url = "";
+		sha256 = "";
+	}
+snippet trace_old
+	(builtins.trace ("zz"+ builtins.toJSON $1) {VISUAL})
+snippet trace
+	(lib.traceValFn builtins.toXML ({VISUAL}))
+
+snippet systemd_service
+	systemd.services."$1" = {
+		path = [ ];
+		description = "${1}";
+		after = [ "network.target" "fs.target" ];
+		wantedBy = [ "multi-user.target" ];
+		serviceConfig.ExecStart = "$2";
+		# serviceConfig.ExecStop = "";
+		serviceConfig.PrivateTmp = false;
+		# serviceConfig.Type = "forking/oneshot/...";
+                serviceConfig.Restart = "always";
+	};
+snippet epb
+	enable_parallel_building = true;

@@ -14,6 +14,8 @@ endf
 inoremap <buffer> <m-f> <c-r>=<sid>LTSp("=>")<cr>
 inoremap <m-o>= <c-r>=vim_addon_other#InsertLT(' ','\|\|=',' ')<cr>
 inoremap <m-r><m-r> require_relative "
+inoremap <m-s-n> .nil?
+inoremap <m-s> self.
 inoremap <m-:> ::
 
 " noremap <m-g><m-e> :cfile errors-dev.txt<cr>

@@ -5,36 +5,47 @@ fun! vim_addon_MarcWeber#Activate()
   if s:did_activate | return | endif
   let s:did_activate = 1
 
+  autocmd BufNewFile,BufRead *.ts  set filetype=typescript
+  autocmd BufNewFile,BufRead *.tsx setfiletype typescript
+
   let g:vim_addon_urweb = { 'use_vim_addon_async' : 1 }
   let g:netrw_silent = 0
   let g:linux=1
-  let g:config = { 'goto-thing-handler-mapping-lhs' : 'gf' }
+  let g:vim_addon_goto_thing_at_cursor = { 'goto-thing-handler-mapping-lhs' : 'gf' }
 
   let g:local_vimrc = {'names':['vl_project.vim']}
 
-  let snippet_engine = has('python') || has('python3') ? 'github:MarcWeber/ultisnips' : "snipmate"
+  if !exists('g:snippet_engine')
+    let g:snippet_engine = 'github:MarcWeber/ultisnips'
+    " let g:snippet_engine = 'snipmate'
+    " let g:snippet_engine = has('python') || has('python3') ? 'github:MarcWeber/ultisnips' : "snipmate"
+  endif
 
   " open file with spaces by using E instead of e
   command! -nargs=* E exec 'e '.fnameescape(join([<f-args>], ' '))
 
 
-  if snippet_engine =~? "UltiSnips"
+  let g:vim_addon_commenting = {'force_filetype_comments': {'typescript' : ['//','']}}
+
+  if g:snippet_engine =~? "UltiSnips"
+    VAMActivate github-MarcWeber-ultisnips
     " ultisnips setup
-    let g:UltiSnips = {
-          \ 'always_use_first_snippet': 1,
-          \ 'ExpandTrigger': "<tab>",
-          \ 'JumpForwardTrigger': "<c-j>",
-          \ 'JumpBackwardTrigger': "",
-          \ 'ListSnippets': ""
-          \ }
+    if exists('g:UltiSnips') | throw "bad" | endif
+    let g:UltiSnips = {}
+    let g:UltiSnips['always_use_first_snippet'] = 1
+    let g:UltiSnips['ExpandTrigger'] = "<c-tab>"
+    let g:UltiSnips['JumpForwardTrigger'] = "<c-j>"
+    let g:UltiSnips['JumpBackwardTrigger'] = "xxx"
+    let g:UltiSnips['ListSnippets'] = ""
 
     let g:UltiSnips.snipmate_ft_filter = {
                 \ 'default' : {'filetypes': ["FILETYPE", "_"] },
                 \ 'html'    : {'filetypes': ["html_minimal", "html", "javascript", "_"] },
-                \ 'php'    : {'filetypes': ["php", "html_minimal", "javascript"] },
-                \ 'xhtml'    : {'filetypes': ["html_minimal", "javascript"] },
-                \ 'haml'    : {'filetypes': ["haml", "javascript"] },
-                \ 'coffee.iced-coffee'    : {'filetypes': ["iced", "javascript"] },
+                \ 'php'     : {'filetypes': ["php", "html_minimal", "javascript", "sql","_"] },
+                \ 'xhtml'   : {'filetypes': ["html_minimal", "javascript","_"] },
+                \ 'haml'    : {'filetypes': ["haml", "javascript","_"] },
+                \ 'coffee.iced-coffee'    : {'filetypes': ["iced", "javascript","_"] },
+                \ 'typescript'    : {'filetypes': ["typescript", "javascript", "_"] },
                 \ }
 
     " don't load snipmate snippets by default
@@ -49,11 +60,32 @@ fun! vim_addon_MarcWeber#Activate()
                 \ 'all' : {'filetypes': ['all'] },
                 \ }
 
+    " {'name': 'github:MarcWeber/ultisnips', 'tag': 'later'}
+    call vam#Scripts(expand('~/.vim-scripts'), {'tag_regex': 'later'})
     noremap <m-s><m-p> :UltiSnipsEdit<cr>
   else
+    " snipmate sucks on improt i .. "i"
+    let g:snipMate = {}
+    let g:snipMate.override = 1
+    let g:snipMate.always_choose_first = 1
 
+    " let g:snips_trigger_key = '<c-tab>'
     noremap <m-s><m-p> :SnipMateOpenSnippetFiles<cr>
-    let g:snipMate = { 'scope_aliases' :
+    imap <C-J> <Plug>snipMateNextOrTrigger
+
+    let g:snips_no_mappings = 1
+
+    fun SnipmateT()
+      if pumvisible()
+        call feedkeys("\<c-tab>", "t")
+        return "\<esc>a"
+      else
+        return snipMate#TriggerSnippet(1)
+      endif
+    endf
+
+    imap <C-tab> <c-r> <c-r>=SnipmateT()<CR>
+    let g:snipMate.scope_aliases =
           \ {'objc' :'c'
           \ ,'cpp': 'c'
           \ ,'cs':'c'
@@ -64,7 +96,7 @@ fun! vim_addon_MarcWeber#Activate()
           \ ,'mxml': 'actionscript'
           \ ,'haml': 'html,javascript'
           \ ,'nix': 'nix'
-          \ }}
+          \ }
   endif
 
 
@@ -77,11 +109,7 @@ fun! vim_addon_MarcWeber#Activate()
   noremap <m-w>/ /\<\><left><left>
   noremap <m-w>? ?\<\><left><left>
   noremap <c-,> :cprevious<cr-  set guioptions+=c
-  set guioptions+=M
-  set guioptions-=m
-  set guioptions-=T
-  set guioptions-=r
-  set guioptions-=l
+  set guioptions=
   noremap <c-c> :cnext<cr>
   inoremap <m-s-r> <esc>:w<cr>
   nnoremap <m-s-r> :w<cr>
@@ -130,6 +158,7 @@ fun! vim_addon_MarcWeber#Activate()
   command! APython call repl_python#PythonBuffer({'cmd':'python -i','move_last' : 1, 'prompt': '^>>> '})
   command! APHP call repl_php#PHPBuffer({'cmd':'php -a','move_last' : 1, 'prompt': 'php >'})
   command! ASMLNJ call repl_ruby#RubyBuffer({'cmd':'sml','move_last' : 1, 'prompt': '^- '})
+  command! ALB call repl_logicblox#LogicbloxBuffer({'move_last' : 1})
 
   "autocommands:"{{{
     " When editing a file, always jump to the last known cursor position.
@@ -186,15 +215,13 @@ fun! vim_addon_MarcWeber#Activate()
   noremap <m--> k$
   noremap <m-s-a> <esc>jA
   noremap <m-e> :e<space>
-
-  noremap <m-s-t><m-s-p> :<c-u>tprevious<cr>
-  noremap <m-s-t><m-s-n> :<c-u>tnext<cr>
   nnoremap <m-s-t> :tabnew<cr>
   exec "noremap \\ftp :exec 'e ".fnamemodify(s:thisf,':h:h')."/ftplugin/'.&filetype.'_mw.vim'<cr>"
   noremap \co :<c-u>exec 'cope '.&lines/3<cr>
 
+  let g:sparkup = {"lhs_expand": "<c-s-e>s"}
 
-  inoremap <c-e> <esc>A
+  " inoremap <c-e> <esc>A
 
   if isdirectory('src/main/scala')
     noremap <m-s> :e src/main/scala/*
@@ -202,46 +229,15 @@ fun! vim_addon_MarcWeber#Activate()
 
   set list listchars=tab:\ \ ,trail:· 
 
-  noremap \og :call<space>vim_addon_MarcWeber#FileByGlobCurrentDir('**/*'.input('glob open '),"\\.git<bar>\\.hg" )<cr>
+  noremap \og :call<space>glob_linux#FileByGlobCurrentDir('**/*'.input('glob open '), "default" )<cr>
+  noremap \Og :call<space>glob_linux#FileByGlobCurrentDir('**/*'.input('glob open '), "default",{'cmd_find': 'find -L'} )<cr>
 
   set sw =2
   call vim_addon_MarcWeber#Old()
   call vim_addon_MarcWeber#GlobalMappings()
+  call vim_addon_goto_thing_at_cursor#by_language#SETUP()
 endf
 
-" TODO refactor: create glob function
-function! vim_addon_MarcWeber#FileByGlobCurrentDir(glob, exclude_pattern)
-  " let files = split(glob(a:glob),"\n")
-  let g = a:glob
-  let replace = {'**': '.*','*': '[^/\]*','.': '\.'}
-  let g = substitute(g, '\(\*\*\|\*\|\.\)', '\='.string(replace).'[submatch(1)]','g')
-
-  let exclude = a:exclude_pattern == ''? '' : ' | grep -v -e '.shellescape(a:exclude_pattern)
-
-  let cmd = 'find | grep -e '.shellescape(g).exclude
-  let files = split(system(cmd),"\n")
-  " for nom in a:excludes
-  "   call filter(files,nom)
-  " endfor
-  if len(files) > 1000
-    echoe "more than ".2000." files - would be too slow. Open the file in another way"
-  else
-    if empty(files)
-      echoe "no file found"
-    elseif len(files) == 1
-      exec 'e '.fnameescape(files[0])
-    else
-      let g:abc=7
-      call tovl#ui#filter_list#ListView({
-            \ 'number' : 1,
-            \ 'selectByIdOrFilter' : 1,
-            \ 'Continuation' : funcref#Function('exec "e ".fnameescape(ARGS[0])'),
-            \ 'items' : files,
-            \ 'cmds' : ['wincmd J']
-            \ })
-    endif
-  endif
-endfunction
 
 fun! vim_addon_MarcWeber#Old()
 
@@ -436,7 +432,6 @@ fun! vim_addon_MarcWeber#GlobalMappings()
   noremap \sf :update<bar>source %<cr>
   inoremap <m-h><m-l> <c-r>=vl#dev#text#insertheadlines#GetHeadline(input('caption :'))<cr>
   inoremap <c-o> <esc>:
-  inoremap <m-t><m-s> <c-r>=system('date')<cr>
 
   inoremap <m-a><m-w> <esc>kyawjPa
   inoremap <m-b><m-w> <esc>jyawkPa
@@ -446,7 +441,6 @@ fun! vim_addon_MarcWeber#GlobalMappings()
   inoremap <m-"> \"
   inoremap <m-s-n> \n
   inoremap <m-t><m-d> TODO
-  inoremap <m-f><m-m> FIXME
   nnoremap <m-m><m-n> :Man<space>
 
   noremap <s-f2> :MapAction<cr>
@@ -490,7 +484,6 @@ fun! vim_addon_MarcWeber#GlobalMappings()
   "quick open
   noremap <m-e><m-m> :e Makefile<cr> 
   noremap <m-m><m-k> :make<space><up>
-  noremap <m-t><m-l> :Tlist<cr>
   noremap <m-s-o><m-s-l> :exec 'lopen '.&lines/3<cr>
   noremap <m-s-o><m-s-h> :h<space>
 
@@ -501,15 +494,6 @@ fun! vim_addon_MarcWeber#GlobalMappings()
   noremap <m-s-d><m-s-v> :exec 'e '.DirectorySpecificVimFile()<cr>
 
   noremap <m-m><m-s> :messages<cr>
-
-  " closeb.vim
-  noremap <m-t><m-p> :let b:dummy_abc=b:closeb_openname<bar>
-    \ let b:closeb_openname="mymatch" <bar> 
-    \ exec 'echo substitute('.g:closeb_Pathfunc.",'/<',\"\\n<\",'g')"<bar>
-    \ let b:closeb_openname = b:dummy_abc <bar> unlet b:dummy_abc<cr>
-  noremap <m-s-i><m-s-t> :IT<space>
-
-
 
   inoremap <m-s-d> <esc>:call vl#ui#confirm#IfConfirm(&modified,"file wasn't saved yet, delete anyway?","bd!")
   noremap <m-s-c> :close<cr>
@@ -524,11 +508,6 @@ fun! vim_addon_MarcWeber#GlobalMappings()
   noremap <m-s-p><m-s-l> :<c-u>ptlast<cr>
   noremap <m-s-p><m-s-p> :<c-u>ptprevious<cr>
   noremap <m-s-p><m-s-n> :<c-u>ptnext<cr>
-
-  for i in range(8,2,-1)
-    exec 'imap '.i.'<c-n> <c-x><c-i>'.repeat('<down>',i-1).'<cr>'
-    exec 'imap '.i.'<m-m> <m-x><c-i>'.repeat('<down>',i-1).'<cr>'
-  endfor
 
   noremap <m-e><m-c> :e *.cabal<cr>
 
@@ -591,14 +570,6 @@ fun! vim_addon_MarcWeber#GlobalMappings()
   "tabs
   map g< :tabp<cr>
   map g> :tabn<cr>2k
-  for i in range(10,1,-1)
-    "for getting the nth item from completion menu
-    exec 'inoremap <m-t>'.i.' '.repeat('<down>',i).'<cr>' 
-
-    exec 'noremap <m-'.i.'> '.i.'gt'
-    exec 'inoremap <m-'.i.'> <esc>'.i.'gt'
-  endfor
-
   " Plugin mappings"
 
 "vnoremap <m-@> :<c-u>call vl#dev#text#surround#Surround('v')<cr>
@@ -712,3 +683,6 @@ augroup ADD_CONFLICT_MARKERS_MATCH_WORDS
   " git onlny for now
   autocmd BufRead,BufNewFile * exec 'let b:match_words '.(exists('b:match_words') ? '.' : '').'= '.string(exists('b:match_words') ? ',' : ''.'<<<<<<<:=======:>>>>>>>')
 augroup end
+
+" no problem, because you can always undo
+set autoread

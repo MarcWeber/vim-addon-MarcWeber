@@ -9,3 +9,30 @@ snippet case
 # calling external basename process may be slow
 snippet basename
 	{${1:var}/*\//}
+snippet args
+	while [ "$#" -gt 0 ]; do
+	    i="$1"; shift 1
+	    case "$i" in
+	      --help)
+	       showSyntax
+	       ;;
+	      --max-jobs|-j)
+	       j="$1"; shift 1
+	       extraBuildFlags+=("$i" "$j")
+	       ;;
+	      *)
+	       echo "$0: unknown option \`$i'"
+	       exit 1
+	       ;;
+	    esac
+	doone
+	
+
+snippet array_new_strings
+	declare -A $1
+snippet array_new_int
+	declare -a $1
+snippet array_count
+        ${#${1}[@]}
+snippet array_add
+	$1=("{$1[@]}" $2)

@@ -37,6 +37,9 @@ snippet fek
 snippet __call
 	public function __call($name, $arguments) {
 	}
+snippet new
+	function __construct($1){
+	}
 snippet __construct
 	function __construct($1){
 	}
@@ -45,7 +48,7 @@ snippet ve
 snippet ga
 	$args = func_get_args();
 snippet trace
-	$debug_handle = fopen('/tmp/php.log', 'a+');
+	$debug_handle = fopen('log', 'a+');
 	fwrite($debug_handle, var_export(${1},true)."\n" );
 	fclose($debug_handle);
 snippet entferne_boms
@@ -670,6 +673,88 @@ snippet for
 
 snippet l
 	function($x){return $2;}
+snippet lu
+	function($1)use($2){return $3;}
 snippet fer
 	foreach($$1 as &$$2){
 	}unset($$2);
+snippet pf
+	public function
+snippet ake
+	array_key_exists(${1}, ${2})
+snippet pe
+	<?php echo $1; ?>
+
+snippet curl
+
+    $params = array();
+    $params[] = 'addresses'.'='.urlencode(json_encode($list_of_addresses));
+    $nvpreq=implode('&', $params);
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, 'https://85.214.108.44/addresses-v1');
+    curl_setopt($ch, CURLOPT_PORT, 8000);
+    curl_setopt($ch, CURLOPT_VERBOSE, 0);
+
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 3+$timeout);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 3+$timeout);
+
+    //turning off the server and peer verification(TrustManager Concept).
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+    curl_setopt($ch, CURLOPT_POST, 1);
+
+    //setting the nvpreq as POST FIELD to curl
+    curl_setopt($ch,CURLOPT_POSTFIELDS,$nvpreq);
+
+    //getting response from server
+    $response = curl_exec($ch);
+    $curl_err = curl_errno($ch);
+    if ($curl_err){
+      $curl_message = curl_error($ch);
+      curl_close($ch);
+      throw new Exception($curl_err.' '.$curl_message);
+    }
+    $r = json_decode($response, true);
+    if (is_null($r))
+      throw new Exception($response);
+    else return $r;
+
+
+snippet trace_append
+	file_put_contents("trace", date('c').':'.var_export($1, true)."\n", FILE_APPEND | LOCK_EX);
+snippet mylog_var_export
+	mylog(__FILE__.':'.__LINE__.' '.var_export(${1}, true));
+
+snippet f1
+	fn ($x) => ${2}
+
+snippet f2
+	fn ($x, $y) => ${2}
+
+snippet dom
+	$doc = new DOMDocument();
+	$doc->loadHTML($html);
+	$xml = simplexml_import_dom($doc);
+	$result = $xml->xpath('//div[contains(@class, "rez-item")]');
+	while(list( , $node) = each($result)) {
+        // ->asXML()
+        // as text .'' 
+	// .//div -> relative xpath
+
+snippet test_jit
+	var_dump(opcache_get_status()['jit']);
+	daemonCfg.opcache.enable = true;
+	daemonCfg.opcache.jit_buffer_size = "100M";
+
+snippet autoload_from_dir
+	function my_autoload($class)
+	{
+		if (file_exists($p = 'classes/'.$class.'.php')){
+			require_once $p;
+			return;
+		}
+	}
+	spl_autoload_register('my_autoload', true, true);

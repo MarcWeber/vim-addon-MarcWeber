@@ -79,10 +79,13 @@ fun! NixXMLToExpr()
   %s@<string value="\([^"]*\)" />@"\1"@g
 endfun
 
+fun! NixJSONToNix()
+  %s/"\(.*\)": "\(.*\)",/\1 = "\2";/g
+endf
+
 setlocal cinkeys=0{,0},0),:,!^F,o,O,e
 
 abbrev bt builtins.trace
 inoremap <buffer> <c-b> builtins.
 
-inoremap <buffer> <c-x><c-o> <c-r>=vim_addon_completion#CompleteUsing('vim_addon_nix#FuzzyNixCompletion')<cr>
-
+exec 'setlocal tags+='.fnameescape(eval('{"'.substitute(substitute(substitute($NIX_PATH, ':', ',', 'g'), '=',':', 'g'), '\([:,]\)', '"\1"',"g").'"}')["nixpkgs"].'/tags')

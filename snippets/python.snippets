@@ -2,6 +2,9 @@ snippet pdb_start
   import pdb; pdb.set_trace()
 snippet lambda
 	lambda x: x**2
+snippet ds
+	def $1(self, $2):
+		$3
 snippet class
 	class ${1:name} ${2:(parent):
 		def __init__(self, ...):
@@ -33,5 +36,9 @@ snippet encoding
 	reload(sys)
 	sys.setdefaultencoding( "latin-1" )
 
-snippet empty                                                                          
+snippet empty
 	${1:lines} = `"["`x.strip() for x in ${2} if x.strip()`"]"`
+snippet p
+	print($1)
+snippet pa
+	print("$1 %s$3" % ($2))
