@@ -54,7 +54,7 @@ inoremap <buffer> <m-bs> \<lt>bs>
   " regex
 
 noremap <m-u><m-f><m-l> :UpdateAutoloadFunctionList<cr>
-noremap <m-i><m-a> :normal i(marco-oweber@gmx.de)
+" noremap <m-i><m-a> :normal i(marco-oweber@gmx.de)
 
 inoremap <buffer> <m-s><m-o><m-l> ^\s*
 "inoremap <buffer> <m-n><m-o> <c-r>=getline('excluded characters')."]"<cr>

@@ -30,15 +30,12 @@ irc.freenode.net: MarcWeber
 
 " WEG VON VOLKSBANK
 
-" Marc Weber
-" Gestalterbank
-" DE78664900000102697901
-" GENODE61OG1
+" owner Marc Weber
+" IBAN DE78664900000102697901
+" BIC GENODE61OG1
 
 
 ALT
 " BIC:	GENODE61VS1
 " IBAN:	DE03694900000102697901
 " http://www.microsoft.com/downloads/details.aspx?displaylang=de&FamilyID=b5d1b8c3-fda5-4508-b0d0-1311d670e336
-"
-      \tr

@@ -24,9 +24,9 @@ snippet atd
 snippet u
 	UPDATE ${1} SET ${2} WHERE ${3}
 snippet mysql_create_grant
-	CREATE user ${1:name}
-	CREATE DATABASE ${1}
-	GRANT all  ON  ${1}.*  TO '${1}'@'localhost' IDENTIFIED BY 'PASSWORT${3}';
+	CREATE user '${1:name}'@'localhost' IDENTIFIED BY '${3:PASSWORD}';
+	CREATE DATABASE ${1};
+	GRANT all  ON  ${1}.* TO '${1}'@'localhost';
 snippet mysql_add_index
 	ALTER TABLE `${1}` ADD INDEX ( `${2:field_list}` );
 snippet ii

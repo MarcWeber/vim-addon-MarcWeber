@@ -18,8 +18,10 @@ inoremap <buffer> <m-.>= <c-r>=<SID>LTSp(".=")<cr>
 
 inoremap <buffer> <m-d><m-e> define('','')<left><left><left><left><left>
 
-inoremap <buffer> <m-r> ->
+inoremap <buffer> <m-r>- ->
 inoremap <buffer> <m-i> ['
+vnoremap <buffer> <m-i> s['<c-r>*']
+
 inoremap <buffer> <m-f> <space>=><space>
 inoremap <buffer> <m-t> $this->
 
@@ -53,6 +55,8 @@ inoremap <buffer> <m-p> <?php<space>
 setlocal completefunc=vim_addon_sql#Complete
 
 inoremap <buffer> <m-a><m-k><m-e> array_key_exists('',)<esc>3l
+
+iabbrev rn return
 finish
 
 " switch files
@@ -312,3 +316,4 @@ $date = new DateTime('now', $tz);
 $date->modify('+1 week');
 $date->modify('+1 day');
 $date->format('Y-m-d H:i');
+

@@ -1,3 +1,5 @@
+snippet sleep
+	const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 snippet absoluteCoordinates
 	[% set paste %]
 	function getAbsoluteLeft(objectId) {
@@ -236,7 +238,7 @@ snippet rethinkdb_connect
 		connection = conn;
 	})
 snippet cl
-	console.log(${1});
+	console.log({VISUAL}${1});
 snippet cla
 	console.log(JSON.stringify(${1}, undefined, 4));
 
@@ -365,9 +367,10 @@ snippet l1d
 snippet l2
 	(a, b) => { ${1}; }
 snippet for
-	for (let ${2:i} = 0, ${3:len} = ${1:Things.length}; $2 < $3; $2++) {
+	for (let ${2:i} = 0; $2 < $3; $2++) {
 		${0:${VISUAL}}
 	}
+
 snippet ifn
 	if (!${1}){
 		${2}
@@ -459,3 +462,15 @@ snippet isa
 	Array.isArray(${1})
 snippet Af
 	Array.from(${1:{VISUAL}})
+snippet regex_capture_groups
+	const m = 'a b'.match(/.../)
+        m[1]
+        m[2]
+snippet Ok
+	Object.keys({VISUAL}$1)
+snippet Ov
+	Object.values({VISUAL}$1)
+snippet Oe
+	Object.entries({VISUAL}$1)
+snippet Of
+	Object.fromEntries({VISUAL}$1)

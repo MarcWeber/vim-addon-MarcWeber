@@ -80,7 +80,8 @@ fun! NixXMLToExpr()
 endfun
 
 fun! NixJSONToNix()
-  %s/"\(.*\)": "\(.*\)",/\1 = "\2";/g
+  %s/"\(.*\)": \(.*\),/\1 = \2;/g
+  %s/submodules/fetchSubmodules/g
 endf
 
 setlocal cinkeys=0{,0},0),:,!^F,o,O,e

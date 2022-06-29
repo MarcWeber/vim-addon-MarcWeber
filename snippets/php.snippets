@@ -22,6 +22,11 @@ snippet args
 	$args = func_get_args();
 snippet tne
 	throw new Exception(${1});
+snippet tnee
+	throw new Exception(var_export(${1}, true));
+snippet tnA
+	throw new ActionErrorException(${1});
+
 snippet fen
 	foreach ($${1:variable} as $${2:value}) {
 		${3:// code...}
@@ -47,10 +52,15 @@ snippet ve
 	var_export(${1}, true)
 snippet ga
 	$args = func_get_args();
-snippet trace
-	$debug_handle = fopen('log', 'a+');
-	fwrite($debug_handle, var_export(${1},true)."\n" );
-	fclose($debug_handle);
+
+snippet php_trace
+	file_put_contents('trace', date('c').':'.__FILE__.':'.__LINE__.':$2'.var_export($1, true), FILE_APPEND | LOCK_EX);
+snippet trace_append
+	file_put_contents("trace", date('c').':'.var_export($1, true)."\n", FILE_APPEND | LOCK_EX);
+
+snippet xdebug_start_trace
+	xdebug_start_trace( __DIR__.'/xdebug-trace-php-'.phpversion() );
+
 snippet entferne_boms
 	<?php
 	
@@ -723,17 +733,13 @@ snippet curl
     else return $r;
 
 
-snippet trace_append
-	file_put_contents("trace", date('c').':'.var_export($1, true)."\n", FILE_APPEND | LOCK_EX);
 snippet mylog_var_export
 	mylog(__FILE__.':'.__LINE__.' '.var_export(${1}, true));
 
 snippet f1
 	fn ($x) => ${2}
-
 snippet f2
 	fn ($x, $y) => ${2}
-
 snippet dom
 	$doc = new DOMDocument();
 	$doc->loadHTML($html);
@@ -743,6 +749,9 @@ snippet dom
         // ->asXML()
         // as text .'' 
 	// .//div -> relative xpath
+
+snippet var_dump
+	var_dump({VISUAL});
 
 snippet test_jit
 	var_dump(opcache_get_status()['jit']);
@@ -758,3 +767,54 @@ snippet autoload_from_dir
 		}
 	}
 	spl_autoload_register('my_autoload', true, true);
+snippet is_cli
+	php_sapi_name() == 'cli'
+
+snippet am1
+	array_map(fn($x) => $1, $2)
+
+snippet af1
+	array_filter($1, fn($x) => $2)
+snippet curl_multi
+	class ABC {
+	
+	  public function x(){
+	
+	    $replay_urls[] ='https://mawercer.de/ip.php?a=1';
+	    $replay_urls[] ='https://mawercer.de/ip.php?a=2';
+	    $replay_urls[] ='https://mawercer.de/ip.php?a=3';
+	
+	    $this->curl_multi = curl_multi_init();
+	
+	    foreach ($replay_urls as $url) {
+	      $this->chs[$url] = $ch =curl_init(); 
+	      curl_setopt($ch, CURLOPT_URL, $url);
+	      curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	      curl_multi_add_handle($this->curl_multi,$ch);
+	    }
+	    curl_multi_exec($this->curl_multi, $running);
+	
+	  }
+	
+	  public function stop(){
+	    do {
+	      curl_multi_exec($this->curl_multi, $running);
+	      curl_multi_select($this->curl_multi);
+	    } while ($running > 0);
+	
+	    foreach ($this->chs as $k => $ch) {
+	      $content = curl_multi_getcontent($ch);
+	      curl_multi_remove_handle($this->curl_multi, $ch);
+	    }
+	    curl_multi_close($this->curl_multi);
+	  }
+	}
+	
+	
+	$x = new ABC();
+	
+	$x->x();
+	$x->stop();
+	
+snippet epf
+	echo sprintf("$1\n", $1);

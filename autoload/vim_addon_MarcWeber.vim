@@ -28,7 +28,7 @@ fun! vim_addon_MarcWeber#Activate()
   let g:vim_addon_commenting = {'force_filetype_comments': {'typescript' : ['//','']}}
 
   if g:snippet_engine =~? "UltiSnips"
-    VAMActivate github-MarcWeber-ultisnips
+    VAMActivate github:MarcWeber/ultisnips
     " ultisnips setup
     if exists('g:UltiSnips') | throw "bad" | endif
     let g:UltiSnips = {}
@@ -41,11 +41,12 @@ fun! vim_addon_MarcWeber#Activate()
     let g:UltiSnips.snipmate_ft_filter = {
                 \ 'default' : {'filetypes': ["FILETYPE", "_"] },
                 \ 'html'    : {'filetypes': ["html_minimal", "html", "javascript", "_"] },
-                \ 'php'     : {'filetypes': ["php", "html_minimal", "javascript", "sql","_"] },
+                \ 'php'     : {'filetypes': ["javascript", "html_minimal", "sql", "php","_"] },
                 \ 'xhtml'   : {'filetypes': ["html_minimal", "javascript","_"] },
                 \ 'haml'    : {'filetypes': ["haml", "javascript","_"] },
                 \ 'coffee.iced-coffee'    : {'filetypes': ["iced", "javascript","_"] },
-                \ 'typescript'    : {'filetypes': ["typescript", "javascript", "_"] },
+                \ 'typescript'    : {'filetypes': ["typescript", "javascript", "xpath", "_"] },
+                \ 'ruby'    : {'filetypes': ["ruby", "xpath", "_"] },
                 \ }
 
     " don't load snipmate snippets by default
@@ -55,7 +56,7 @@ fun! vim_addon_MarcWeber#Activate()
                 \ 'default' : {'filetypes': ['FILETYPE'] },
                 \ 'html'    : {'filetypes': ["html_minimal", "javascript"] },
                 \ 'php'    : {'filetypes': [] },
-                \ 'xhtml'    : {'filetypes': ["html_minimal", "javascript"] },
+                \ 'xhtml'    : {'filetypes': ["html_minimal", "javascript", "xpath"] },
                 \ 'coffee.iced-coffee'    : {'filetypes': ["iced", "javascript"] },
                 \ 'all' : {'filetypes': ['all'] },
                 \ }
@@ -440,7 +441,8 @@ fun! vim_addon_MarcWeber#GlobalMappings()
   inoremap <c-r>* <c-o>:set paste<cr><c-r>*<c-o>:set nopaste<cr>
   inoremap <m-"> \"
   inoremap <m-s-n> \n
-  inoremap <m-t><m-d> TODO
+  " inoremap <m-t><m-d> TODO
+  iabbr TD TODO
   nnoremap <m-m><m-n> :Man<space>
 
   noremap <s-f2> :MapAction<cr>

@@ -11,7 +11,7 @@ snippet basename
 	{${1:var}/*\//}
 snippet args
 	while [ "$#" -gt 0 ]; do
-	    i="$1"; shift 1
+	    i="$$1"; shift 1
 	    case "$i" in
 	      --help)
 	       showSyntax
@@ -25,7 +25,7 @@ snippet args
 	       exit 1
 	       ;;
 	    esac
-	doone
+	done
 	
 
 snippet array_new_strings
