@@ -306,3 +306,10 @@ snippet systemd_service
 	};
 snippet epb
 	enable_parallel_building = true;
+
+snippet is_cross
+	stdenv.hostPlatform != stdenv.buildPlatform
+
+snippet comment_github
+	# NIX_COMMENT_UPDATER_START {"updater": "github",  "repo": "$1", "owner": "$2", "rev": "master", "extra_keys": ["name", "version"] }
+	# NIX_COMMENT_UPDATER_END
