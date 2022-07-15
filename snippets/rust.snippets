@@ -1,0 +1,68 @@
+snippet main
+	fn main() {
+		println!("helo?");
+	}
+snippet loop
+	loop {
+		$1
+	}
+snippet wh
+	while $1 {
+		$2
+	}
+
+snippet l
+	let $1 = $2;
+snippet fn
+	fn is_four(x: int) -> bool {
+		x == 4
+	}
+snippet println
+	// `{}` will print the "default format" of a type
+	// `{:?}` will conveniently print any type
+	println!("{} is {}", "the answer", 43);
+snippet match
+	match my_number {
+		0     => println!("zero"),
+		1 | 2 => println!("one or two"),
+		3..10 => println!("three to ten"),
+		_     => println!("something else")
+	}
+
+snippet struct
+	struct Point {
+		x: f64,
+		y: f64
+	}
+        // let origin = Point { x: 0.0, y: 0.0 };
+	// match mypoint {
+	//     Point { x: 0.0, y: yy } => println!("{}", yy),
+	//     Point { x: xx,  y: yy } => println!("{} {}", xx, yy)
+	// }
+
+snippet enum
+	enum Direction {
+		North,
+		East,
+		South,
+		West
+	}
+	enum Color {
+		Red = 0xff0000,
+		Green = 0x00ff00,
+		Blue = 0x0000ff
+	}
+	enum Shape {
+		Circle(Point, f64),
+		Rectangle(Point, Point)
+	}
+
+snippet closure_stack
+	|a| a
+snippet closure_owned
+	proc() { .. }
+
+snippet argv
+	let args: Vec<String> = std::env::args().collect();
+	println!("{:?}", args);
+	println!("{}", args[0]);

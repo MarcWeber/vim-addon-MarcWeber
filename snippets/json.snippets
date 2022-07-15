@@ -1,0 +1,35 @@
+snippet tsmono
+	{
+	  "package": {
+		"name": "$1"
+	  },
+	
+	  "devDependencies": [
+		"utils-testrunner"
+	  ],
+	
+	  "dependencies": [
+	  ],
+	
+	  "tsconfig": {
+		"compilerOptions": {
+		  "jsx": "react",
+		  "strict": true,
+		  "jsxFactory": "createElement",
+		  "module": "commonjs",
+		  "target": "esnext",
+		  "sourceMap": true,
+		  "importHelpers": true,
+		  "emitDecoratorMetadata": true,
+		  "experimentalDecorators": true,
+		  "outDir":"./dist",
+		  "esModuleInterop": true,
+		  "allowSyntheticDefaultImports": true,
+		  "paths": {
+			"${1}/*": ["src/*"]
+		  }
+		},
+		"exclude": [
+		]
+	  }
+	}

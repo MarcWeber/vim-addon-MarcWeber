@@ -1,0 +1,40 @@
+snippet os
+	Open Scope
+snippet os_z
+	Open Scope Z_scope.
+snippet os_n
+	Open Scope nat_scope.
+
+snippet require
+	Require Import Arith.
+	Require Import ZArith.
+	Require Import Bool.
+snippet ps
+	Print Scope $1.
+
+snippet ind
+	Inductive ${1:bool} : Type :=
+		| true : $1
+
+snippet def
+	Definition ${1:name} (${2:arg:type}) :=
+snippet fix
+	Fixpoint ${1:name} (${2:arg:type}) :=
+snippet a
+	(${1:name}: ${2:type) $3
+	
+snippet match
+	match $1 with
+	end.
+
+snippet mc
+	| $1 => $2
+
+snippet ex
+	Example $1: $2.
+	Proof. ${3:reflexivity}. Qed.
+
+snippet mod
+	Module $1.
+	$2
+	End $1.

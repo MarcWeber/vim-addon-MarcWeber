@@ -1,0 +1,435 @@
+snippet ei
+	export interface $1 = {
+	}
+
+snippet forkv
+	for (let [${2:k}, ${3:v}] of Object.entries(${1})) {
+	}
+
+
+snippet for
+	for (let ${2:i} = 0; $2 < $3; $2++) {
+		${0:${VISUAL}}
+	}
+
+snippet fv
+	for (const ${1:v} of ${2}) {
+		${3}
+	}
+snippet tds
+	{[key:string]: ${1}}
+snippet P
+	Promise<{0:${VISUAL}>
+
+
+snippet Jp
+	JSON.parse($1)
+snippet Js
+	JSON.stringify({VISUAL}${1}, undefined, 2)
+snippet unique
+	${1}.filter((v,i) => ${1}.indexOf(v) === i)
+
+snippet thing
+	export type Thing_$1 = D.Thing<"${1:i}", {
+	}>
+snippet thing2
+	export type Thing_${1:i} = D.Thing<"$1", {
+	}>
+
+snippet i
+	import ${2:$1} from "${1:express}";
+snippet ik
+	import {${2:$1}} from "${1:express}";
+snippet is
+	import * as ${2:$1} from "${1:express}";
+
+snippet argparse
+
+	import { ArgumentParser } from "argparse";
+	const parser = new ArgumentParser({
+		addHelp: true,
+		description: 'deathannouncments lib tool',
+		version: "0.0.0",
+	});
+	const sp = parser.addSubparsers({
+		title: "sub commands",
+		dest: "main_action",
+	})
+	
+	const x = sp.addParser("X", {addHelp: true})
+	x.addArgument(..)
+        x.addArgument("args", {nargs: "*"})
+        x.addArgument("--force", {action: "storeTrue"})
+	
+	const args = parser.parseArgs();
+
+	switch (args.main_action) {
+		case 'x':
+			break;
+		default:
+	}
+
+
+snippet argparse_subparser
+        {
+          const parser = APMA.addParser("X", {addHelp: true})
+          parser.addArgument(..)
+          parser.addArgument("args", {nargs: "*"})
+          parser.addArgument("--force", {action: "storeTrue"})
+        }
+
+
+snippet main_with_argparse
+	import { ArgumentParser } from "argparse";
+	import { with_default_config } from 'src/config';
+	
+	const AP = new ArgumentParser({
+		addHelp: true,
+		description: 'deathannouncments lib tool',
+		version: "0.0.0",
+	});
+
+	const APMA  = ArgumentParser({
+		title: "sub commands",
+		dest: "main_action",
+	})
+
+        // snippet argparse_subparser
+
+	const main = async () => {
+		with_default_config((config) => {
+		const args = AP.parseArgs();
+	
+		switch (args.main_action) {
+			case 'db-clean':
+				break;
+			case 'db-fill-with-mock-data':
+				config.
+				break;
+			default:
+				break;
+		}
+	}
+	
+	main().then(
+		console.log,
+		console.log
+	)
+
+snippet main_argv
+		if (process.argv[2] === "$1"){
+		}
+snippet main
+	const main = async () => {
+          // snippet main_process_argv
+          // snippet main_with_argparse
+
+          switch (process.argv[2]) {
+
+          case 'x':
+
+            break;
+          default:
+
+          }
+
+	}
+	main().then(
+		x => console.log(x),
+		x => console.log(x)
+	)
+
+snippet react_class
+
+	type $1Input = {
+		$3
+	}
+
+	type $1State = {
+		$4
+	}
+
+	export class ${1:classname}<T extends string> extends Component<$1Input, $1State> {
+
+
+
+		constructor(props: any) {
+                        super(props)
+
+                        this.state = {
+                        	$6
+                        }
+		}
+
+		componentDidMount(){
+		}
+
+		render() {
+			$5
+		}
+
+	}
+
+snippet pj
+	path.join(${1:__dirname}, $2)
+
+snippet trait
+        // https://www.typescriptlang.org/docs/handbook/mixins.html
+        type GConstructor<T = {}> = new (...args: any[]) => T
+	const Trait${1:name}<TBase extends GConstructor>(Base: TBase) {
+		return class $1 extends Base {
+                        // Mixins contents
+			// Mixins may not declare private/protected properties
+			// however, you can use ES2020 private fields
+			_scale = 1;
+	
+			setScale(scale: number) {
+				this._scale = scale;
+			}
+	
+			get scale(): number {
+				return this._scale;
+			}
+		};
+	}
+
+snippet et
+	export type 
+
+
+snippet main
+	const main = async () => {
+		if (process.argv[2] == "$1"){
+                }
+	}
+	
+	main().catch((e) => {
+	    console.log("== ERROR uncaught exception  ==");
+	    console.log(e);
+	    process.exit(1)
+	})
+
+snippet p
+	Promise<{VISUAL}>
+snippet dayjs
+	dayjs('2018-08-08') // parse
+	dayjs().format('{YYYY} MM-DDTHH:mm:ss SSS [Z] A') // display
+	dayjs().set('month', 3).month() // get & set
+	dayjs().add(1, 'year') // manipulate
+	dayjs().isBefore(dayjs()) // query
+
+snippet dayjs_import
+	import dayjs from "dayjs";
+	import utc from "dayjs/plugin/utc";
+	import timezone from "dayjs/plugin/timezone";
+	import LocalizedFormat from "dayjs/plugin/localizedFormat";
+	import customParseFormat from "dayjs/plugin/customParseFormat"
+	
+	dayjs.extend(utc)
+	dayjs.extend(timezone)
+	dayjs.extend(LocalizedFormat)
+	dayjs.extend(customParseFormat)
+
+
+
+snippet mcc
+	export class ${1} extends mu.C<{
+	${2}
+	}> {
+		oninit(){
+		}
+		// oninit, oncreate, onbeforeupdate, onupdate, onbeforeremove
+		view() {
+		  return ${3};
+		}
+	}
+snippet mco
+	export const C_$1: m.Component<{
+		${2:attrs}
+	}, {
+		${3:state}
+	}> ={
+	
+		oninit: ({ state, attrs }) => {
+				$4
+			},
+		onupdate: ({ state, attrs }) => {
+				$6
+			},
+		view: ({ state, attrs}) => {
+			$5
+		}
+	}
+snippet ig
+	// @ts-ignore
+snippet read_json_and_save
+	const read_json_and_save = <T>(path: string) => {
+		const data: T[]= fs.existsSync(path) ? JSON.parse(fs.readFileSync(path, 'utf8')) : []
+		return {
+			data,
+			save: () => {
+				fs.writeFileSync(path, JSON.stringify(data, undefined, 4), 'utf8')
+			}
+		}
+	}
+
+snippet nP
+	new Promise((r,j) => {
+	})
+snippet Ok
+	Object.keys({VISUAL}$1)
+snippet Ov
+	Object.values({VISUAL}$1)
+snippet Oe
+	Object.entries({VISUAL}$1)
+snippet Of
+	Object.fromEntries({VISUAL}$1)
+snippet lazyData
+	const lazyData = <I,>(input:I, delay_ms: number = 1000):Promise<I> => new Promise((r, _) => setTimeout(() => r(input), delay_ms))
+
+snippet Oa
+	Object.assign($1)
+	
+
+snippet axios_code
+	import axios from "axios";
+	import https from "https";
+	const httpsAgent = new https.Agent({
+	    rejectUnauthorized: false
+	})
+	const validateStatus = (s:any) => s == 200
+	
+	const response = await axios.get(domain, {httpsAgent, validateStatus})
+	const html = response.data
+
+snippet assert
+	if (!($1)) throw $2
+
+snippet m1
+	map((x) => $1)
+
+snippet fr1
+	filter((x) => $1)
+
+snippet fd1
+	find((x) => $1)
+
+snippet t1
+	then((x) => $1)
+
+snippet stacktrace
+	(new Error()).stack
+
+snippet sleep
+	const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
+
+snippet tE
+	throw Error($1)
+
+snippet debug_and_log
+	import utils_debug from 'utils-debug'
+	const log = utils_debug('`expand('%')`');
+
+snippet projects_project
+	projects.push(project_simple_projection({
+	    projectId: '$1',
+	    title: '$2',
+	    execution_summary: $3,
+	
+	    execution_plan = [ ],
+	
+	    relations: [
+	        // { projectId: 'ebike_transportation_germany_or_europe', description: '', relationType: 'uses' }
+	    ],
+	
+	},
+	
+	    "TODO"
+	));
+
+snippet service_worker_typings
+	/// <reference no-default-lib="true"/>
+	/// <reference lib="es2020" />
+	/// <reference lib="WebWorker" />
+	
+	const sw = self as ServiceWorkerGlobalScope & typeof globalThis
+snippet is_vite_ssr
+	import.meta.env.SSR
+
+snippet try
+	try {
+	} catch (e){
+	}
+
+snippet read_stdin
+	fs.readFileSync(0).toString();
+
+snippet dayjs_plugins_format
+	import dayjs from "dayjs"
+	import advancedFormat from 'dayjs/plugin/advancedFormat'
+	dayjs.extend(advancedFormat)
+
+snippet unique
+	const unique = <T>(x: T[]): T[] => { return x.filter((v, i) => x.indexOf(v) === i) }
+
+snippet tc
+	{
+		const t = runner.describe("$1")
+		$2
+		t.expect_$3
+	}
+
+snippet testrunner
+	import { } from "../src";
+	import { run_tests_print } from 'utils-testrunner';
+	
+	run_tests_print({
+	  'description': 'tests',
+	  'timeout' : 2000,
+	}, async (c) => {
+	
+	    c.describe("$1").
+	
+	}).then(console.log, console.log)
+
+snippet fast-glob
+	import fg from 'fast-glob'
+        const entries = await fg(['.editorconfig', '**/index.js'], { dot: true });
+
+snippet readline_promises_node_17+
+            var readlinePromises = require("readline/promises");
+            const rl = readlinePromises.createInterface({
+                input: process.stdin,
+                output: process.stdout,
+                completer: le_completion
+            })
+            console.log("answer is ", await rl.question("le: "));
+
+snippet readline
+            var readline = require("readline");
+            const rl = readline.createInterface({
+                input: process.stdin,
+                output: process.stdout,
+                completer: le_completion
+            })
+            const question = require('util').promisify(rl.question).bind(rl);
+            console.log("answer is R", await question("ABC"));
+
+
+snippet zip
+	const zip = (a: any, b: any) => a.map((k: any, i: any) => [k, b[i]]);
+
+snippet promisify
+	import util from "util"
+	util.promisify($1)
+
+const stat = util.promisify(fs.stat);
+
+snippet tos
+	typeof $1 == 'string'
+snippet ton
+	typeof $1 == 'number'
+snippet lP
+	lazyPromise(async () => $1)
+snippet at
+	if (!$1) throw "X"
